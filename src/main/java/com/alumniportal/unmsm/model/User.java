@@ -1,6 +1,7 @@
 package com.alumniportal.unmsm.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -75,6 +76,7 @@ public class User {
     //    Relacion con WorkExperience
     //@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @JsonIgnore
     private List<WorkExperience> workExperiences;
 
 

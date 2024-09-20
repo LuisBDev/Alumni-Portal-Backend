@@ -16,7 +16,7 @@ public interface IWorkExperienceService {
     void deleteById(Long id);
 
     //    Buscar todas las experiencias laborales de un usuario
-    List<WorkExperience> findAllByUserId(Long userId);
+    List<WorkExperience> findWorkExperiencesByUser_Id(Long userId);
 
 
 }

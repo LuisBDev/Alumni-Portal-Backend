@@ -37,7 +37,7 @@ public class WorkExperienceDAOImpl implements IWorkExperienceDAO {
     }
 
     @Override
-    public List<WorkExperience> findAllByUserId(Long userId) {
-        return workExperienceRepository.findAllByUserId(userId);
+    public List<WorkExperience> findWorkExperiencesByUser_Id(Long userId) {
+        return workExperienceRepository.findWorkExperiencesByUser_Id(userId);
     }
 }
