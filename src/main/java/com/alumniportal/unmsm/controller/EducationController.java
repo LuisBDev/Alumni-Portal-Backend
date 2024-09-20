@@ -1,9 +1,9 @@
 package com.alumniportal.unmsm.controller;
 
 import com.alumniportal.unmsm.model.User;
-import com.alumniportal.unmsm.model.WorkExperience;
+import com.alumniportal.unmsm.model.Education;
+import com.alumniportal.unmsm.service.IEducationService;
 import com.alumniportal.unmsm.service.IUserService;
-import com.alumniportal.unmsm.service.IWorkExperienceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,52 +11,52 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/work-experience")
+@RequestMapping("/api/education")
 @CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 
-public class WorkExperienceController {
+public class EducationController {
 
     @Autowired
-    private IWorkExperienceService workExperienceService;
+    private IEducationService educationService;
 
     @Autowired
     private IUserService userService;
 
     @GetMapping("/all")
-    public List<WorkExperience> findAll() {
-        return workExperienceService.findAll();
+    public List<Education> findAll() {
+        return educationService.findAll();
     }
 
     @GetMapping("/{id}")
-    public WorkExperience findById(@PathVariable Long id) {
-        return workExperienceService.findById(id);
+    public Education findById(@PathVariable Long id) {
+        return educationService.findById(id);
     }
 
     @PostMapping("/save/{userId}")
-    public ResponseEntity<?> save(@RequestBody WorkExperience workExperience, @PathVariable Long userId) {
+    public ResponseEntity<?> save(@RequestBody Education education, @PathVariable Long userId) {
         User user = userService.findById(userId);
         if (user == null) {
             return ResponseEntity.badRequest().body("Error: User not found!");
         }
-        workExperience.setUser(user);
-        workExperienceService.save(workExperience);
+        education.setUser(user);
+        educationService.save(education);
 
-        user.getWorkExperienceList().add(workExperience);
+        user.getEducationList().add(education);
         userService.save(user);
 
-        return ResponseEntity.ok("WorkExperience saved successfully!");
+        return ResponseEntity.ok("Education saved successfully!");
 
     }
 
 
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id) {
-        workExperienceService.deleteById(id);
+        educationService.deleteById(id);
     }
 
     @GetMapping("/user/{userId}")
-    public List<WorkExperience> findWorkExperiencesByUser_Id(@PathVariable Long userId) {
-        return workExperienceService.findWorkExperiencesByUser_Id(userId);
+    public List<Education> findEducationsByUser_Id(@PathVariable Long userId) {
+        return educationService.findEducationsByUser_Id(userId);
     }
 
 

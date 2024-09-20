@@ -3,6 +3,8 @@ package com.alumniportal.unmsm.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @Setter
@@ -23,10 +25,10 @@ public class WorkExperience {
     private String jobTitle;
 
     @Column(nullable = false)
-    private String startDate;
+    private LocalDate startDate;
 
     @Column(nullable = true)
-    private String endDate;
+    private LocalDate endDate;
 
     @Column(nullable = false)
     private String description;

@@ -31,7 +31,10 @@ public class Certification {
     @Column
     private String credentialUrl;
 
-//    Relation with User
+    //    Relation with User
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
 
 }

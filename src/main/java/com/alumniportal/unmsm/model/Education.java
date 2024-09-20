@@ -34,5 +34,10 @@ public class Education {
     @Column(nullable = true)
     private String description;
 
-//    Relation with User
+    //    Relation with User
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+
 }

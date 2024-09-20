@@ -77,7 +77,17 @@ public class User {
     //@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     @JsonIgnore
-    private List<WorkExperience> workExperiences;
+    private List<WorkExperience> workExperienceList;
+
+    //    Relacion con Education
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @JsonIgnore
+    private List<Education> educationList;
+
+    //    Relacion con Certification
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @JsonIgnore
+    private List<Certification> certificationList;
 
 
 }
