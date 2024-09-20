@@ -24,15 +24,15 @@ public class Activity {
     @Column(nullable = false)
     private String description;
 
-//    event_type ENUM('workshop', 'conference', 'seminar', 'other')
+//    event_type ENUM('workshop', 'conference', 'seminar', 'post', 'other')
 
     @Column(nullable = false)
     private String eventType;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Date startDate;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Date endDate;
 
     @Column(nullable = true)
@@ -41,7 +41,11 @@ public class Activity {
     @Column(nullable = true)
     private String url;
 
-//    Relation with User
+    //    Relation with User
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
 
 //    Relation with Enrollment
 

@@ -93,6 +93,11 @@ public class User {
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     @JsonIgnore
     private List<Project> projectList;
-    
+
+    //    Relacion con Activity
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @JsonIgnore
+    private List<Activity> activityList;
+
 
 }
