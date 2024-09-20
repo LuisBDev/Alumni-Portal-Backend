@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -20,10 +21,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(unique = true, nullable = false)
     private String email;
 
-    @Column
+    @Column(nullable = false)
     private String password;
 
     @Column
@@ -69,7 +70,12 @@ public class User {
     private String headline;
 
 
-//    Relacion con User, WorkExperience, Education, Project, Certification, Skill, Interest, Enrollment, Activity, Application
+//    Relacion con WorkExperience, Education, Project, Certification, Skill, Interest, Enrollment, Activity, Application
+
+    //    Relacion con WorkExperience
+    //@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    private List<WorkExperience> workExperiences;
 
 
 }

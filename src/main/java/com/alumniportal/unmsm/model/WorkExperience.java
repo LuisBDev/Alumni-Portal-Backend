@@ -31,6 +31,9 @@ public class WorkExperience {
     @Column(nullable = false)
     private String description;
 
-//    Relation with User
+    //    Relation with User
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
 }
