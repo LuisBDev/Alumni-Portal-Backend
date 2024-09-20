@@ -20,6 +20,6 @@ public class Interest {
     private String name;
 
 
-//Relation with Profile
+//Relation with User
 
 }

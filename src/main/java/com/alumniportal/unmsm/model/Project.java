@@ -27,7 +27,7 @@ public class Project {
     @Column(nullable = false)
     private String description;
 
-//    Relation with Profile
+//    Relation with User
 
 
 }

@@ -34,5 +34,5 @@ public class Education {
     @Column(nullable = true)
     private String description;
 
-//    Relation with Profile
+//    Relation with User
 }

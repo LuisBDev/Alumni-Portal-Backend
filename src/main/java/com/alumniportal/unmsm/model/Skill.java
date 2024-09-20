@@ -19,6 +19,9 @@ public class Skill {
     @Column(nullable = false)
     private String name;
 
-//Relation with Profile
+    @Column(nullable = false)
+    private String level;
+
+//Relation with User
 
 }

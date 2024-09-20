@@ -31,7 +31,7 @@ public class Certification {
     @Column
     private String credentialUrl;
 
-//    Relation with Profile
+//    Relation with User
 
 
 }
