@@ -89,5 +89,10 @@ public class User {
     @JsonIgnore
     private List<Certification> certificationList;
 
+    //    Relacion con Project
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @JsonIgnore
+    private List<Project> projectList;
+    
 
 }

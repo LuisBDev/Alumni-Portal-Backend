@@ -1,0 +1,62 @@
+package com.alumniportal.unmsm.controller;
+
+import com.alumniportal.unmsm.model.User;
+import com.alumniportal.unmsm.model.Project;
+import com.alumniportal.unmsm.service.IUserService;
+import com.alumniportal.unmsm.service.IProjectService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/project")
+@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
+public class ProjectController {
+
+    @Autowired
+    private IProjectService projectService;
+
+    @Autowired
+    private IUserService userService;
+
+    @GetMapping("/all")
+    public List<Project> findAll() {
+        return projectService.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public Project findById(@PathVariable Long id) {
+        return projectService.findById(id);
+    }
+
+    @PostMapping("/save/{userId}")
+    public ResponseEntity<?> save(@RequestBody Project workExperience, @PathVariable Long userId) {
+        User user = userService.findById(userId);
+        if (user == null) {
+            return ResponseEntity.badRequest().body("Error: User not found!");
+        }
+        workExperience.setUser(user);
+        projectService.save(workExperience);
+
+        user.getProjectList().add(workExperience);
+        userService.save(user);
+
+        return ResponseEntity.ok("Project saved successfully!");
+
+    }
+
+
+    @DeleteMapping("/{id}")
+    public void deleteById(@PathVariable Long id) {
+        projectService.deleteById(id);
+    }
+
+    @GetMapping("/user/{userId}")
+    public List<Project> findProjectsByUser_Id(@PathVariable Long userId) {
+        return projectService.findProjectsByUser_Id(userId);
+    }
+
+
+}
