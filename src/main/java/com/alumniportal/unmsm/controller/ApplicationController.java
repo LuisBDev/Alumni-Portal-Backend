@@ -1,8 +1,6 @@
 package com.alumniportal.unmsm.controller;
 
 import com.alumniportal.unmsm.model.Application;
-import com.alumniportal.unmsm.model.JobOffer;
-import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.service.IApplicationService;
 import com.alumniportal.unmsm.service.IJobOfferService;
 import com.alumniportal.unmsm.service.IUserService;
@@ -10,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -21,11 +18,6 @@ public class ApplicationController {
     @Autowired
     private IApplicationService applicationService;
 
-    @Autowired
-    private IUserService userService;
-
-    @Autowired
-    private IJobOfferService jobOfferService;
 
     @GetMapping("/all")
     public List<Application> findAll() {
@@ -43,30 +35,15 @@ public class ApplicationController {
 
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody Application application) {
-        User user = userService.findById(application.getUser().getId());
-        if (user == null) {
-            return ResponseEntity.badRequest().body("Error: User not found!");
+        try {
+            // Delegamos la lógica de guardado en el servicio
+            applicationService.saveApplication(application);
+            return ResponseEntity.ok("Application saved successfully!");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("An error occurred while saving the application");
         }
-        JobOffer jobOffer = jobOfferService.findById(application.getJobOffer().getId());
-        if (jobOffer == null) {
-            return ResponseEntity.badRequest().body("Error: JobOffer not found!");
-        }
-
-//        Persistir application
-        application.setUser(user);
-        application.setJobOffer(jobOffer);
-        application.setApplicationDate(LocalDate.now());
-        applicationService.save(application);
-
-//        Actualizar user
-        user.getApplicationList().add(application);
-        userService.save(user);
-
-//        Actualizar application
-        jobOffer.getApplicationList().add(application);
-        applicationService.save(application);
-
-        return ResponseEntity.ok("Application saved successfully!");
 
     }
 

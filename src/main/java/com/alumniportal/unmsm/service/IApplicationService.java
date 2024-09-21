@@ -18,5 +18,5 @@ public interface IApplicationService {
 
     List<Application> findApplicationsByJobOffer_Id(Long jobOfferId);
 
-
+    public void saveApplication(Application application);
 }
