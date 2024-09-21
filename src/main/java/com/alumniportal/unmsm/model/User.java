@@ -104,5 +104,10 @@ public class User {
     @JsonIgnore
     private List<Enrollment> enrollmentList;
 
+    //    Relacion con Application
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @JsonIgnore
+    private List<Application> applicationList;
+
 
 }

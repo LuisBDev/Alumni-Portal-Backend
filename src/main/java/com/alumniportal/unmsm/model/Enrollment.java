@@ -34,6 +34,5 @@ public class Enrollment {
     @Column(nullable = true)
     private String status;
 
-//    TODO: Implementar funcion que extraiga todos los enrollments por usuario y por actividad
 
 }

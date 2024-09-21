@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -38,7 +39,12 @@ public class JobOfferController {
             return ResponseEntity.badRequest().body("Error: Company not found!");
         }
         jobOffer.setCompany(companyService.findById(companyId));
+        jobOffer.setCreatedAt(LocalDate.now());
         jobOfferService.save(jobOffer);
+
+        company.getJobOfferList().add(jobOffer);
+        System.out.println(company.getJobOfferList());
+        companyService.save(company);
         return ResponseEntity.ok("JobOffer saved successfully!");
     }
 
