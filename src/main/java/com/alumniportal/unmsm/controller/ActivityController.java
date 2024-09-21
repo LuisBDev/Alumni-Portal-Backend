@@ -42,9 +42,11 @@ public class ActivityController {
         if (user == null) {
             return ResponseEntity.badRequest().body("Error: User not found!");
         }
+//        Setteando el usuario en la actividad
         activity.setUser(user);
         activityService.save(activity);
 
+//        Agregando la actividad a la lista de actividades del usuario
         user.getActivityList().add(activity);
         userService.save(user);
 
