@@ -27,11 +27,26 @@ public class CompanyController {
         return companyService.findById(id);
     }
 
-    @PostMapping("/save")
+    @PostMapping("/loginCompany")
+    public ResponseEntity<?> login(@RequestBody Company company) {
+        Company companyFound = companyService.findByEmail(company.getEmail());
+        if (companyFound == null) {
+            return ResponseEntity.badRequest().body("Error: Email not found!");
+        } else {
+            if (companyFound.getPassword().equals(company.getPassword())) {
+                return ResponseEntity.ok("Login successful!");
+            } else {
+                return ResponseEntity.badRequest().body("Error: Password incorrect!");
+            }
+        }
+    }
+
+
+    @PostMapping("/registerCompany")
     public ResponseEntity<?> save(@RequestBody Company company) {
         boolean companyDB = companyService.existsByEmail(company.getEmail());
         if (companyDB) {
-            return ResponseEntity.badRequest().body("Error: Company already exists!");
+            return ResponseEntity.badRequest().body("Error: Email Company already exists!");
         }
         company.setCreatedAt(LocalDate.now());
         companyService.save(company);
@@ -47,6 +62,11 @@ public class CompanyController {
         }
         companyService.deleteById(id);
         return ResponseEntity.ok("Company deleted successfully!");
+    }
+
+    @GetMapping
+    public Company findByEmail(@RequestBody String email) {
+        return companyService.findByEmail(email);
     }
 
 

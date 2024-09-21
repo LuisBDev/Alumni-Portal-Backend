@@ -15,4 +15,6 @@ public interface ICompanyDAO {
     void deleteById(Long id);
 
     boolean existsByEmail(String email);
+
+    Company findByEmail(String email);
 }

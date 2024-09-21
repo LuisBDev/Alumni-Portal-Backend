@@ -41,5 +41,10 @@ public class CompanyServiceImpl implements ICompanyService {
         return companyDAO.existsByEmail(email);
     }
 
+    @Override
+    public Company findByEmail(String email) {
+        return companyDAO.findByEmail(email);
+    }
+
 
 }

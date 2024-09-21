@@ -39,4 +39,9 @@ public class CompanyDAOImpl implements ICompanyDAO {
     public boolean existsByEmail(String email) {
         return companyRepository.existsByEmail(email);
     }
+
+    @Override
+    public Company findByEmail(String email) {
+        return companyRepository.findByEmail(email);
+    }
 }

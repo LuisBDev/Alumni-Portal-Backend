@@ -34,8 +34,13 @@ public class UserController {
 
 
     @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable Long id) {
+    public ResponseEntity<?> deleteById(@PathVariable Long id) {
+        User user = userService.findById(id);
+        if (user == null) {
+            return ResponseEntity.status(404).body("Error: User not found!");
+        }
         userService.deleteById(id);
+        return ResponseEntity.ok("User deleted successfully!");
     }
 
     @PostMapping("/loginAcademic")

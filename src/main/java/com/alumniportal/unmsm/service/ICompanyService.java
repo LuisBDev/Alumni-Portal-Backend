@@ -14,4 +14,6 @@ public interface ICompanyService {
     void deleteById(Long id);
 
     boolean existsByEmail(String email);
+
+    Company findByEmail(String email);
 }
