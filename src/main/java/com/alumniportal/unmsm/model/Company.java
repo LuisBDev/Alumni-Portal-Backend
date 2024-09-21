@@ -1,10 +1,11 @@
 package com.alumniportal.unmsm.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -48,5 +49,10 @@ public class Company {
 
     @Column(nullable = true)
     private LocalDate updatedAt;
+
+    //    Relacion con JobOffer
+    @OneToMany(mappedBy = "company", orphanRemoval = true)
+    @JsonIgnore
+    private List<JobOffer> jobOfferList;
 
 }

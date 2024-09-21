@@ -25,7 +25,7 @@ public class JobOffer {
     @Column(nullable = false)
     private String description;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Integer vacancies;
 
     @Column(nullable = false)
@@ -46,7 +46,7 @@ public class JobOffer {
     @Column(nullable = false)
     private Integer maxSalary;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Integer experience;
 
     @Column(nullable = false)
@@ -56,7 +56,12 @@ public class JobOffer {
     private LocalDate updatedAt;
 
 
-//    Relation with Company
+    //    Relation with Company
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Company company;
+
+
 //    Relation with Application
 
 //    Relation with Skill
