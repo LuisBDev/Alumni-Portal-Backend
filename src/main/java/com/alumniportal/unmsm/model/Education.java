@@ -3,6 +3,8 @@ package com.alumniportal.unmsm.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @Setter
@@ -26,10 +28,10 @@ public class Education {
     private String fieldOfStudy;
 
     @Column(nullable = false)
-    private String startDate;
+    private LocalDate startDate;
 
     @Column(nullable = true)
-    private String endDate;
+    private LocalDate endDate;
 
     @Column(nullable = true)
     private String description;

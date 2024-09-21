@@ -27,8 +27,12 @@ public class ProjectController {
     }
 
     @GetMapping("/{id}")
-    public Project findById(@PathVariable Long id) {
-        return projectService.findById(id);
+    public ResponseEntity<?> findById(@PathVariable Long id) {
+        Project project = projectService.findById(id);
+        if (project == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(project);
     }
 
     @PostMapping("/save/{userId}")

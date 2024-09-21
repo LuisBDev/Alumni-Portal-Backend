@@ -28,8 +28,12 @@ public class ActivityController {
     }
 
     @GetMapping("/{id}")
-    public Activity findById(@PathVariable Long id) {
-        return activityService.findById(id);
+    public ResponseEntity<?> findById(@PathVariable Long id) {
+        Activity activity = activityService.findById(id);
+        if (activity == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(activity);
     }
 
     @PostMapping("/save/{userId}")

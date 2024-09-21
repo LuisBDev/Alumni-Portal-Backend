@@ -1,9 +1,12 @@
 package com.alumniportal.unmsm.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -30,10 +33,10 @@ public class Activity {
     private String eventType;
 
     @Column(nullable = true)
-    private Date startDate;
+    private LocalDate startDate;
 
     @Column(nullable = true)
-    private Date endDate;
+    private LocalDate endDate;
 
     @Column(nullable = true)
     private String location;
@@ -41,13 +44,19 @@ public class Activity {
     @Column(nullable = true)
     private String url;
 
+    @Column(nullable = false)
+    private boolean enrollable;
+
     //    Relation with User
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
 
-//    Relation with Enrollment
+    //    Relation with Enrollment
+    @OneToMany(mappedBy = "activity")
+    @JsonIgnore
+    private List<Enrollment> enrollmentList;
 
 
 }

@@ -3,6 +3,7 @@ package com.alumniportal.unmsm.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -49,10 +50,10 @@ public class JobOffer {
     private Integer experience;
 
     @Column(nullable = false)
-    private Date createdAt;
+    private LocalDate createdAt;
 
     @Column(nullable = true)
-    private Date updatedAt;
+    private LocalDate updatedAt;
 
 
 //    Relation with Company

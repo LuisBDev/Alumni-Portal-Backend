@@ -28,8 +28,12 @@ public class EducationController {
     }
 
     @GetMapping("/{id}")
-    public Education findById(@PathVariable Long id) {
-        return educationService.findById(id);
+    public ResponseEntity<?> findById(@PathVariable Long id) {
+        Education education = educationService.findById(id);
+        if (education == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(education);
     }
 
     @PostMapping("/save/{userId}")

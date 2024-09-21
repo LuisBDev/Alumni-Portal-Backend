@@ -3,6 +3,8 @@ package com.alumniportal.unmsm.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @Setter
@@ -23,10 +25,10 @@ public class Certification {
     private String issuingOrganization;
 
     @Column
-    private String issueDate;
+    private LocalDate issueDate;
 
     @Column
-    private String expirationDate;
+    private LocalDate expirationDate;
 
     @Column
     private String credentialUrl;

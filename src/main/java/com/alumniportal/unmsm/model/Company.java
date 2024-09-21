@@ -3,6 +3,7 @@ package com.alumniportal.unmsm.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -43,9 +44,9 @@ public class Company {
     private String website;
 
     @Column(nullable = false)
-    private Date createdAt;
+    private LocalDate createdAt;
 
     @Column(nullable = true)
-    private Date updatedAt;
+    private LocalDate updatedAt;
 
 }

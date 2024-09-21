@@ -3,6 +3,8 @@ package com.alumniportal.unmsm.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @Setter
@@ -17,7 +19,7 @@ public class Application {
     private Long id;
 
     @Column
-    private String applicationDate;
+    private LocalDate applicationDate;
 
     //    para mapear cuando un User aplica a un JobOffer
     @ManyToOne

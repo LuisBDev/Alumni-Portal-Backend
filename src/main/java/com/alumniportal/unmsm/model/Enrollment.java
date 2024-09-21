@@ -1,7 +1,10 @@
 package com.alumniportal.unmsm.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -26,10 +29,11 @@ public class Enrollment {
     private Activity activity;
 
     @Column
-    private String enrollmentDate;
+    private LocalDate enrollmentDate;
 
     @Column(nullable = true)
     private String status;
 
+//    TODO: Implementar funcion que extraiga todos los enrollments por usuario y por actividad
 
 }

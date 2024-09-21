@@ -28,8 +28,12 @@ public class CertificationController {
     }
 
     @GetMapping("/{id}")
-    public Certification findById(@PathVariable Long id) {
-        return certificationService.findById(id);
+    public ResponseEntity<?> findById(@PathVariable Long id) {
+        Certification certification = certificationService.findById(id);
+        if (certification == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(certification);
     }
 
     @PostMapping("/save/{userId}")

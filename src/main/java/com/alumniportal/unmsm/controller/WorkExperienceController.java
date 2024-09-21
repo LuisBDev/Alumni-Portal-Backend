@@ -28,8 +28,12 @@ public class WorkExperienceController {
     }
 
     @GetMapping("/{id}")
-    public WorkExperience findById(@PathVariable Long id) {
-        return workExperienceService.findById(id);
+    public ResponseEntity<?> findById(@PathVariable Long id) {
+        WorkExperience workExperience = workExperienceService.findById(id);
+        if (workExperience == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(workExperience);
     }
 
     @PostMapping("/save/{userId}")
