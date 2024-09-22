@@ -21,11 +21,6 @@ public class EnrollmentController {
     @Autowired
     private IEnrollmentService enrollmentService;
 
-    @Autowired
-    private IUserService userService;
-
-    @Autowired
-    private IActivityService activityService;
 
     @GetMapping("/all")
     public List<Enrollment> findAll() {
@@ -43,33 +38,15 @@ public class EnrollmentController {
 
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody Enrollment enrollment) {
-        User user = userService.findById(enrollment.getUser().getId());
-        if (user == null) {
-            return ResponseEntity.badRequest().body("Error: User not found!");
+
+        try {
+            enrollmentService.saveEnrollment(enrollment);
+            return ResponseEntity.ok("Enrollment saved successfully!");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("An error occurred while saving the enrollment");
         }
-        Activity activity = activityService.findById(enrollment.getActivity().getId());
-        if (activity == null) {
-            return ResponseEntity.badRequest().body("Error: Activity not found!");
-        }
-
-//        Persistir enrollment
-        enrollment.setUser(user);
-        enrollment.setActivity(activity);
-        enrollment.setEnrollmentDate(LocalDate.now());
-        enrollment.setStatus("ACTIVE");
-        enrollmentService.save(enrollment);
-
-//        Actualizar user
-        user.getEnrollmentList().add(enrollment);
-        System.out.println(user.getEnrollmentList());
-        userService.save(user);
-
-//        Actualizar activity
-        activity.getEnrollmentList().add(enrollment);
-        System.out.println(activity.getEnrollmentList());
-        activityService.save(activity);
-
-        return ResponseEntity.ok("Enrollment saved successfully!");
 
     }
 

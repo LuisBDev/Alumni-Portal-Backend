@@ -17,4 +17,6 @@ public interface IEnrollmentService {
 
     List<Enrollment> findEnrollmentsByActivity_Id(Long activityId);
 
+    public void saveEnrollment(Enrollment enrollment);
+
 }

@@ -36,7 +36,6 @@ public class ApplicationController {
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody Application application) {
         try {
-            // Delegamos la lógica de guardado en el servicio
             applicationService.saveApplication(application);
             return ResponseEntity.ok("Application saved successfully!");
         } catch (IllegalArgumentException e) {
