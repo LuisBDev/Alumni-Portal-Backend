@@ -16,4 +16,6 @@ public interface ICertificationService {
 
     List<Certification> findCertificationsByUser_Id(Long userId);
 
+    void saveCertification(Certification certification, Long userId);
+
 }

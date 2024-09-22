@@ -16,4 +16,6 @@ public interface ICompanyService {
     boolean existsByEmail(String email);
 
     Company findByEmail(String email);
+
+    void saveCompany(Company company);
 }

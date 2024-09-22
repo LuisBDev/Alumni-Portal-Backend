@@ -17,5 +17,5 @@ public interface IProjectService {
     //    Buscar todos los projects de un usuario
     List<Project> findProjectsByUser_Id(Long userId);
 
-    
+    void saveProject(Project project, Long userId);
 }

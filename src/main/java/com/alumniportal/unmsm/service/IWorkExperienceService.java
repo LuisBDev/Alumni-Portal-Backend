@@ -18,5 +18,7 @@ public interface IWorkExperienceService {
     //    Buscar todas las experiencias laborales de un usuario
     List<WorkExperience> findWorkExperiencesByUser_Id(Long userId);
 
+    void saveWorkExperience(WorkExperience workExperience, Long userId);
+
 
 }

@@ -59,13 +59,11 @@ public class UserController {
 
     @PostMapping("/registerAcademic")
     public ResponseEntity<?> save(@RequestBody User user) {
-        boolean emailExists = userService.existsByEmail(user.getEmail());
-        if (emailExists) {
-            return ResponseEntity.badRequest().body("Error: Email ya existe en la bd!");
-        } else {
-            user.setCreatedAt(new Date());
-            userService.save(user);
-            return ResponseEntity.ok("User saved successfully!");
+        try {
+            userService.saveUser(user);
+            return ResponseEntity.ok("User registered successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

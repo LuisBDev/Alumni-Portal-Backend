@@ -1,9 +1,12 @@
 package com.alumniportal.unmsm.service.impl;
 
+import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.model.WorkExperience;
 import com.alumniportal.unmsm.persistence.IWorkExperienceDAO;
+import com.alumniportal.unmsm.service.IUserService;
 import com.alumniportal.unmsm.service.IWorkExperienceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +16,9 @@ public class WorkExperienceServiceImpl implements IWorkExperienceService {
 
     @Autowired
     private IWorkExperienceDAO workExperienceDAO;
+
+    @Autowired
+    private IUserService userService;
 
 
     @Override
@@ -38,5 +44,21 @@ public class WorkExperienceServiceImpl implements IWorkExperienceService {
     @Override
     public List<WorkExperience> findWorkExperiencesByUser_Id(Long userId) {
         return workExperienceDAO.findWorkExperiencesByUser_Id(userId);
+    }
+
+    @Override
+    public void saveWorkExperience(WorkExperience workExperience, Long userId) {
+        User user = userService.findById(userId);
+        if (user == null) {
+            throw new RuntimeException("User not found");
+        }
+//        asignando el usuario a la experiencia laboral y persistiendo
+        workExperience.setUser(user);
+        workExperienceDAO.save(workExperience);
+        
+//        agregando la experiencia laboral al usuario y persistiendo
+        user.getWorkExperienceList().add(workExperience);
+        userService.save(user);
+
     }
 }

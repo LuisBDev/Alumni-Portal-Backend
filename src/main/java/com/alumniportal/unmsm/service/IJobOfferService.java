@@ -15,4 +15,6 @@ public interface IJobOfferService {
 
     List<JobOffer> findJobOffersByCompany_Id(Long id);
 
+    void saveJobOffer(JobOffer jobOffer, Long companyId);
+
 }

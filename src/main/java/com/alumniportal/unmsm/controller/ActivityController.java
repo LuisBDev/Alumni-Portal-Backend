@@ -2,9 +2,7 @@ package com.alumniportal.unmsm.controller;
 
 
 import com.alumniportal.unmsm.model.Activity;
-import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.service.IActivityService;
-import com.alumniportal.unmsm.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +16,6 @@ public class ActivityController {
 
     @Autowired
     private IActivityService activityService;
-
-    @Autowired
-    private IUserService userService;
 
     @GetMapping("/all")
     public List<Activity> findAll() {
@@ -38,20 +33,15 @@ public class ActivityController {
 
     @PostMapping("/save/{userId}")
     public ResponseEntity<?> save(@RequestBody Activity activity, @PathVariable Long userId) {
-        User user = userService.findById(userId);
-        if (user == null) {
-            return ResponseEntity.badRequest().body("Error: User not found!");
+
+        try {
+            activityService.saveActivity(activity, userId);
+            return ResponseEntity.ok(activity);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error al guardar la actividad");
         }
-//        Setteando el usuario en la actividad
-        activity.setUser(user);
-        activityService.save(activity);
-
-//        Agregando la actividad a la lista de actividades del usuario
-        user.getActivityList().add(activity);
-        userService.save(user);
-
-        return ResponseEntity.ok("Activity saved successfully!");
-
     }
 
 

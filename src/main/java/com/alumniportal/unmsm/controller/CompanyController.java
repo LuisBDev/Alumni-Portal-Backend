@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -44,13 +43,12 @@ public class CompanyController {
 
     @PostMapping("/registerCompany")
     public ResponseEntity<?> save(@RequestBody Company company) {
-        boolean companyDB = companyService.existsByEmail(company.getEmail());
-        if (companyDB) {
-            return ResponseEntity.badRequest().body("Error: Email Company already exists!");
+        try {
+            companyService.saveCompany(company);
+            return ResponseEntity.ok("Company registered successfully!");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        company.setCreatedAt(LocalDate.now());
-        companyService.save(company);
-        return ResponseEntity.ok("Company saved successfully!");
 
     }
 

@@ -1,6 +1,5 @@
 package com.alumniportal.unmsm.controller;
 
-import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.model.Education;
 import com.alumniportal.unmsm.service.IEducationService;
 import com.alumniportal.unmsm.service.IUserService;
@@ -38,17 +37,13 @@ public class EducationController {
 
     @PostMapping("/save/{userId}")
     public ResponseEntity<?> save(@RequestBody Education education, @PathVariable Long userId) {
-        User user = userService.findById(userId);
-        if (user == null) {
-            return ResponseEntity.badRequest().body("Error: User not found!");
+
+        try {
+            educationService.saveEducation(education, userId);
+            return ResponseEntity.ok("Education saved successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        education.setUser(user);
-        educationService.save(education);
-
-        user.getEducationList().add(education);
-        userService.save(user);
-
-        return ResponseEntity.ok("Education saved successfully!");
 
     }
 

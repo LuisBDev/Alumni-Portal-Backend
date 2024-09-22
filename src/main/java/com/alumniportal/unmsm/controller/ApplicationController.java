@@ -2,8 +2,6 @@ package com.alumniportal.unmsm.controller;
 
 import com.alumniportal.unmsm.model.Application;
 import com.alumniportal.unmsm.service.IApplicationService;
-import com.alumniportal.unmsm.service.IJobOfferService;
-import com.alumniportal.unmsm.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

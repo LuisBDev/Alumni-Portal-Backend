@@ -18,4 +18,6 @@ public interface IUserService {
 
     User findByEmail(String email);
 
+    void saveUser(User user);
+
 }

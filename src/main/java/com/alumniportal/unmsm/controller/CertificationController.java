@@ -2,7 +2,6 @@ package com.alumniportal.unmsm.controller;
 
 
 import com.alumniportal.unmsm.model.Certification;
-import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.service.ICertificationService;
 import com.alumniportal.unmsm.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,17 +37,12 @@ public class CertificationController {
 
     @PostMapping("/save/{userId}")
     public ResponseEntity<?> save(@RequestBody Certification certification, @PathVariable Long userId) {
-        User user = userService.findById(userId);
-        if (user == null) {
-            return ResponseEntity.badRequest().body("Error: User not found!");
+        try {
+            certificationService.saveCertification(certification, userId);
+            return ResponseEntity.ok(certification);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        certification.setUser(user);
-        certificationService.save(certification);
-
-        user.getCertificationList().add(certification);
-        userService.save(user);
-
-        return ResponseEntity.ok("Certification saved successfully!");
 
     }
 

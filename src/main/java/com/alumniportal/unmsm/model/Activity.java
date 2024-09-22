@@ -47,6 +47,12 @@ public class Activity {
     @Column(nullable = false)
     private boolean enrollable;
 
+    @Column(nullable = false)
+    private LocalDate createdAt;
+
+    @Column(nullable = true)
+    private LocalDate updatedAt;
+
     //    Relation with User
     @ManyToOne
     @JoinColumn(name = "user_id")

@@ -4,8 +4,10 @@ import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.IUserDAO;
 import com.alumniportal.unmsm.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -42,5 +44,16 @@ public class UserServiceImpl implements IUserService {
     @Override
     public User findByEmail(String email) {
         return userDAO.findByEmail(email);
+    }
+
+    @Override
+    public void saveUser(User user) {
+        boolean emailExists = userDAO.existsByEmail(user.getEmail());
+        if (emailExists) {
+            throw new RuntimeException("Error: Email already exists!");
+        } else {
+            user.setCreatedAt(new Date());
+            userDAO.save(user);
+        }
     }
 }

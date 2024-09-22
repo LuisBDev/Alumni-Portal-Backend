@@ -1,6 +1,5 @@
 package com.alumniportal.unmsm.controller;
 
-import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.model.Project;
 import com.alumniportal.unmsm.service.IUserService;
 import com.alumniportal.unmsm.service.IProjectService;
@@ -37,18 +36,13 @@ public class ProjectController {
 
     @PostMapping("/save/{userId}")
     public ResponseEntity<?> save(@RequestBody Project workExperience, @PathVariable Long userId) {
-        User user = userService.findById(userId);
-        if (user == null) {
-            return ResponseEntity.badRequest().body("Error: User not found!");
+
+        try {
+            projectService.saveProject(workExperience, userId);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        workExperience.setUser(user);
-        projectService.save(workExperience);
-
-        user.getProjectList().add(workExperience);
-        userService.save(user);
-
-        return ResponseEntity.ok("Project saved successfully!");
-
     }
 
 

@@ -16,5 +16,7 @@ public interface IEducationService {
 
     List<Education> findEducationsByUser_Id(Long userId);
 
-    
+    void saveEducation(Education education, Long userId);
+
+
 }

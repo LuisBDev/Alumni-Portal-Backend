@@ -14,4 +14,6 @@ public interface IActivityService {
     void deleteById(Long id);
 
     List<Activity> findActivitiesByUser_Id(Long userId);
+
+    void saveActivity(Activity activity, Long userId);
 }

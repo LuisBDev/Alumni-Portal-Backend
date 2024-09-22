@@ -4,8 +4,10 @@ import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.persistence.ICompanyDAO;
 import com.alumniportal.unmsm.service.ICompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -44,6 +46,16 @@ public class CompanyServiceImpl implements ICompanyService {
     @Override
     public Company findByEmail(String email) {
         return companyDAO.findByEmail(email);
+    }
+
+    @Override
+    public void saveCompany(Company company) {
+        boolean companyDB = companyDAO.existsByEmail(company.getEmail());
+        if (companyDB) {
+            throw new RuntimeException("Error: Email already exists!");
+        }
+        company.setCreatedAt(LocalDate.now());
+        companyDAO.save(company);
     }
 
 

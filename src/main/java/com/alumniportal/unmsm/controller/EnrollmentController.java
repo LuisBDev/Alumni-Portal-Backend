@@ -1,16 +1,11 @@
 package com.alumniportal.unmsm.controller;
 
-import com.alumniportal.unmsm.model.Activity;
 import com.alumniportal.unmsm.model.Enrollment;
-import com.alumniportal.unmsm.model.User;
-import com.alumniportal.unmsm.service.IActivityService;
 import com.alumniportal.unmsm.service.IEnrollmentService;
-import com.alumniportal.unmsm.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController

@@ -38,17 +38,13 @@ public class WorkExperienceController {
 
     @PostMapping("/save/{userId}")
     public ResponseEntity<?> save(@RequestBody WorkExperience workExperience, @PathVariable Long userId) {
-        User user = userService.findById(userId);
-        if (user == null) {
-            return ResponseEntity.badRequest().body("Error: User not found!");
+
+        try {
+            workExperienceService.saveWorkExperience(workExperience, userId);
+            return ResponseEntity.ok(workExperience);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        workExperience.setUser(user);
-        workExperienceService.save(workExperience);
-
-        user.getWorkExperienceList().add(workExperience);
-        userService.save(user);
-
-        return ResponseEntity.ok("WorkExperience saved successfully!");
 
     }
 
