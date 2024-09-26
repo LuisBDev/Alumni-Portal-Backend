@@ -6,7 +6,6 @@ import com.alumniportal.unmsm.persistence.IJobOfferDAO;
 import com.alumniportal.unmsm.service.ICompanyService;
 import com.alumniportal.unmsm.service.IJobOfferService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;

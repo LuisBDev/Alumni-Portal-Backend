@@ -6,7 +6,6 @@ import com.alumniportal.unmsm.persistence.IWorkExperienceDAO;
 import com.alumniportal.unmsm.service.IUserService;
 import com.alumniportal.unmsm.service.IWorkExperienceService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -55,7 +54,7 @@ public class WorkExperienceServiceImpl implements IWorkExperienceService {
 //        asignando el usuario a la experiencia laboral y persistiendo
         workExperience.setUser(user);
         workExperienceDAO.save(workExperience);
-        
+
 //        agregando la experiencia laboral al usuario y persistiendo
         user.getWorkExperienceList().add(workExperience);
         userService.save(user);
