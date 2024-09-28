@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EnrollmentServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">unmsm</a> &gt; <a href="index.source.html" class="el_package">com.alumniportal.unmsm.service.impl</a> &gt; <span class="el_source">EnrollmentServiceImpl.java</span></div><h1>EnrollmentServiceImpl.java</h1><pre class="source lang-java linenums">package com.alumniportal.unmsm.service.impl;
+
+import com.alumniportal.unmsm.model.Activity;
+import com.alumniportal.unmsm.model.Enrollment;
+import com.alumniportal.unmsm.model.User;
+import com.alumniportal.unmsm.persistence.IEnrollmentDAO;
+import com.alumniportal.unmsm.service.IActivityService;
+import com.alumniportal.unmsm.service.IEnrollmentService;
+import com.alumniportal.unmsm.service.IUserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@Service
+<span class="fc" id="L17">public class EnrollmentServiceImpl implements IEnrollmentService {</span>
+
+    @Autowired
+    private IEnrollmentDAO enrollmentDAO;
+
+    @Autowired
+    private IUserService userService;
+
+    @Autowired
+    private IActivityService activityService;
+
+    @Override
+    public List&lt;Enrollment&gt; findAll() {
+<span class="nc" id="L30">        return enrollmentDAO.findAll();</span>
+    }
+
+    @Override
+    public Enrollment findById(Long id) {
+<span class="nc" id="L35">        return enrollmentDAO.findById(id);</span>
+    }
+
+    @Override
+    public void save(Enrollment enrollment) {
+<span class="nc" id="L40">        enrollmentDAO.save(enrollment);</span>
+<span class="nc" id="L41">    }</span>
+
+    @Override
+    public void deleteById(Long id) {
+<span class="nc" id="L45">        enrollmentDAO.deleteById(id);</span>
+<span class="nc" id="L46">    }</span>
+
+    @Override
+    public List&lt;Enrollment&gt; findEnrollmentsByUser_Id(Long userId) {
+<span class="nc" id="L50">        return enrollmentDAO.findEnrollmentsByUser_Id(userId);</span>
+    }
+
+    @Override
+    public List&lt;Enrollment&gt; findEnrollmentsByActivity_Id(Long activityId) {
+<span class="nc" id="L55">        return enrollmentDAO.findEnrollmentsByActivity_Id(activityId);</span>
+    }
+
+    public void saveEnrollment(Enrollment enrollment) {
+<span class="nc" id="L59">        User user = userService.findById(enrollment.getUser().getId());</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">        if (user == null) {</span>
+<span class="nc" id="L61">            throw new IllegalArgumentException(&quot;Error: User not found!&quot;);</span>
+        }
+<span class="nc" id="L63">        Activity activity = activityService.findById(enrollment.getActivity().getId());</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">        if (activity == null) {</span>
+<span class="nc" id="L65">            throw new IllegalArgumentException(&quot;Error: Activity not found!&quot;);</span>
+        }
+
+//        Persistir enrollment
+<span class="nc" id="L69">        enrollment.setUser(user);</span>
+<span class="nc" id="L70">        enrollment.setActivity(activity);</span>
+<span class="nc" id="L71">        enrollment.setEnrollmentDate(LocalDate.now());</span>
+<span class="nc" id="L72">        enrollment.setStatus(&quot;ACTIVE&quot;);</span>
+<span class="nc" id="L73">        enrollmentDAO.save(enrollment);</span>
+
+//        Actualizar user
+<span class="nc" id="L76">        user.getEnrollmentList().add(enrollment);</span>
+<span class="nc" id="L77">        userService.save(user);</span>
+
+//        Actualizar activity
+<span class="nc" id="L80">        activity.getEnrollmentList().add(enrollment);</span>
+<span class="nc" id="L81">        activityService.save(activity);</span>
+
+<span class="nc" id="L83">    }</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

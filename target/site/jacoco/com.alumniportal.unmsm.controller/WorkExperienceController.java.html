@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WorkExperienceController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">unmsm</a> &gt; <a href="index.source.html" class="el_package">com.alumniportal.unmsm.controller</a> &gt; <span class="el_source">WorkExperienceController.java</span></div><h1>WorkExperienceController.java</h1><pre class="source lang-java linenums">package com.alumniportal.unmsm.controller;
+
+import com.alumniportal.unmsm.model.User;
+import com.alumniportal.unmsm.model.WorkExperience;
+import com.alumniportal.unmsm.service.IUserService;
+import com.alumniportal.unmsm.service.IWorkExperienceService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping(&quot;/api/work-experience&quot;)
+@CrossOrigin(origins = &quot;*&quot;, allowedHeaders = &quot;*&quot;, methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
+
+<span class="fc" id="L17">public class WorkExperienceController {</span>
+
+    @Autowired
+    private IWorkExperienceService workExperienceService;
+
+    @Autowired
+    private IUserService userService;
+
+    @GetMapping(&quot;/all&quot;)
+    public List&lt;WorkExperience&gt; findAll() {
+<span class="nc" id="L27">        return workExperienceService.findAll();</span>
+    }
+
+    @GetMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;?&gt; findById(@PathVariable Long id) {
+<span class="nc" id="L32">        WorkExperience workExperience = workExperienceService.findById(id);</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">        if (workExperience == null) {</span>
+<span class="nc" id="L34">            return ResponseEntity.notFound().build();</span>
+        }
+<span class="nc" id="L36">        return ResponseEntity.ok(workExperience);</span>
+    }
+
+    @PostMapping(&quot;/save/{userId}&quot;)
+    public ResponseEntity&lt;?&gt; save(@RequestBody WorkExperience workExperience, @PathVariable Long userId) {
+
+        try {
+<span class="nc" id="L43">            workExperienceService.saveWorkExperience(workExperience, userId);</span>
+<span class="nc" id="L44">            return ResponseEntity.ok(workExperience);</span>
+<span class="nc" id="L45">        } catch (Exception e) {</span>
+<span class="nc" id="L46">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+        }
+
+    }
+
+
+    @DeleteMapping(&quot;/{id}&quot;)
+    public void deleteById(@PathVariable Long id) {
+<span class="nc" id="L54">        workExperienceService.deleteById(id);</span>
+<span class="nc" id="L55">    }</span>
+
+    @GetMapping(&quot;/user/{userId}&quot;)
+    public List&lt;WorkExperience&gt; findWorkExperiencesByUser_Id(@PathVariable Long userId) {
+<span class="nc" id="L59">        return workExperienceService.findWorkExperiencesByUser_Id(userId);</span>
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

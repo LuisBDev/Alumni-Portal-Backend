@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WorkExperienceServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">unmsm</a> &gt; <a href="index.source.html" class="el_package">com.alumniportal.unmsm.service.impl</a> &gt; <span class="el_source">WorkExperienceServiceImpl.java</span></div><h1>WorkExperienceServiceImpl.java</h1><pre class="source lang-java linenums">package com.alumniportal.unmsm.service.impl;
+
+import com.alumniportal.unmsm.model.User;
+import com.alumniportal.unmsm.model.WorkExperience;
+import com.alumniportal.unmsm.persistence.IWorkExperienceDAO;
+import com.alumniportal.unmsm.service.IUserService;
+import com.alumniportal.unmsm.service.IWorkExperienceService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+<span class="fc" id="L14">public class WorkExperienceServiceImpl implements IWorkExperienceService {</span>
+
+    @Autowired
+    private IWorkExperienceDAO workExperienceDAO;
+
+    @Autowired
+    private IUserService userService;
+
+
+    @Override
+    public List&lt;WorkExperience&gt; findAll() {
+<span class="nc" id="L25">        return workExperienceDAO.findAll();</span>
+    }
+
+    @Override
+    public WorkExperience findById(Long id) {
+<span class="nc" id="L30">        return workExperienceDAO.findById(id);</span>
+    }
+
+    @Override
+    public void save(WorkExperience workExperience) {
+<span class="nc" id="L35">        workExperienceDAO.save(workExperience);</span>
+<span class="nc" id="L36">    }</span>
+
+    @Override
+    public void deleteById(Long id) {
+<span class="nc" id="L40">        workExperienceDAO.deleteById(id);</span>
+<span class="nc" id="L41">    }</span>
+
+    @Override
+    public List&lt;WorkExperience&gt; findWorkExperiencesByUser_Id(Long userId) {
+<span class="nc" id="L45">        return workExperienceDAO.findWorkExperiencesByUser_Id(userId);</span>
+    }
+
+    @Override
+    public void saveWorkExperience(WorkExperience workExperience, Long userId) {
+<span class="nc" id="L50">        User user = userService.findById(userId);</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">        if (user == null) {</span>
+<span class="nc" id="L52">            throw new RuntimeException(&quot;User not found&quot;);</span>
+        }
+//        asignando el usuario a la experiencia laboral y persistiendo
+<span class="nc" id="L55">        workExperience.setUser(user);</span>
+<span class="nc" id="L56">        workExperienceDAO.save(workExperience);</span>
+
+//        agregando la experiencia laboral al usuario y persistiendo
+<span class="nc" id="L59">        user.getWorkExperienceList().add(workExperience);</span>
+<span class="nc" id="L60">        userService.save(user);</span>
+
+<span class="nc" id="L62">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

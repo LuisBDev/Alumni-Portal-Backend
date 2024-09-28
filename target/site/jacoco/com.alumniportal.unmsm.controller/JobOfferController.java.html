@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JobOfferController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">unmsm</a> &gt; <a href="index.source.html" class="el_package">com.alumniportal.unmsm.controller</a> &gt; <span class="el_source">JobOfferController.java</span></div><h1>JobOfferController.java</h1><pre class="source lang-java linenums">package com.alumniportal.unmsm.controller;
+
+import com.alumniportal.unmsm.model.JobOffer;
+import com.alumniportal.unmsm.service.IJobOfferService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping(&quot;/api/job-offer&quot;)
+@CrossOrigin(origins = &quot;*&quot;, allowedHeaders = &quot;*&quot;, methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
+<span class="fc" id="L14">public class JobOfferController {</span>
+
+    @Autowired
+    private IJobOfferService jobOfferService;
+
+
+    @GetMapping(&quot;/all&quot;)
+    public List&lt;JobOffer&gt; findAll() {
+<span class="nc" id="L22">        return jobOfferService.findAll();</span>
+    }
+
+    @GetMapping(&quot;/{id}&quot;)
+    public JobOffer findById(@PathVariable Long id) {
+<span class="nc" id="L27">        return jobOfferService.findById(id);</span>
+    }
+
+    @PostMapping(&quot;/save/{companyId}&quot;)
+    public ResponseEntity&lt;?&gt; save(@RequestBody JobOffer jobOffer, @PathVariable Long companyId) {
+
+        try {
+<span class="nc" id="L34">            jobOfferService.saveJobOffer(jobOffer, companyId);</span>
+<span class="nc" id="L35">            return ResponseEntity.ok(&quot;JobOffer saved successfully!&quot;);</span>
+<span class="nc" id="L36">        } catch (Exception e) {</span>
+<span class="nc" id="L37">            return ResponseEntity.badRequest().body(&quot;Error: &quot; + e.getMessage());</span>
+        }
+    }
+
+    @DeleteMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;?&gt; deleteById(@PathVariable Long id) {
+<span class="nc" id="L43">        JobOffer jobOffer = jobOfferService.findById(id);</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">        if (jobOffer == null) {</span>
+<span class="nc" id="L45">            return ResponseEntity.badRequest().body(&quot;Error: JobOffer not found!&quot;);</span>
+        }
+<span class="nc" id="L47">        jobOfferService.deleteById(id);</span>
+<span class="nc" id="L48">        return ResponseEntity.ok(&quot;JobOffer deleted successfully!&quot;);</span>
+    }
+
+    @GetMapping(&quot;/company/{companyId}&quot;)
+    public List&lt;JobOffer&gt; findJobOffersByCompany_Id(@PathVariable Long companyId) {
+<span class="nc" id="L53">        return jobOfferService.findJobOffersByCompany_Id(companyId);</span>
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
