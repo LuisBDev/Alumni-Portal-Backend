@@ -3,6 +3,7 @@ package com.alumniportal.unmsm.service;
 import com.alumniportal.unmsm.model.Company;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ICompanyService {
     List<Company> findAll();
@@ -18,4 +19,6 @@ public interface ICompanyService {
     Company findByEmail(String email);
 
     void saveCompany(Company company);
+
+    void updateCompany(Long id, Map<String, Object> fields);
 }

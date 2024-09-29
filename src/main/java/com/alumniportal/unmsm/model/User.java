@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -47,10 +47,10 @@ public class User {
     private String contactNumber;
 
     @Column(nullable = false)
-    private Date createdAt;
+    private LocalDate createdAt;
 
     @Column(nullable = true)
-    private Date updatedAt;
+    private LocalDate updatedAt;
 
     @Column
     private String faculty;

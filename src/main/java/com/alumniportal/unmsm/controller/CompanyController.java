@@ -4,9 +4,12 @@ import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.service.ICompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/company")
@@ -40,7 +43,6 @@ public class CompanyController {
         }
     }
 
-
     @PostMapping("/registerCompany")
     public ResponseEntity<?> save(@RequestBody Company company) {
         try {
@@ -67,5 +69,14 @@ public class CompanyController {
         return companyService.findByEmail(email);
     }
 
-
+    //Actualizar parcialmente los campos
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+        try {
+            companyService.updateCompany(id, updates);
+            return ResponseEntity.ok("Company updated successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

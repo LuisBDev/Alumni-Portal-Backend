@@ -32,17 +32,20 @@ public class Company {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String description;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String sector;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String phone;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String website;
+
+    @Column(nullable = true)
+    private String location;
 
     @Column(nullable = false)
     private LocalDate createdAt;

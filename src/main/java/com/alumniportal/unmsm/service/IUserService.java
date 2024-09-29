@@ -3,6 +3,7 @@ package com.alumniportal.unmsm.service;
 import com.alumniportal.unmsm.model.User;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IUserService {
 
@@ -19,5 +20,7 @@ public interface IUserService {
     User findByEmail(String email);
 
     void saveUser(User user);
+
+    void updateUser(Long id, Map<String, Object> fields);
 
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user")
@@ -62,6 +63,16 @@ public class UserController {
         try {
             userService.saveUser(user);
             return ResponseEntity.ok("User registered successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+        try {
+            userService.updateUser(id, updates);
+            return ResponseEntity.ok("User updated successfully!");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

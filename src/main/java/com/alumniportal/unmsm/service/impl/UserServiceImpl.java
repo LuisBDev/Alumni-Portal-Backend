@@ -5,9 +5,12 @@ import com.alumniportal.unmsm.persistence.IUserDAO;
 import com.alumniportal.unmsm.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
-import java.util.Date;
+import java.lang.reflect.Field;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserServiceImpl implements IUserService {
@@ -51,8 +54,24 @@ public class UserServiceImpl implements IUserService {
         if (emailExists) {
             throw new RuntimeException("Error: Email already exists!");
         } else {
-            user.setCreatedAt(new Date());
+            user.setCreatedAt(LocalDate.now());
             userDAO.save(user);
         }
+    }
+
+    @Override
+    public void updateUser(Long id, Map<String, Object> fields) {
+        User user = userDAO.findById(id);
+        if (user == null) {
+            throw new RuntimeException("Error: User not found!");
+        }
+        fields.forEach((k, v) -> {
+            Field field = ReflectionUtils.findField(User.class, k);
+            field.setAccessible(true);
+            ReflectionUtils.setField(field, user, v);
+        });
+        user.setUpdatedAt(LocalDate.now());
+        userDAO.save(user);
+
     }
 }
