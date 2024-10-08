@@ -1,10 +1,12 @@
 package com.alumniportal.unmsm.service.impl;
 
+import com.alumniportal.unmsm.dto.CertificationDTO;
 import com.alumniportal.unmsm.model.Certification;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.ICertificationDAO;
+import com.alumniportal.unmsm.persistence.IUserDAO;
 import com.alumniportal.unmsm.service.ICertificationService;
-import com.alumniportal.unmsm.service.IUserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,17 +19,27 @@ public class CertificationServiceImpl implements ICertificationService {
     private ICertificationDAO certificationDAO;
 
     @Autowired
-    private IUserService userService;
+    private IUserDAO userDAO;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
 
     @Override
-    public List<Certification> findAll() {
-        return certificationDAO.findAll();
+    public List<CertificationDTO> findAll() {
+        return certificationDAO.findAll()
+                .stream()
+                .map(certification -> modelMapper.map(certification, CertificationDTO.class))
+                .toList();
     }
 
     @Override
-    public Certification findById(Long id) {
-        return certificationDAO.findById(id);
+    public CertificationDTO findById(Long id) {
+        Certification certification = certificationDAO.findById(id);
+        if (certification == null) {
+            return null;
+        }
+        return modelMapper.map(certification, CertificationDTO.class);
     }
 
     @Override
@@ -41,13 +53,16 @@ public class CertificationServiceImpl implements ICertificationService {
     }
 
     @Override
-    public List<Certification> findCertificationsByUser_Id(Long userId) {
-        return certificationDAO.findCertificationsByUser_Id(userId);
+    public List<CertificationDTO> findCertificationsByUser_Id(Long userId) {
+        return certificationDAO.findCertificationsByUser_Id(userId)
+                .stream()
+                .map(certification -> modelMapper.map(certification, CertificationDTO.class))
+                .toList();
     }
 
     @Override
     public void saveCertification(Certification certification, Long userId) {
-        User user = userService.findById(userId);
+        User user = userDAO.findById(userId);
         if (user == null) {
             throw new RuntimeException("User not found");
         }
@@ -57,6 +72,6 @@ public class CertificationServiceImpl implements ICertificationService {
 
 //    Agregar el certificado a la lista de certificados del usuario
         user.getCertificationList().add(certification);
-        userService.save(user);
+        userDAO.save(user);
     }
 }

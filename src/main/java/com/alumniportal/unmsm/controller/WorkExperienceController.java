@@ -1,8 +1,7 @@
 package com.alumniportal.unmsm.controller;
 
-import com.alumniportal.unmsm.model.User;
+import com.alumniportal.unmsm.dto.WorkExperienceDTO;
 import com.alumniportal.unmsm.model.WorkExperience;
-import com.alumniportal.unmsm.service.IUserService;
 import com.alumniportal.unmsm.service.IWorkExperienceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,21 +18,19 @@ public class WorkExperienceController {
     @Autowired
     private IWorkExperienceService workExperienceService;
 
-    @Autowired
-    private IUserService userService;
 
     @GetMapping("/all")
-    public List<WorkExperience> findAll() {
+    public List<WorkExperienceDTO> findAll() {
         return workExperienceService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
-        WorkExperience workExperience = workExperienceService.findById(id);
-        if (workExperience == null) {
+        WorkExperienceDTO workExperienceDTO = workExperienceService.findById(id);
+        if (workExperienceDTO == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(workExperience);
+        return ResponseEntity.ok(workExperienceDTO);
     }
 
     @PostMapping("/save/{userId}")
@@ -55,7 +52,7 @@ public class WorkExperienceController {
     }
 
     @GetMapping("/user/{userId}")
-    public List<WorkExperience> findWorkExperiencesByUser_Id(@PathVariable Long userId) {
+    public List<WorkExperienceDTO> findWorkExperiencesByUser_Id(@PathVariable Long userId) {
         return workExperienceService.findWorkExperiencesByUser_Id(userId);
     }
 

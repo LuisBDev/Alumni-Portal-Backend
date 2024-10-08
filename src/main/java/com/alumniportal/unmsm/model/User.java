@@ -73,11 +73,11 @@ public class User {
 
 //    Relacion con WorkExperience, Education, Project, Certification, Skill, Interest, Enrollment, Activity, Application
 
-    //    Relacion con WorkExperience
     //@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     @JsonIgnore
-    private List<WorkExperience> workExperienceList;
+    private List<WorkExperience> workExperienceList;    //    Relacion con WorkExperience
+
 
     //    Relacion con Education
     @OneToMany(mappedBy = "user", orphanRemoval = true)
@@ -108,6 +108,11 @@ public class User {
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     @JsonIgnore
     private List<Application> applicationList;
+
+    //    Relacion con Skill
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @JsonIgnore
+    private List<Skill> skillList;
 
 
 }

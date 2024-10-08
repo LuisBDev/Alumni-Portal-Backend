@@ -1,10 +1,13 @@
 package com.alumniportal.unmsm.service.impl;
 
+import com.alumniportal.unmsm.dto.ApplicationDTO;
 import com.alumniportal.unmsm.model.Application;
 import com.alumniportal.unmsm.persistence.IApplicationDAO;
+import com.alumniportal.unmsm.persistence.IJobOfferDAO;
+import com.alumniportal.unmsm.persistence.IUserDAO;
 import com.alumniportal.unmsm.service.IApplicationService;
 import com.alumniportal.unmsm.service.IJobOfferService;
-import com.alumniportal.unmsm.service.IUserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.alumniportal.unmsm.model.JobOffer;
@@ -21,19 +24,29 @@ public class ApplicationServiceImpl implements IApplicationService {
     private IApplicationDAO applicationDAO;
 
     @Autowired
-    private IUserService userService;
+    private IUserDAO userDAO;
 
     @Autowired
-    private IJobOfferService jobOfferService;
+    private IJobOfferDAO jobOfferDAO;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
-    public List<Application> findAll() {
-        return applicationDAO.findAll();
+    public List<ApplicationDTO> findAll() {
+        return applicationDAO.findAll()
+                .stream()
+                .map(application -> modelMapper.map(application, ApplicationDTO.class))
+                .toList();
     }
 
     @Override
-    public Application findById(Long id) {
-        return applicationDAO.findById(id);
+    public ApplicationDTO findById(Long id) {
+        Application application = applicationDAO.findById(id);
+        if (application == null) {
+            return null;
+        }
+        return modelMapper.map(application, ApplicationDTO.class);
     }
 
     @Override
@@ -47,22 +60,28 @@ public class ApplicationServiceImpl implements IApplicationService {
     }
 
     @Override
-    public List<Application> findApplicationsByUser_Id(Long userId) {
-        return applicationDAO.findApplicationsByUser_Id(userId);
+    public List<ApplicationDTO> findApplicationsByUser_Id(Long userId) {
+        return applicationDAO.findApplicationsByUser_Id(userId)
+                .stream()
+                .map(application -> modelMapper.map(application, ApplicationDTO.class))
+                .toList();
     }
 
     @Override
-    public List<Application> findApplicationsByJobOffer_Id(Long jobOfferId) {
-        return applicationDAO.findApplicationsByJobOffer_Id(jobOfferId);
+    public List<ApplicationDTO> findApplicationsByJobOffer_Id(Long jobOfferId) {
+        return applicationDAO.findApplicationsByJobOffer_Id(jobOfferId)
+                .stream()
+                .map(application -> modelMapper.map(application, ApplicationDTO.class))
+                .toList();
     }
 
     public void saveApplication(Application application) {
-        User user = userService.findById(application.getUser().getId());
+        User user = userDAO.findById(application.getUser().getId());
         if (user == null) {
             throw new IllegalArgumentException("Error: User not found!");
         }
 
-        JobOffer jobOffer = jobOfferService.findById(application.getJobOffer().getId());
+        JobOffer jobOffer = jobOfferDAO.findById(application.getJobOffer().getId());
         if (jobOffer == null) {
             throw new IllegalArgumentException("Error: JobOffer not found!");
         }
@@ -77,11 +96,11 @@ public class ApplicationServiceImpl implements IApplicationService {
 
         // Actualizamos el user con la nueva aplicación
         user.getApplicationList().add(application);
-        userService.save(user);
+        userDAO.save(user);
 
         // Actualizamos la lista de aplicaciones en el JobOffer
         jobOffer.getApplicationList().add(application);
-        jobOfferService.save(jobOffer);
+        jobOfferDAO.save(jobOffer);
     }
 
 

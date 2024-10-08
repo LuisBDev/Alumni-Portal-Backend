@@ -1,5 +1,7 @@
 package com.alumniportal.unmsm.controller;
 
+import com.alumniportal.unmsm.dto.CompanyDTO;
+import com.alumniportal.unmsm.dto.LoginRequestDTO;
 import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.service.ICompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
@@ -20,27 +21,24 @@ public class CompanyController {
     private ICompanyService companyService;
 
     @GetMapping("/all")
-    public List<Company> findAll() {
+    public List<CompanyDTO> findAll() {
         return companyService.findAll();
     }
 
     @GetMapping("/{id}")
-    public Company findById(@PathVariable Long id) {
+    public CompanyDTO findById(@PathVariable Long id) {
         return companyService.findById(id);
     }
 
     @PostMapping("/loginCompany")
-    public ResponseEntity<?> login(@RequestBody Company company) {
-        Company companyFound = companyService.findByEmail(company.getEmail());
-        if (companyFound == null) {
-            return ResponseEntity.badRequest().body("Error: Email not found!");
-        } else {
-            if (companyFound.getPassword().equals(company.getPassword())) {
-                return ResponseEntity.ok("Login successful!");
-            } else {
-                return ResponseEntity.badRequest().body("Error: Password incorrect!");
-            }
+    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDTO) {
+        try {
+            CompanyDTO companyDTO = companyService.validateLogin(loginRequestDTO.getEmail(), loginRequestDTO.getPassword());
+            return ResponseEntity.ok(companyDTO);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
+
     }
 
     @PostMapping("/registerCompany")
@@ -56,8 +54,8 @@ public class CompanyController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
-        Company company = companyService.findById(id);
-        if (company == null) {
+        CompanyDTO companyDTO = companyService.findById(id);
+        if (companyDTO == null) {
             return ResponseEntity.badRequest().body("Error: Company not found!");
         }
         companyService.deleteById(id);
@@ -65,7 +63,7 @@ public class CompanyController {
     }
 
     @GetMapping
-    public Company findByEmail(@RequestBody String email) {
+    public CompanyDTO findByEmail(@RequestBody String email) {
         return companyService.findByEmail(email);
     }
 

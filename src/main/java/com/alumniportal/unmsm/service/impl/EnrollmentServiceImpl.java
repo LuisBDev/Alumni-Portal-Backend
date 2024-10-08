@@ -1,12 +1,14 @@
 package com.alumniportal.unmsm.service.impl;
 
+import com.alumniportal.unmsm.dto.EnrollmentDTO;
 import com.alumniportal.unmsm.model.Activity;
 import com.alumniportal.unmsm.model.Enrollment;
 import com.alumniportal.unmsm.model.User;
+import com.alumniportal.unmsm.persistence.IActivityDAO;
 import com.alumniportal.unmsm.persistence.IEnrollmentDAO;
-import com.alumniportal.unmsm.service.IActivityService;
+import com.alumniportal.unmsm.persistence.IUserDAO;
 import com.alumniportal.unmsm.service.IEnrollmentService;
-import com.alumniportal.unmsm.service.IUserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,19 +22,29 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
     private IEnrollmentDAO enrollmentDAO;
 
     @Autowired
-    private IUserService userService;
+    private IUserDAO userDAO;
 
     @Autowired
-    private IActivityService activityService;
+    private IActivityDAO activityDAO;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
-    public List<Enrollment> findAll() {
-        return enrollmentDAO.findAll();
+    public List<EnrollmentDTO> findAll() {
+        return enrollmentDAO.findAll()
+                .stream()
+                .map(enrollment -> modelMapper.map(enrollment, EnrollmentDTO.class))
+                .toList();
     }
 
     @Override
-    public Enrollment findById(Long id) {
-        return enrollmentDAO.findById(id);
+    public EnrollmentDTO findById(Long id) {
+        Enrollment enrollment = enrollmentDAO.findById(id);
+        if (enrollment == null) {
+            return null;
+        }
+        return modelMapper.map(enrollment, EnrollmentDTO.class);
     }
 
     @Override
@@ -46,21 +58,27 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
     }
 
     @Override
-    public List<Enrollment> findEnrollmentsByUser_Id(Long userId) {
-        return enrollmentDAO.findEnrollmentsByUser_Id(userId);
+    public List<EnrollmentDTO> findEnrollmentsByUser_Id(Long userId) {
+        return enrollmentDAO.findEnrollmentsByUser_Id(userId)
+                .stream()
+                .map(enrollment -> modelMapper.map(enrollment, EnrollmentDTO.class))
+                .toList();
     }
 
     @Override
-    public List<Enrollment> findEnrollmentsByActivity_Id(Long activityId) {
-        return enrollmentDAO.findEnrollmentsByActivity_Id(activityId);
+    public List<EnrollmentDTO> findEnrollmentsByActivity_Id(Long activityId) {
+        return enrollmentDAO.findEnrollmentsByActivity_Id(activityId)
+                .stream()
+                .map(enrollment -> modelMapper.map(enrollment, EnrollmentDTO.class))
+                .toList();
     }
 
     public void saveEnrollment(Enrollment enrollment) {
-        User user = userService.findById(enrollment.getUser().getId());
+        User user = userDAO.findById(enrollment.getUser().getId());
         if (user == null) {
             throw new IllegalArgumentException("Error: User not found!");
         }
-        Activity activity = activityService.findById(enrollment.getActivity().getId());
+        Activity activity = activityDAO.findById(enrollment.getActivity().getId());
         if (activity == null) {
             throw new IllegalArgumentException("Error: Activity not found!");
         }
@@ -74,11 +92,11 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
 
 //        Actualizar user
         user.getEnrollmentList().add(enrollment);
-        userService.save(user);
+        userDAO.save(user);
 
 //        Actualizar activity
         activity.getEnrollmentList().add(enrollment);
-        activityService.save(activity);
+        activityDAO.save(activity);
 
     }
 

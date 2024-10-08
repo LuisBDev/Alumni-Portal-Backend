@@ -1,6 +1,7 @@
 package com.alumniportal.unmsm.controller;
 
 
+import com.alumniportal.unmsm.dto.ActivityDTO;
 import com.alumniportal.unmsm.model.Activity;
 import com.alumniportal.unmsm.service.IActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,21 +15,27 @@ import java.util.List;
 @CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 public class ActivityController {
 
+    private final IActivityService activityService;
+
+    // Inyección por constructor
     @Autowired
-    private IActivityService activityService;
+    public ActivityController(IActivityService activityService) {
+        this.activityService = activityService;
+    }
+
 
     @GetMapping("/all")
-    public List<Activity> findAll() {
+    public List<ActivityDTO> findAll() {
         return activityService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
-        Activity activity = activityService.findById(id);
-        if (activity == null) {
+        ActivityDTO activityDTO = activityService.findById(id);
+        if (activityDTO == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(activity);
+        return ResponseEntity.ok(activityDTO);
     }
 
     @PostMapping("/save/{userId}")
@@ -51,7 +58,7 @@ public class ActivityController {
     }
 
     @GetMapping("/user/{userId}")
-    public List<Activity> findActivitysByUser_Id(@PathVariable Long userId) {
+    public List<ActivityDTO> findActivitysByUser_Id(@PathVariable Long userId) {
         return activityService.findActivitiesByUser_Id(userId);
     }
 

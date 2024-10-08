@@ -1,5 +1,6 @@
 package com.alumniportal.unmsm.controller;
 
+import com.alumniportal.unmsm.dto.EducationDTO;
 import com.alumniportal.unmsm.model.Education;
 import com.alumniportal.unmsm.service.IEducationService;
 import com.alumniportal.unmsm.service.IUserService;
@@ -22,17 +23,17 @@ public class EducationController {
     private IUserService userService;
 
     @GetMapping("/all")
-    public List<Education> findAll() {
+    public List<EducationDTO> findAll() {
         return educationService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
-        Education education = educationService.findById(id);
-        if (education == null) {
+        EducationDTO educationDTO = educationService.findById(id);
+        if (educationDTO == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(education);
+        return ResponseEntity.ok(educationDTO);
     }
 
     @PostMapping("/save/{userId}")
@@ -54,7 +55,7 @@ public class EducationController {
     }
 
     @GetMapping("/user/{userId}")
-    public List<Education> findEducationsByUser_Id(@PathVariable Long userId) {
+    public List<EducationDTO> findEducationsByUser_Id(@PathVariable Long userId) {
         return educationService.findEducationsByUser_Id(userId);
     }
 

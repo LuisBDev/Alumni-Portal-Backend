@@ -1,10 +1,12 @@
 package com.alumniportal.unmsm.service.impl;
 
+import com.alumniportal.unmsm.dto.ActivityDTO;
 import com.alumniportal.unmsm.model.Activity;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.IActivityDAO;
+import com.alumniportal.unmsm.persistence.IUserDAO;
 import com.alumniportal.unmsm.service.IActivityService;
-import com.alumniportal.unmsm.service.IUserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,16 +20,23 @@ public class ActivityServiceImpl implements IActivityService {
     private IActivityDAO activityDAO;
 
     @Autowired
-    private IUserService userService;
+    private IUserDAO userDAO;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
-    public List<Activity> findAll() {
-        return activityDAO.findAll();
+    public List<ActivityDTO> findAll() {
+        return activityDAO.findAll()
+                .stream()
+                .map((activity) -> modelMapper.map(activity, ActivityDTO.class))
+                .toList();
     }
 
     @Override
-    public Activity findById(Long id) {
-        return activityDAO.findById(id);
+    public ActivityDTO findById(Long id) {
+        Activity activity = activityDAO.findById(id);
+        return modelMapper.map(activity, ActivityDTO.class);
     }
 
     @Override
@@ -41,12 +50,15 @@ public class ActivityServiceImpl implements IActivityService {
     }
 
     @Override
-    public List<Activity> findActivitiesByUser_Id(Long userId) {
-        return activityDAO.findActivitiesByUser_Id(userId);
+    public List<ActivityDTO> findActivitiesByUser_Id(Long userId) {
+        return activityDAO.findActivitiesByUser_Id(userId)
+                .stream()
+                .map(activity -> modelMapper.map(activity, ActivityDTO.class))
+                .toList();
     }
 
     public void saveActivity(Activity activity, Long userId) {
-        User user = userService.findById(userId);
+        User user = userDAO.findById(userId);
         if (user == null) {
             throw new RuntimeException("User not found");
         }
@@ -57,7 +69,7 @@ public class ActivityServiceImpl implements IActivityService {
 
 //        Agregando la actividad a la lista de actividades del usuario
         user.getActivityList().add(activity);
-        userService.save(user);
+        userDAO.save(user);
 
     }
 

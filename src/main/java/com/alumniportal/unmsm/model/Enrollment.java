@@ -1,6 +1,6 @@
 package com.alumniportal.unmsm.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.*;
 

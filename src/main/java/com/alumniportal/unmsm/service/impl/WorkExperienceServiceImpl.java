@@ -1,10 +1,12 @@
 package com.alumniportal.unmsm.service.impl;
 
+import com.alumniportal.unmsm.dto.WorkExperienceDTO;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.model.WorkExperience;
+import com.alumniportal.unmsm.persistence.IUserDAO;
 import com.alumniportal.unmsm.persistence.IWorkExperienceDAO;
-import com.alumniportal.unmsm.service.IUserService;
 import com.alumniportal.unmsm.service.IWorkExperienceService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,17 +19,28 @@ public class WorkExperienceServiceImpl implements IWorkExperienceService {
     private IWorkExperienceDAO workExperienceDAO;
 
     @Autowired
-    private IUserService userService;
+    private IUserDAO userDAO;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
 
     @Override
-    public List<WorkExperience> findAll() {
-        return workExperienceDAO.findAll();
+    public List<WorkExperienceDTO> findAll() {
+        return workExperienceDAO.findAll()
+                .stream()
+                .map(workExperience -> modelMapper.map(workExperience, WorkExperienceDTO.class))
+                .toList();
     }
 
+
     @Override
-    public WorkExperience findById(Long id) {
-        return workExperienceDAO.findById(id);
+    public WorkExperienceDTO findById(Long id) {
+        WorkExperience workExperience = workExperienceDAO.findById(id);
+        if (workExperience == null) {
+            return null;
+        }
+        return modelMapper.map(workExperience, WorkExperienceDTO.class);
     }
 
     @Override
@@ -41,13 +54,16 @@ public class WorkExperienceServiceImpl implements IWorkExperienceService {
     }
 
     @Override
-    public List<WorkExperience> findWorkExperiencesByUser_Id(Long userId) {
-        return workExperienceDAO.findWorkExperiencesByUser_Id(userId);
+    public List<WorkExperienceDTO> findWorkExperiencesByUser_Id(Long userId) {
+        return workExperienceDAO.findWorkExperiencesByUser_Id(userId)
+                .stream()
+                .map(workExperience -> modelMapper.map(workExperience, WorkExperienceDTO.class))
+                .toList();
     }
 
     @Override
     public void saveWorkExperience(WorkExperience workExperience, Long userId) {
-        User user = userService.findById(userId);
+        User user = userDAO.findById(userId);
         if (user == null) {
             throw new RuntimeException("User not found");
         }
@@ -57,7 +73,7 @@ public class WorkExperienceServiceImpl implements IWorkExperienceService {
 
 //        agregando la experiencia laboral al usuario y persistiendo
         user.getWorkExperienceList().add(workExperience);
-        userService.save(user);
+        userDAO.save(user);
 
     }
 }

@@ -1,7 +1,7 @@
 package com.alumniportal.unmsm.controller;
 
+import com.alumniportal.unmsm.dto.ProjectDTO;
 import com.alumniportal.unmsm.model.Project;
-import com.alumniportal.unmsm.service.IUserService;
 import com.alumniportal.unmsm.service.IProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,21 +17,18 @@ public class ProjectController {
     @Autowired
     private IProjectService projectService;
 
-    @Autowired
-    private IUserService userService;
-
     @GetMapping("/all")
-    public List<Project> findAll() {
+    public List<ProjectDTO> findAll() {
         return projectService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
-        Project project = projectService.findById(id);
-        if (project == null) {
+        ProjectDTO projectDTO = projectService.findById(id);
+        if (projectDTO == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(project);
+        return ResponseEntity.ok(projectDTO);
     }
 
     @PostMapping("/save/{userId}")
@@ -52,7 +49,7 @@ public class ProjectController {
     }
 
     @GetMapping("/user/{userId}")
-    public List<Project> findProjectsByUser_Id(@PathVariable Long userId) {
+    public List<ProjectDTO> findProjectsByUser_Id(@PathVariable Long userId) {
         return projectService.findProjectsByUser_Id(userId);
     }
 

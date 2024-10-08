@@ -1,5 +1,6 @@
 package com.alumniportal.unmsm.controller;
 
+import com.alumniportal.unmsm.dto.EnrollmentDTO;
 import com.alumniportal.unmsm.model.Enrollment;
 import com.alumniportal.unmsm.service.IEnrollmentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,17 +19,17 @@ public class EnrollmentController {
 
 
     @GetMapping("/all")
-    public List<Enrollment> findAll() {
+    public List<EnrollmentDTO> findAll() {
         return enrollmentService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
-        Enrollment enrollment = enrollmentService.findById(id);
-        if (enrollment == null) {
+        EnrollmentDTO enrollmentDTO = enrollmentService.findById(id);
+        if (enrollmentDTO == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(enrollment);
+        return ResponseEntity.ok(enrollmentDTO);
     }
 
     @PostMapping("/save")
@@ -51,12 +52,12 @@ public class EnrollmentController {
     }
 
     @GetMapping("/user/{userId}")
-    public List<Enrollment> findEnrollmentsByUser_Id(@PathVariable Long userId) {
+    public List<EnrollmentDTO> findEnrollmentsByUser_Id(@PathVariable Long userId) {
         return enrollmentService.findEnrollmentsByUser_Id(userId);
     }
 
     @GetMapping("/activity/{activityId}")
-    public List<Enrollment> findEnrollmentsByActivity_Id(@PathVariable Long activityId) {
+    public List<EnrollmentDTO> findEnrollmentsByActivity_Id(@PathVariable Long activityId) {
         return enrollmentService.findEnrollmentsByActivity_Id(activityId);
     }
 

@@ -1,21 +1,22 @@
 package com.alumniportal.unmsm.service;
 
+import com.alumniportal.unmsm.dto.ProjectDTO;
 import com.alumniportal.unmsm.model.Project;
 
 import java.util.List;
 
 public interface IProjectService {
 
-    List<Project> findAll();
+    List<ProjectDTO> findAll();
 
-    Project findById(Long id);
+    ProjectDTO findById(Long id);
 
     void save(Project project);
 
     void deleteById(Long id);
 
     //    Buscar todos los projects de un usuario
-    List<Project> findProjectsByUser_Id(Long userId);
+    List<ProjectDTO> findProjectsByUser_Id(Long userId);
 
     void saveProject(Project project, Long userId);
 }

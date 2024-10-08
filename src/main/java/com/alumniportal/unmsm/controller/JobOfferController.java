@@ -1,5 +1,6 @@
 package com.alumniportal.unmsm.controller;
 
+import com.alumniportal.unmsm.dto.JobOfferDTO;
 import com.alumniportal.unmsm.model.JobOffer;
 import com.alumniportal.unmsm.service.IJobOfferService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +19,12 @@ public class JobOfferController {
 
 
     @GetMapping("/all")
-    public List<JobOffer> findAll() {
+    public List<JobOfferDTO> findAll() {
         return jobOfferService.findAll();
     }
 
     @GetMapping("/{id}")
-    public JobOffer findById(@PathVariable Long id) {
+    public JobOfferDTO findById(@PathVariable Long id) {
         return jobOfferService.findById(id);
     }
 
@@ -40,8 +41,8 @@ public class JobOfferController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
-        JobOffer jobOffer = jobOfferService.findById(id);
-        if (jobOffer == null) {
+        JobOfferDTO jobOfferDTO = jobOfferService.findById(id);
+        if (jobOfferDTO == null) {
             return ResponseEntity.badRequest().body("Error: JobOffer not found!");
         }
         jobOfferService.deleteById(id);
@@ -49,7 +50,7 @@ public class JobOfferController {
     }
 
     @GetMapping("/company/{companyId}")
-    public List<JobOffer> findJobOffersByCompany_Id(@PathVariable Long companyId) {
+    public List<JobOfferDTO> findJobOffersByCompany_Id(@PathVariable Long companyId) {
         return jobOfferService.findJobOffersByCompany_Id(companyId);
     }
 

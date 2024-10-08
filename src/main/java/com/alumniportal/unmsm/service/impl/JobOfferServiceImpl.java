@@ -1,10 +1,12 @@
 package com.alumniportal.unmsm.service.impl;
 
+import com.alumniportal.unmsm.dto.JobOfferDTO;
 import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.model.JobOffer;
+import com.alumniportal.unmsm.persistence.ICompanyDAO;
 import com.alumniportal.unmsm.persistence.IJobOfferDAO;
-import com.alumniportal.unmsm.service.ICompanyService;
 import com.alumniportal.unmsm.service.IJobOfferService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,16 +20,26 @@ public class JobOfferServiceImpl implements IJobOfferService {
     private IJobOfferDAO jobOfferDAO;
 
     @Autowired
-    private ICompanyService companyService;
+    private ICompanyDAO companyDAO;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
-    public List<JobOffer> findAll() {
-        return jobOfferDAO.findAll();
+    public List<JobOfferDTO> findAll() {
+        return jobOfferDAO.findAll()
+                .stream()
+                .map(jobOffer -> modelMapper.map(jobOffer, JobOfferDTO.class))
+                .toList();
     }
 
     @Override
-    public JobOffer findById(Long id) {
-        return jobOfferDAO.findById(id);
+    public JobOfferDTO findById(Long id) {
+        JobOffer jobOffer = jobOfferDAO.findById(id);
+        if (jobOffer == null) {
+            return null;
+        }
+        return modelMapper.map(jobOffer, JobOfferDTO.class);
     }
 
     @Override
@@ -41,13 +53,16 @@ public class JobOfferServiceImpl implements IJobOfferService {
     }
 
     @Override
-    public List<JobOffer> findJobOffersByCompany_Id(Long id) {
-        return jobOfferDAO.findJobOffersByCompany_Id(id);
+    public List<JobOfferDTO> findJobOffersByCompany_Id(Long id) {
+        return jobOfferDAO.findJobOffersByCompany_Id(id)
+                .stream()
+                .map(jobOffer -> modelMapper.map(jobOffer, JobOfferDTO.class))
+                .toList();
     }
 
     @Override
     public void saveJobOffer(JobOffer jobOffer, Long companyId) {
-        Company company = companyService.findById(companyId);
+        Company company = companyDAO.findById(companyId);
         if (company == null) {
             throw new RuntimeException("Company not found!");
         }
@@ -56,6 +71,6 @@ public class JobOfferServiceImpl implements IJobOfferService {
         jobOfferDAO.save(jobOffer);
 
         company.getJobOfferList().add(jobOffer);
-        companyService.save(company);
+        companyDAO.save(company);
     }
 }

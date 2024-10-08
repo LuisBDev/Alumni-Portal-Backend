@@ -1,10 +1,12 @@
 package com.alumniportal.unmsm.service.impl;
 
+import com.alumniportal.unmsm.dto.EducationDTO;
 import com.alumniportal.unmsm.model.Education;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.IEducationDAO;
+import com.alumniportal.unmsm.persistence.IUserDAO;
 import com.alumniportal.unmsm.service.IEducationService;
-import com.alumniportal.unmsm.service.IUserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,17 +19,27 @@ public class EducationServiceImpl implements IEducationService {
     private IEducationDAO educationDAO;
 
     @Autowired
-    private IUserService userService;
+    private IUserDAO userDAO;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
 
     @Override
-    public List<Education> findAll() {
-        return educationDAO.findAll();
+    public List<EducationDTO> findAll() {
+        return educationDAO.findAll()
+                .stream()
+                .map(education -> modelMapper.map(education, EducationDTO.class))
+                .toList();
     }
 
     @Override
-    public Education findById(Long id) {
-        return educationDAO.findById(id);
+    public EducationDTO findById(Long id) {
+        Education education = educationDAO.findById(id);
+        if (education == null) {
+            return null;
+        }
+        return modelMapper.map(education, EducationDTO.class);
     }
 
     @Override
@@ -41,13 +53,16 @@ public class EducationServiceImpl implements IEducationService {
     }
 
     @Override
-    public List<Education> findEducationsByUser_Id(Long userId) {
-        return educationDAO.findEducationsByUser_Id(userId);
+    public List<EducationDTO> findEducationsByUser_Id(Long userId) {
+        return educationDAO.findEducationsByUser_Id(userId)
+                .stream()
+                .map(education -> modelMapper.map(education, EducationDTO.class))
+                .toList();
     }
 
     @Override
     public void saveEducation(Education education, Long userId) {
-        User user = userService.findById(userId);
+        User user = userDAO.findById(userId);
         if (user == null) {
             throw new RuntimeException("User not found");
         }
@@ -56,6 +71,6 @@ public class EducationServiceImpl implements IEducationService {
         educationDAO.save(education);
 //        Agregando la educacion al usuario y persistiendo
         user.getEducationList().add(education);
-        userService.save(user);
+        userDAO.save(user);
     }
 }

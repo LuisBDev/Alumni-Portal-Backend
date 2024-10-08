@@ -1,5 +1,7 @@
 package com.alumniportal.unmsm.service;
 
+import com.alumniportal.unmsm.dto.UserCVDTO;
+import com.alumniportal.unmsm.dto.UserDTO;
 import com.alumniportal.unmsm.model.User;
 
 import java.util.List;
@@ -7,9 +9,9 @@ import java.util.Map;
 
 public interface IUserService {
 
-    List<User> findAll();
+    List<UserDTO> findAll();
 
-    User findById(Long id);
+    UserDTO findById(Long id);
 
     void save(User user);
 
@@ -17,10 +19,14 @@ public interface IUserService {
 
     boolean existsByEmail(String email);
 
-    User findByEmail(String email);
+    UserDTO findByEmail(String email);
 
     void saveUser(User user);
 
     void updateUser(Long id, Map<String, Object> fields);
+
+    UserDTO validateLogin(String email, String password);
+
+    UserCVDTO getUserCV(Long userId);
 
 }

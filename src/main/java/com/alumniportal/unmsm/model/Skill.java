@@ -22,6 +22,9 @@ public class Skill {
     @Column(nullable = false)
     private String level;
 
-//Relation with User
+    //Relation with User
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
 }

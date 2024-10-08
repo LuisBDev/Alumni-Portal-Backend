@@ -1,5 +1,6 @@
 package com.alumniportal.unmsm.controller;
 
+import com.alumniportal.unmsm.dto.ApplicationDTO;
 import com.alumniportal.unmsm.model.Application;
 import com.alumniportal.unmsm.service.IApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,17 +19,17 @@ public class ApplicationController {
 
 
     @GetMapping("/all")
-    public List<Application> findAll() {
+    public List<ApplicationDTO> findAll() {
         return applicationService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
-        Application application = applicationService.findById(id);
-        if (application == null) {
+        ApplicationDTO applicationDTO = applicationService.findById(id);
+        if (applicationDTO == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(application);
+        return ResponseEntity.ok(applicationDTO);
     }
 
     @PostMapping("/save")
@@ -50,12 +51,12 @@ public class ApplicationController {
     }
 
     @GetMapping("/user/{userId}")
-    public List<Application> findApplicationsByUser_Id(@PathVariable Long userId) {
+    public List<ApplicationDTO> findApplicationsByUser_Id(@PathVariable Long userId) {
         return applicationService.findApplicationsByUser_Id(userId);
     }
 
     @GetMapping("/job-offer/{jobOfferId}")
-    public List<Application> findApplicationsByJobOffer_Id(@PathVariable Long jobOfferId) {
+    public List<ApplicationDTO> findApplicationsByJobOffer_Id(@PathVariable Long jobOfferId) {
         return applicationService.findApplicationsByJobOffer_Id(jobOfferId);
     }
 

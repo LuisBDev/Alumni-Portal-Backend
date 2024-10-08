@@ -1,14 +1,15 @@
 package com.alumniportal.unmsm.service;
 
+import com.alumniportal.unmsm.dto.CompanyDTO;
 import com.alumniportal.unmsm.model.Company;
 
 import java.util.List;
 import java.util.Map;
 
 public interface ICompanyService {
-    List<Company> findAll();
+    List<CompanyDTO> findAll();
 
-    Company findById(Long id);
+    CompanyDTO findById(Long id);
 
     void save(Company company);
 
@@ -16,9 +17,11 @@ public interface ICompanyService {
 
     boolean existsByEmail(String email);
 
-    Company findByEmail(String email);
+    CompanyDTO findByEmail(String email);
 
     void saveCompany(Company company);
 
     void updateCompany(Long id, Map<String, Object> fields);
+
+    CompanyDTO validateLogin(String email, String password);
 }

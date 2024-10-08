@@ -1,8 +1,10 @@
 package com.alumniportal.unmsm.service.impl;
 
+import com.alumniportal.unmsm.dto.CompanyDTO;
 import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.persistence.ICompanyDAO;
 import com.alumniportal.unmsm.service.ICompanyService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
@@ -18,14 +20,24 @@ public class CompanyServiceImpl implements ICompanyService {
     @Autowired
     private ICompanyDAO companyDAO;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     @Override
-    public List<Company> findAll() {
-        return companyDAO.findAll();
+    public List<CompanyDTO> findAll() {
+        return companyDAO.findAll()
+                .stream()
+                .map(company -> modelMapper.map(company, CompanyDTO.class))
+                .toList();
     }
 
     @Override
-    public Company findById(Long id) {
-        return companyDAO.findById(id);
+    public CompanyDTO findById(Long id) {
+        Company company = companyDAO.findById(id);
+        if (company == null) {
+            return null;
+        }
+        return modelMapper.map(company, CompanyDTO.class);
     }
 
     @Override
@@ -46,8 +58,12 @@ public class CompanyServiceImpl implements ICompanyService {
     }
 
     @Override
-    public Company findByEmail(String email) {
-        return companyDAO.findByEmail(email);
+    public CompanyDTO findByEmail(String email) {
+        Company company = companyDAO.findByEmail(email);
+        if (company == null) {
+            return null;
+        }
+        return modelMapper.map(company, CompanyDTO.class);
     }
 
     @Override
@@ -74,5 +90,16 @@ public class CompanyServiceImpl implements ICompanyService {
         companyDAO.save(companyFound);
     }
 
+    @Override
+    public CompanyDTO validateLogin(String email, String password) {
+        Company company = companyDAO.findByEmail(email);
+        if (company == null) {
+            throw new RuntimeException("Error: Company not found!");
+        }
+        if (!company.getPassword().equals(password)) {
+            throw new RuntimeException("Error: Password incorrect!");
+        }
+        return modelMapper.map(company, CompanyDTO.class);
+    }
 
 }
