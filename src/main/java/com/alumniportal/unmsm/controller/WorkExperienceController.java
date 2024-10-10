@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/work-experience")
@@ -45,6 +46,17 @@ public class WorkExperienceController {
 
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Map<String, Object> updates)
+    {
+        try {
+            workExperienceService.updateWorkExperience(id, updates);
+            return ResponseEntity.ok("Work Experience updated successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id) {
@@ -55,6 +67,8 @@ public class WorkExperienceController {
     public List<WorkExperienceDTO> findWorkExperiencesByUser_Id(@PathVariable Long userId) {
         return workExperienceService.findWorkExperiencesByUser_Id(userId);
     }
+
+
 
 
 }

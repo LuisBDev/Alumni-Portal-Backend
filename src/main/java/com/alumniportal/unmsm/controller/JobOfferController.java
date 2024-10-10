@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/job-offer")
@@ -34,6 +35,17 @@ public class JobOfferController {
         try {
             jobOfferService.saveJobOffer(jobOffer, companyId);
             return ResponseEntity.ok("JobOffer saved successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Map<String, Object> updates)
+    {
+        try {
+            jobOfferService.updateJobOffer(id, updates);
+            return ResponseEntity.ok("JobOffer updated successfully!");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }

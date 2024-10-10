@@ -3,14 +3,18 @@ package com.alumniportal.unmsm.service.impl;
 import com.alumniportal.unmsm.dto.SkillDTO;
 import com.alumniportal.unmsm.model.Skill;
 import com.alumniportal.unmsm.model.User;
+import com.alumniportal.unmsm.model.WorkExperience;
 import com.alumniportal.unmsm.persistence.ISkillDAO;
 import com.alumniportal.unmsm.persistence.IUserDAO;
 import com.alumniportal.unmsm.service.ISkillService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class SkillServiceImpl implements ISkillService {
@@ -71,6 +75,20 @@ public class SkillServiceImpl implements ISkillService {
 //        Agregando el skill a la lista de skills del usuario
         user.getSkillList().add(skill);
         userDAO.save(user);
+    }
+
+    @Override
+    public void updateSkill(Long id, Map<String, Object> fields) {
+        Skill skill = skillDAO.findById(id);
+        if (skill == null) {
+            throw new RuntimeException("Error: skill not found!");
+        }
+        fields.forEach((k, v) -> {
+            Field field = ReflectionUtils.findField(Skill.class, k);
+            field.setAccessible(true);
+            ReflectionUtils.setField(field, skill, v);
+        });
+        skillDAO.save(skill);
     }
 
 }

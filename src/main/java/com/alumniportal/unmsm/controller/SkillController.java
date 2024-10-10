@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/skill")
@@ -37,6 +38,17 @@ public class SkillController {
         try {
             skillService.saveSkill(skill, userId);
             return ResponseEntity.ok("Skill saved successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Map<String, Object> updates)
+    {
+        try {
+            skillService.updateSkill(id, updates);
+            return ResponseEntity.ok("Skill updated successfully!");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

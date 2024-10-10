@@ -2,6 +2,7 @@ package com.alumniportal.unmsm.service.impl;
 
 import com.alumniportal.unmsm.dto.ProjectDTO;
 import com.alumniportal.unmsm.model.Project;
+import com.alumniportal.unmsm.model.Skill;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.IProjectDAO;
 import com.alumniportal.unmsm.persistence.IUserDAO;
@@ -9,8 +10,11 @@ import com.alumniportal.unmsm.service.IProjectService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProjectServiceImpl implements IProjectService {
@@ -71,6 +75,20 @@ public class ProjectServiceImpl implements IProjectService {
 //        Agregando el project a la lista de projects del usuario
         user.getProjectList().add(project);
         userDAO.save(user);
+    }
+
+    @Override
+    public void updateProject(Long id, Map<String, Object> fields) {
+        Project project = projectDAO.findById(id);
+        if (project == null) {
+            throw new RuntimeException("Error: project not found!");
+        }
+        fields.forEach((k, v) -> {
+            Field field = ReflectionUtils.findField(Project.class, k);
+            field.setAccessible(true);
+            ReflectionUtils.setField(field, project, v);
+        });
+        projectDAO.save(project);
     }
 
 }

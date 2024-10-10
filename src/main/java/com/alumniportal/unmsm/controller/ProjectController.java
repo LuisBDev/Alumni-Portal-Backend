@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/project")
@@ -36,7 +37,18 @@ public class ProjectController {
 
         try {
             projectService.saveProject(workExperience, userId);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok("Project saved successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Map<String, Object> updates)
+    {
+        try {
+            projectService.updateProject(id, updates);
+            return ResponseEntity.ok("Project updated successfully!");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

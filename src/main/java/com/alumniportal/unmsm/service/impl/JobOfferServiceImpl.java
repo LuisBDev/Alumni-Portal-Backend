@@ -3,15 +3,19 @@ package com.alumniportal.unmsm.service.impl;
 import com.alumniportal.unmsm.dto.JobOfferDTO;
 import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.model.JobOffer;
+import com.alumniportal.unmsm.model.Project;
 import com.alumniportal.unmsm.persistence.ICompanyDAO;
 import com.alumniportal.unmsm.persistence.IJobOfferDAO;
 import com.alumniportal.unmsm.service.IJobOfferService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
+import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class JobOfferServiceImpl implements IJobOfferService {
@@ -72,5 +76,19 @@ public class JobOfferServiceImpl implements IJobOfferService {
 
         company.getJobOfferList().add(jobOffer);
         companyDAO.save(company);
+    }
+
+    @Override
+    public void updateJobOffer(Long id, Map<String, Object> fields) {
+        JobOffer jobOffer = jobOfferDAO.findById(id);
+        if (jobOffer == null) {
+            throw new RuntimeException("Error: jobOffer not found!");
+        }
+        fields.forEach((k, v) -> {
+            Field field = ReflectionUtils.findField(JobOffer.class, k);
+            field.setAccessible(true);
+            ReflectionUtils.setField(field, jobOffer, v);
+        });
+        jobOfferDAO.save(jobOffer);
     }
 }

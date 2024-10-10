@@ -1,6 +1,7 @@
 package com.alumniportal.unmsm.service.impl;
 
 import com.alumniportal.unmsm.dto.EducationDTO;
+import com.alumniportal.unmsm.model.Certification;
 import com.alumniportal.unmsm.model.Education;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.IEducationDAO;
@@ -9,8 +10,11 @@ import com.alumniportal.unmsm.service.IEducationService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class EducationServiceImpl implements IEducationService {
@@ -72,5 +76,19 @@ public class EducationServiceImpl implements IEducationService {
 //        Agregando la educacion al usuario y persistiendo
         user.getEducationList().add(education);
         userDAO.save(user);
+    }
+
+    @Override
+    public void updateEducation(Long id, Map<String, Object> fields) {
+        Education education = educationDAO.findById(id);
+        if (education == null) {
+            throw new RuntimeException("Error: education not found!");
+        }
+        fields.forEach((k, v) -> {
+            Field field = ReflectionUtils.findField(Education.class, k);
+            field.setAccessible(true);
+            ReflectionUtils.setField(field, education, v);
+        });
+        educationDAO.save(education);
     }
 }

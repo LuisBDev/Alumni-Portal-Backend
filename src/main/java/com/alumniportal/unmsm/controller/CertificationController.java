@@ -5,11 +5,13 @@ import com.alumniportal.unmsm.dto.CertificationDTO;
 import com.alumniportal.unmsm.model.Certification;
 import com.alumniportal.unmsm.service.ICertificationService;
 import com.alumniportal.unmsm.service.IUserService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/certification")
@@ -51,6 +53,16 @@ public class CertificationController {
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id) {
         certificationService.deleteById(id);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> updateCertification(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+        try {
+            certificationService.updateCertification(id, updates);
+            return ResponseEntity.ok("Certification updated successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/user/{userId}")

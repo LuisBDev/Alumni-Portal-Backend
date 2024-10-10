@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/education")
@@ -46,6 +47,16 @@ public class EducationController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
 
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+        try {
+            educationService.updateEducation(id, updates);
+            return ResponseEntity.ok("Education updated successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
     }
 
 

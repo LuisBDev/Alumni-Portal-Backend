@@ -4,6 +4,7 @@ import com.alumniportal.unmsm.dto.JobOfferDTO;
 import com.alumniportal.unmsm.model.JobOffer;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IJobOfferService {
     List<JobOfferDTO> findAll();
@@ -17,5 +18,7 @@ public interface IJobOfferService {
     List<JobOfferDTO> findJobOffersByCompany_Id(Long id);
 
     void saveJobOffer(JobOffer jobOffer, Long companyId);
+
+    void updateJobOffer(Long id, Map<String, Object> fields);
 
 }

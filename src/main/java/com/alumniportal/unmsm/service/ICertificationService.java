@@ -4,6 +4,7 @@ import com.alumniportal.unmsm.dto.CertificationDTO;
 import com.alumniportal.unmsm.model.Certification;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ICertificationService {
 
@@ -18,5 +19,7 @@ public interface ICertificationService {
     List<CertificationDTO> findCertificationsByUser_Id(Long userId);
 
     void saveCertification(Certification certification, Long userId);
+
+    void updateCertification(Long id, Map<String, Object> fields);
 
 }

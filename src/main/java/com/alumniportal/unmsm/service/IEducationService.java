@@ -4,6 +4,7 @@ import com.alumniportal.unmsm.dto.EducationDTO;
 import com.alumniportal.unmsm.model.Education;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IEducationService {
 
@@ -18,6 +19,8 @@ public interface IEducationService {
     List<EducationDTO> findEducationsByUser_Id(Long userId);
 
     void saveEducation(Education education, Long userId);
+
+    void updateEducation(Long id, Map<String, Object> fields);
 
 
 }

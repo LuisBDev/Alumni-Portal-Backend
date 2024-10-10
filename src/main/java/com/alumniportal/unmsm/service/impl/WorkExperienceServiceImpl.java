@@ -9,8 +9,11 @@ import com.alumniportal.unmsm.service.IWorkExperienceService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class WorkExperienceServiceImpl implements IWorkExperienceService {
@@ -74,6 +77,21 @@ public class WorkExperienceServiceImpl implements IWorkExperienceService {
 //        agregando la experiencia laboral al usuario y persistiendo
         user.getWorkExperienceList().add(workExperience);
         userDAO.save(user);
+
+    }
+
+    @Override
+    public void updateWorkExperience(Long id, Map<String, Object> fields) {
+        WorkExperience workExperience = workExperienceDAO.findById(id);
+        if (workExperience == null) {
+            throw new RuntimeException("Error: workExperience not found!");
+        }
+        fields.forEach((k, v) -> {
+            Field field = ReflectionUtils.findField(WorkExperience.class, k);
+            field.setAccessible(true);
+            ReflectionUtils.setField(field, workExperience, v);
+        });
+        workExperienceDAO.save(workExperience);
 
     }
 }

@@ -4,6 +4,7 @@ import com.alumniportal.unmsm.dto.ProjectDTO;
 import com.alumniportal.unmsm.model.Project;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IProjectService {
 
@@ -19,4 +20,6 @@ public interface IProjectService {
     List<ProjectDTO> findProjectsByUser_Id(Long userId);
 
     void saveProject(Project project, Long userId);
+
+    void updateProject(Long id, Map<String, Object> fields);
 }
