@@ -4,7 +4,6 @@ import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.ICompanyDAO;
 import com.alumniportal.unmsm.persistence.IUserDAO;
-import com.alumniportal.unmsm.service.ICompanyService;
 import com.alumniportal.unmsm.util.ImageManagement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,10 +16,9 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/image")
+@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.PATCH})
 public class ImageController {
 
-    @Autowired
-    private ImageManagement imageManagement;
 
     @Autowired
     private ImageManagement<User> userImageManagement;

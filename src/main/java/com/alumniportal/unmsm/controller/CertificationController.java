@@ -5,7 +5,6 @@ import com.alumniportal.unmsm.dto.CertificationDTO;
 import com.alumniportal.unmsm.model.Certification;
 import com.alumniportal.unmsm.service.ICertificationService;
 import com.alumniportal.unmsm.service.IUserService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +14,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/certification")
-@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
+@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.PATCH})
 public class CertificationController {
 
     @Autowired
