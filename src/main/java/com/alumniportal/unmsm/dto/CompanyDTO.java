@@ -23,4 +23,5 @@ public class CompanyDTO {
     private String location;
     private LocalDate createdAt;
     private LocalDate updatedAt;
+    private String photoUrl;
 }

@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tblCompany")
-public class Company {
+public class Company extends AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,6 +52,8 @@ public class Company {
 
     @Column(nullable = true)
     private LocalDate updatedAt;
+
+    private String photoUrl;
 
     //    Relacion con JobOffer
     @OneToMany(mappedBy = "company", orphanRemoval = true)

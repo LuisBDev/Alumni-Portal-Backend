@@ -6,9 +6,13 @@ import com.alumniportal.unmsm.dto.UserDTO;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.service.IUserService;
 import com.alumniportal.unmsm.util.CVGenerator;
+import com.alumniportal.unmsm.util.ImageManagement;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,6 +30,8 @@ public class UserController {
 
     @Autowired
     private IUserService userService;
+
+
 
     @GetMapping("/all")
     public List<UserDTO> findAll() {
@@ -100,4 +106,6 @@ public class UserController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+
 }
