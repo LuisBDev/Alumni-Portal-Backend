@@ -21,6 +21,7 @@ public class UserCVDTO {
     private String contactNumber;
     private String about;
 
+
     private List<CertificationDTO> certifications;
     private List<EducationDTO> education;
     private List<ProjectDTO> projects;

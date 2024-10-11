@@ -8,6 +8,8 @@ import com.alumniportal.unmsm.service.IUserService;
 import com.alumniportal.unmsm.util.CVGenerator;
 import com.alumniportal.unmsm.util.ImageManagement;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,7 +28,8 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user")
-@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.PATCH})
+@CrossOrigin(origins = "*", allowedHeaders = "*",
+        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.PATCH})
 public class UserController {
 
     @Autowired
@@ -89,22 +93,23 @@ public class UserController {
         }
     }
 
+
     @GetMapping("/cv/download/{userId}")
-    public ResponseEntity<?> downloadUserCV(@PathVariable Long userId) {
-        try {
-            UserCVDTO userCV = userService.getUserCV(userId);
+    public ResponseEntity<?> downloadUserCV(@PathVariable Long userId) throws IOException {
+        // Obtén los datos del usuario utilizando el ID
+        UserCVDTO cv = userService.getUserCV(userId);  // Ajusta este método para obtener el DTO correspondiente
 
-            // Call the CV generation method as a static method
-            File pdfFile = CVGenerator.generateCV(userCV);
+        // Llama al método que ahora devuelve un byte[]
+        byte[] pdfContent = CVGenerator.generateCV(cv);
 
-            Path downloadsPath = Paths.get(System.getProperty("user.home"), "Downloads", pdfFile.getName());
-            Files.move(pdfFile.toPath(), downloadsPath, StandardCopyOption.REPLACE_EXISTING);
+        // Crea los encabezados para la respuesta HTTP
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("inline", "UserCV_" + userId + "_" + cv.getName() + ".pdf");
+        headers.setContentLength(pdfContent.length);
 
-            return ResponseEntity.ok("CV successfully downloaded to: " + downloadsPath.toString());
-
-        } catch (RuntimeException | IOException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        // Retorna el PDF en la respuesta como array de bytes
+        return new ResponseEntity<>(pdfContent, headers, HttpStatus.OK);
     }
 
 

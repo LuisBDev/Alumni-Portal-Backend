@@ -6,18 +6,15 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
-import java.io.File;
-
-import org.apache.pdfbox.pdmodel.font.*;
-
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-
+import org.apache.pdfbox.pdmodel.font.PDFont;
 
 public class CVGenerator {
 
-    public static File generateCV(UserCVDTO cv) throws IOException {
+    public static byte[] generateCV(UserCVDTO cv) throws IOException {
         PDDocument document = new PDDocument();
         PDPage page = new PDPage();
         document.addPage(page);
@@ -43,8 +40,8 @@ public class CVGenerator {
 
         // Centering Name
         contentStream.setFont(boldFont, 18);
-        float titleWidth = boldFont.getStringWidth(fullName) / 1000 * 18; // Text width (PDFBox returns in 1000ths of a point)
-        float titleX = (pageWidth - titleWidth) / 2; // Center X position
+        float titleWidth = boldFont.getStringWidth(fullName) / 1000 * 18;
+        float titleX = (pageWidth - titleWidth) / 2;
 
         contentStream.newLineAtOffset(titleX, 750);
         contentStream.showText(fullName);
@@ -52,16 +49,16 @@ public class CVGenerator {
 
         // Centering Contact Info
         contentStream.setFont(regularFont, 12);
-        float contactWidth = regularFont.getStringWidth(contactInfo) / 1000 * 12; // Text width for contact info
-        float contactX = (pageWidth - contactWidth) / 2; // Center X position
+        float contactWidth = regularFont.getStringWidth(contactInfo) / 1000 * 12;
+        float contactX = (pageWidth - contactWidth) / 2;
 
-        contentStream.newLineAtOffset(contactX - titleX, 0); // Adjust offset since we're already at the center
+        contentStream.newLineAtOffset(contactX - titleX, 0);
         contentStream.showText(contactInfo);
         contentStream.newLine();
         contentStream.newLine();
 
         // Reset offset for other sections to be left-aligned at left margin
-        contentStream.newLineAtOffset(-contactX + leftMargin, 0); // Move to the left margin for other content
+        contentStream.newLineAtOffset(-contactX + leftMargin, 0);
 
         // About Section
         contentStream.setFont(boldFont, 14);
@@ -137,7 +134,7 @@ public class CVGenerator {
 
         contentStream.newLine();
 
-//       Skills Section
+        // Skills Section
         contentStream.setFont(boldFont, 14);
         contentStream.showText("Skills");
         contentStream.newLine();
@@ -148,25 +145,22 @@ public class CVGenerator {
         }
         contentStream.newLine();
 
-
         contentStream.endText();
         contentStream.close();
 
-        // Save PDF
-        File pdfFile = new File("UserCV_" + cv.getName() + ".pdf");
-        document.save(pdfFile);
+        // Use ByteArrayOutputStream instead of saving to file
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        document.save(byteArrayOutputStream);
         document.close();
 
-        return pdfFile;
+        return byteArrayOutputStream.toByteArray();
     }
 
-    // Helper method to safely format nullable LocalDate objects
     private static String formatNullableLocalDate(LocalDate date, DateTimeFormatter dateFormat) {
         if (date != null) {
             return date.format(dateFormat);
         } else {
-            return "N/A"; // Return default if LocalDate is null
+            return "N/A";
         }
     }
-
 }
