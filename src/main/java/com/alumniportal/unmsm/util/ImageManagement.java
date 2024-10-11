@@ -45,7 +45,7 @@ public class ImageManagement<T extends AbstractEntity> {
             filePath = Paths.get(UPLOAD_DIR, fileNameAndId).toString();
 
             // Eliminar imagen anterior si existe
-            deleteOldImage(user.getPhotoUrl());
+            deleteImageByUrl(user.getPhotoUrl());
             user.setPhotoUrl(filePath);
             userDAO.save(user);
         } else if (entity instanceof Company) {
@@ -54,7 +54,7 @@ public class ImageManagement<T extends AbstractEntity> {
             filePath = Paths.get(UPLOAD_DIR, fileNameAndId).toString();
 
             // Eliminar imagen anterior si existe
-            deleteOldImage(company.getPhotoUrl());
+            deleteImageByUrl(company.getPhotoUrl());
             company.setPhotoUrl(filePath);
             companyDAO.save(company);
         } else {
@@ -67,7 +67,7 @@ public class ImageManagement<T extends AbstractEntity> {
         return filePath;
     }
 
-    private void deleteOldImage(String photoUrl) {
+    private void deleteImageByUrl(String photoUrl) {
         if (photoUrl != null) {
             File fileToDelete = new File(photoUrl);
             fileToDelete.delete();
@@ -110,11 +110,7 @@ public class ImageManagement<T extends AbstractEntity> {
         } else {
             throw new IllegalArgumentException("Entity type is not supported");
         }
-
-        if (photoUrl != null) {
-            File fileToDelete = new File(photoUrl);
-            fileToDelete.delete();
-        }
+        deleteImageByUrl(photoUrl);
     }
 
 
