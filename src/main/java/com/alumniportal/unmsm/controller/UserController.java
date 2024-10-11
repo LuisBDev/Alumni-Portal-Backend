@@ -1,28 +1,21 @@
 package com.alumniportal.unmsm.controller;
 
 import com.alumniportal.unmsm.dto.LoginRequestDTO;
+import com.alumniportal.unmsm.dto.PasswordChangeDTO;
 import com.alumniportal.unmsm.dto.UserCVDTO;
 import com.alumniportal.unmsm.dto.UserDTO;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.service.IUserService;
 import com.alumniportal.unmsm.util.CVGenerator;
-import com.alumniportal.unmsm.util.ImageManagement;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
+
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Map;
 
@@ -96,21 +89,32 @@ public class UserController {
 
     @GetMapping("/cv/download/{userId}")
     public ResponseEntity<?> downloadUserCV(@PathVariable Long userId) throws IOException {
-        // Obtén los datos del usuario utilizando el ID
-        UserCVDTO cv = userService.getUserCV(userId);  // Ajusta este método para obtener el DTO correspondiente
 
-        // Llama al método que ahora devuelve un byte[]
+        UserCVDTO cv = userService.getUserCV(userId);
+
         byte[] pdfContent = CVGenerator.generateCV(cv);
 
-        // Crea los encabezados para la respuesta HTTP
+        // Encabezados para la respuesta HTTP
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
         headers.setContentDispositionFormData("inline", "UserCV_" + userId + "_" + cv.getName() + ".pdf");
         headers.setContentLength(pdfContent.length);
 
-        // Retorna el PDF en la respuesta como array de bytes
+        // Se retorna el PDF en la respuesta como array de bytes
         return new ResponseEntity<>(pdfContent, headers, HttpStatus.OK);
     }
+
+    @PostMapping("/updatePassword/{id}")
+    public ResponseEntity<?> updatePassword(@PathVariable Long id, @RequestBody PasswordChangeDTO passwordChangeDTO) {
+        try {
+            userService.updatePassword(id, passwordChangeDTO);
+            return ResponseEntity.ok("Password updated successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+
 
 
 }

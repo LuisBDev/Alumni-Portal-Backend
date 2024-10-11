@@ -182,4 +182,22 @@ public class UserServiceImpl implements IUserService {
 
         return cv;
     }
+
+    @Override
+    public void updatePassword(Long id, PasswordChangeDTO passwordChangeDTO) {
+        User user = userDAO.findById(id);
+        if (user == null) {
+            throw new RuntimeException("Error: User not found!");
+        }
+        if(!user.getEmail().equals(passwordChangeDTO.getEmail())){
+            throw new RuntimeException("Error: Invalid email!");
+        }
+
+        if (!user.getPassword().equals(passwordChangeDTO.getPassword())) {
+            throw new RuntimeException("Error: Tu old password no coincide en la bd!");
+        }
+        user.setPassword(passwordChangeDTO.getNewPassword());
+        user.setUpdatedAt(LocalDate.now());
+        userDAO.save(user);
+    }
 }

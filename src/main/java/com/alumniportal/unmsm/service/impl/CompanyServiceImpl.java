@@ -1,7 +1,9 @@
 package com.alumniportal.unmsm.service.impl;
 
 import com.alumniportal.unmsm.dto.CompanyDTO;
+import com.alumniportal.unmsm.dto.PasswordChangeDTO;
 import com.alumniportal.unmsm.model.Company;
+import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.ICompanyDAO;
 import com.alumniportal.unmsm.service.ICompanyService;
 import org.modelmapper.ModelMapper;
@@ -100,6 +102,24 @@ public class CompanyServiceImpl implements ICompanyService {
             throw new RuntimeException("Error: Password incorrect!");
         }
         return modelMapper.map(company, CompanyDTO.class);
+    }
+
+    @Override
+    public void updatePassword(Long id, PasswordChangeDTO passwordChangeDTO) {
+        Company company = companyDAO.findById(id);
+        if (company == null) {
+            throw new RuntimeException("Error: Company not found!");
+        }
+        if(!company.getEmail().equals(passwordChangeDTO.getEmail())){
+            throw new RuntimeException("Error: Invalid email!");
+        }
+
+        if (!company.getPassword().equals(passwordChangeDTO.getPassword())) {
+            throw new RuntimeException("Error: Tu old password no coincide en la bd!");
+        }
+        company.setPassword(passwordChangeDTO.getNewPassword());
+        company.setUpdatedAt(LocalDate.now());
+        companyDAO.save(company);
     }
 
 }

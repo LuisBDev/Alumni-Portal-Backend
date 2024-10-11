@@ -1,6 +1,7 @@
 package com.alumniportal.unmsm.service;
 
 import com.alumniportal.unmsm.dto.CompanyDTO;
+import com.alumniportal.unmsm.dto.PasswordChangeDTO;
 import com.alumniportal.unmsm.model.Company;
 
 import java.util.List;
@@ -24,4 +25,6 @@ public interface ICompanyService {
     void updateCompany(Long id, Map<String, Object> fields);
 
     CompanyDTO validateLogin(String email, String password);
+
+    void updatePassword(Long id, PasswordChangeDTO passwordChangeDTO);
 }

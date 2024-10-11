@@ -10,6 +10,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 
 public class CVGenerator {
@@ -33,6 +35,7 @@ public class CVGenerator {
         // Page dimensions (for centering)
         float pageWidth = page.getMediaBox().getWidth();
         float leftMargin = 50f; // Standard left margin
+        float maxWidth = pageWidth - leftMargin * 2; // Max width for the text
 
         // Header (Name and Contact Info)
         String fullName = cv.getName() + " " + cv.getPaternalSurname() + " " + cv.getMaternalSurname();
@@ -65,8 +68,10 @@ public class CVGenerator {
         contentStream.showText("About");
         contentStream.newLine();
         contentStream.setFont(regularFont, 12);
-        contentStream.showText(cv.getAbout());
-        contentStream.newLine();
+        for (String line : splitTextIntoLines(cv.getAbout(), maxWidth, regularFont, 12)) {
+            contentStream.showText(line);
+            contentStream.newLine();
+        }
         contentStream.newLine();
 
         // Work Experience Section
@@ -81,7 +86,10 @@ public class CVGenerator {
             contentStream.showText(work.getCompany() + " | " + work.getJobTitle() + " - " + startDate + " a " + endDate);
             contentStream.newLine();
             contentStream.setFont(italicFont, 12);
-            contentStream.showText(work.getDescription());
+            for (String line : splitTextIntoLines(work.getDescription(), maxWidth, italicFont, 12)) {
+                contentStream.showText(line);
+                contentStream.newLine();
+            }
             contentStream.setFont(regularFont, 12);
             contentStream.newLine();
         }
@@ -99,7 +107,10 @@ public class CVGenerator {
             contentStream.showText(edu.getDegree() + " | " + edu.getFieldOfStudy() + " - " + startDate + " a " + endDate);
             contentStream.newLine();
             contentStream.setFont(italicFont, 12);
-            contentStream.showText(edu.getInstitution());
+            for (String line : splitTextIntoLines(edu.getInstitution(), maxWidth, italicFont, 12)) {
+                contentStream.showText(line);
+                contentStream.newLine();
+            }
             contentStream.setFont(regularFont, 12);
             contentStream.newLine();
         }
@@ -115,7 +126,10 @@ public class CVGenerator {
             contentStream.showText(proj.getName() + " - " + projectDate);
             contentStream.newLine();
             contentStream.setFont(italicFont, 12);
-            contentStream.showText(proj.getDescription());
+            for (String line : splitTextIntoLines(proj.getDescription(), maxWidth, italicFont, 12)) {
+                contentStream.showText(line);
+                contentStream.newLine();
+            }
             contentStream.setFont(regularFont, 12);
             contentStream.newLine();
         }
@@ -131,7 +145,6 @@ public class CVGenerator {
             contentStream.showText(cert.getName() + " | " + cert.getIssuingOrganization() + " - " + issueDate);
             contentStream.newLine();
         }
-
         contentStream.newLine();
 
         // Skills Section
@@ -140,8 +153,10 @@ public class CVGenerator {
         contentStream.newLine();
         contentStream.setFont(regularFont, 12);
         for (SkillDTO skill : cv.getSkills()) {
-            contentStream.showText(skill.getName() + " | " + skill.getLevel());
-            contentStream.newLine();
+            for (String line : splitTextIntoLines(skill.getName() + " | " + skill.getLevel(), maxWidth, regularFont, 12)) {
+                contentStream.showText(line);
+                contentStream.newLine();
+            }
         }
         contentStream.newLine();
 
@@ -162,5 +177,26 @@ public class CVGenerator {
         } else {
             return "N/A";
         }
+    }
+
+    private static List<String> splitTextIntoLines(String text, float maxWidth, PDFont font, float fontSize) throws IOException {
+        List<String> lines = new ArrayList<>();
+        String[] words = text.split(" ");
+        StringBuilder currentLine = new StringBuilder();
+
+        for (String word : words) {
+            String testLine = currentLine.length() == 0 ? word : currentLine + " " + word;
+            float textWidth = font.getStringWidth(testLine) / 1000 * fontSize;
+
+            if (textWidth > maxWidth) {
+                lines.add(currentLine.toString());
+                currentLine = new StringBuilder(word);
+            } else {
+                currentLine.append(currentLine.length() == 0 ? word : " " + word);
+            }
+        }
+        lines.add(currentLine.toString());
+
+        return lines;
     }
 }

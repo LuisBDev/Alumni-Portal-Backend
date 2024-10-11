@@ -2,6 +2,7 @@ package com.alumniportal.unmsm.controller;
 
 import com.alumniportal.unmsm.dto.CompanyDTO;
 import com.alumniportal.unmsm.dto.LoginRequestDTO;
+import com.alumniportal.unmsm.dto.PasswordChangeDTO;
 import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.service.ICompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,4 +79,16 @@ public class CompanyController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @PostMapping("/updatePassword/{id}")
+    public ResponseEntity<?> updatePassword(@PathVariable Long id, @RequestBody PasswordChangeDTO passwordChangeDTO) {
+        try {
+            companyService.updatePassword(id, passwordChangeDTO);
+            return ResponseEntity.ok("Password updated successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+
 }

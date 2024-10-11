@@ -1,5 +1,6 @@
 package com.alumniportal.unmsm.service;
 
+import com.alumniportal.unmsm.dto.PasswordChangeDTO;
 import com.alumniportal.unmsm.dto.UserCVDTO;
 import com.alumniportal.unmsm.dto.UserDTO;
 import com.alumniportal.unmsm.model.User;
@@ -28,5 +29,7 @@ public interface IUserService {
     UserDTO validateLogin(String email, String password);
 
     UserCVDTO getUserCV(Long userId);
+
+    void updatePassword(Long id, PasswordChangeDTO passwordChangeDTO);
 
 }
