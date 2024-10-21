@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -86,7 +87,13 @@ public class ProjectServiceImpl implements IProjectService {
         fields.forEach((k, v) -> {
             Field field = ReflectionUtils.findField(Project.class, k);
             field.setAccessible(true);
-            ReflectionUtils.setField(field, project, v);
+            if ("date".equals(k)) {
+                // Convertir el valor de String a LocalDate
+                LocalDate date = LocalDate.parse(v.toString());
+                ReflectionUtils.setField(field, project, date);
+            } else {
+                ReflectionUtils.setField(field, project, v);
+            }
         });
         projectDAO.save(project);
     }

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -85,11 +86,21 @@ public class CertificationServiceImpl implements ICertificationService {
         if (certification == null) {
             throw new RuntimeException("Error: certification not found!");
         }
+
         fields.forEach((k, v) -> {
             Field field = ReflectionUtils.findField(Certification.class, k);
             field.setAccessible(true);
-            ReflectionUtils.setField(field, certification, v);
+
+            if ("issueDate".equals(k) || "expirationDate".equals(k)) {
+                // Convertir el valor de String a LocalDate
+                LocalDate date = LocalDate.parse(v.toString());
+                ReflectionUtils.setField(field, certification, date);
+            } else {
+                ReflectionUtils.setField(field, certification, v);
+            }
         });
+
         certificationDAO.save(certification);
     }
+
 }

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -87,7 +88,13 @@ public class EducationServiceImpl implements IEducationService {
         fields.forEach((k, v) -> {
             Field field = ReflectionUtils.findField(Education.class, k);
             field.setAccessible(true);
-            ReflectionUtils.setField(field, education, v);
+            if ("startDate".equals(k) || "endDate".equals(k)) {
+                // Convertir el valor de String a LocalDate
+                LocalDate date = LocalDate.parse(v.toString());
+                ReflectionUtils.setField(field, education, date);
+            } else {
+                ReflectionUtils.setField(field, education, v);
+            }
         });
         educationDAO.save(education);
     }
