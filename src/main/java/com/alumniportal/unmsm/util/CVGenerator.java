@@ -22,6 +22,7 @@ public class CVGenerator {
         document.addPage(page);
 
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
         // Set up fonts
         PDFont boldFont = PDType1Font.HELVETICA_BOLD;
         PDFont regularFont = PDType1Font.HELVETICA;
@@ -199,3 +200,4 @@ public class CVGenerator {
         return lines;
     }
 }
+
