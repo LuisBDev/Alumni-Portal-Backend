@@ -59,7 +59,7 @@ public class Activity {
 
 
     //    Relation with Enrollment
-    @OneToMany(mappedBy = "activity")
+    @OneToMany(mappedBy = "activity", orphanRemoval = true)
     @JsonIgnore
     private List<Enrollment> enrollmentList;
 
