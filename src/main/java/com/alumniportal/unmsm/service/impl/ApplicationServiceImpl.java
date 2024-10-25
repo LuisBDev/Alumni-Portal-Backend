@@ -6,7 +6,6 @@ import com.alumniportal.unmsm.persistence.IApplicationDAO;
 import com.alumniportal.unmsm.persistence.IJobOfferDAO;
 import com.alumniportal.unmsm.persistence.IUserDAO;
 import com.alumniportal.unmsm.service.IApplicationService;
-import com.alumniportal.unmsm.service.IJobOfferService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,20 +59,30 @@ public class ApplicationServiceImpl implements IApplicationService {
     }
 
     @Override
-    public List<ApplicationDTO> findApplicationsByUser_Id(Long userId) {
-        return applicationDAO.findApplicationsByUser_Id(userId)
+    public List<ApplicationDTO> findApplicationsByUserId(Long userId) {
+        return applicationDAO.findApplicationsByUserId(userId)
                 .stream()
                 .map(application -> modelMapper.map(application, ApplicationDTO.class))
                 .toList();
     }
 
     @Override
-    public List<ApplicationDTO> findApplicationsByJobOffer_Id(Long jobOfferId) {
-        return applicationDAO.findApplicationsByJobOffer_Id(jobOfferId)
+    public List<ApplicationDTO> findApplicationsByJobOfferId(Long jobOfferId) {
+        return applicationDAO.findApplicationsByJobOfferId(jobOfferId)
                 .stream()
                 .map(application -> modelMapper.map(application, ApplicationDTO.class))
                 .toList();
     }
+
+    @Override
+    public ApplicationDTO findApplicationByUserIdAndJobOfferId(Long userId, Long jobOfferId) {
+        Application application = applicationDAO.findApplicationByUserIdAndJobOfferId(userId, jobOfferId);
+        if (application == null) {
+            return null;
+        }
+        return modelMapper.map(application, ApplicationDTO.class);
+    }
+
 
     public void saveApplication(Application application) {
         User user = userDAO.findById(application.getUser().getId());

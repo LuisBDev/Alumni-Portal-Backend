@@ -3,7 +3,6 @@ package com.alumniportal.unmsm.service.impl;
 import com.alumniportal.unmsm.dto.SkillDTO;
 import com.alumniportal.unmsm.model.Skill;
 import com.alumniportal.unmsm.model.User;
-import com.alumniportal.unmsm.model.WorkExperience;
 import com.alumniportal.unmsm.persistence.ISkillDAO;
 import com.alumniportal.unmsm.persistence.IUserDAO;
 import com.alumniportal.unmsm.service.ISkillService;
@@ -57,8 +56,8 @@ public class SkillServiceImpl implements ISkillService {
     }
 
     @Override
-    public List<SkillDTO> findSkillsByUser_Id(Long userId) {
-        return skillDAO.findSkillsByUser_Id(userId)
+    public List<SkillDTO> findSkillsByUserId(Long userId) {
+        return skillDAO.findSkillsByUserId(userId)
                 .stream()
                 .map(skill -> modelMapper.map(skill, SkillDTO.class))
                 .toList();

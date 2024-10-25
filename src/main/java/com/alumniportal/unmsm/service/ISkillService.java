@@ -16,7 +16,7 @@ public interface ISkillService {
     void deleteById(Long id);
 
     //    Buscar todos los skills de un usuario
-    List<SkillDTO> findSkillsByUser_Id(Long userId);
+    List<SkillDTO> findSkillsByUserId(Long userId);
 
     public void saveSkill(Skill skill, Long userId);
 

@@ -66,8 +66,8 @@ public class EducationController {
     }
 
     @GetMapping("/user/{userId}")
-    public List<EducationDTO> findEducationsByUser_Id(@PathVariable Long userId) {
-        return educationService.findEducationsByUser_Id(userId);
+    public List<EducationDTO> findEducationsByUserId(@PathVariable Long userId) {
+        return educationService.findEducationsByUserId(userId);
     }
 
 

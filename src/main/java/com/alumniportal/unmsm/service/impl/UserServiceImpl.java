@@ -3,10 +3,6 @@ package com.alumniportal.unmsm.service.impl;
 import com.alumniportal.unmsm.dto.*;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.*;
-import com.alumniportal.unmsm.repository.ICertificationRepository;
-import com.alumniportal.unmsm.repository.IEducationRepository;
-import com.alumniportal.unmsm.repository.IProjectRepository;
-import com.alumniportal.unmsm.repository.IWorkExperienceRepository;
 import com.alumniportal.unmsm.service.IUserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -136,7 +132,7 @@ public class UserServiceImpl implements IUserService {
         cv.setContactNumber(user.getContactNumber());
         cv.setAbout(user.getAbout());
 
-        cv.setCertifications(certificationDAO.findCertificationsByUser_Id(userId).stream().map(cert -> {
+        cv.setCertifications(certificationDAO.findCertificationsByUserId(userId).stream().map(cert -> {
             CertificationDTO certDto = new CertificationDTO();
             certDto.setName(cert.getName());
             certDto.setIssuingOrganization(cert.getIssuingOrganization());
@@ -145,7 +141,7 @@ public class UserServiceImpl implements IUserService {
             return certDto;
         }).collect(Collectors.toList()));
 
-        cv.setEducation(educationDAO.findEducationsByUser_Id(userId).stream().map(edu -> {
+        cv.setEducation(educationDAO.findEducationsByUserId(userId).stream().map(edu -> {
             EducationDTO eduDto = new EducationDTO();
             eduDto.setInstitution(edu.getInstitution());
             eduDto.setFieldOfStudy(edu.getFieldOfStudy());
@@ -155,7 +151,7 @@ public class UserServiceImpl implements IUserService {
             return eduDto;
         }).collect(Collectors.toList()));
 
-        cv.setProjects(projectDAO.findProjectsByUser_Id(userId).stream().map(proj -> {
+        cv.setProjects(projectDAO.findProjectsByUserId(userId).stream().map(proj -> {
             ProjectDTO projDto = new ProjectDTO();
             projDto.setName(proj.getName());
             projDto.setDescription(proj.getDescription());
@@ -163,14 +159,14 @@ public class UserServiceImpl implements IUserService {
             return projDto;
         }).collect(Collectors.toList()));
 
-        cv.setSkills(skillDAO.findSkillsByUser_Id(userId).stream().map(skill -> {
+        cv.setSkills(skillDAO.findSkillsByUserId(userId).stream().map(skill -> {
             SkillDTO skillDto = new SkillDTO();
             skillDto.setName(skill.getName());
             skillDto.setLevel(skill.getLevel());
             return skillDto;
         }).collect(Collectors.toList()));
 
-        cv.setWorkExperience(workExperienceDAO.findWorkExperiencesByUser_Id(userId).stream().map(work -> {
+        cv.setWorkExperience(workExperienceDAO.findWorkExperiencesByUserId(userId).stream().map(work -> {
             WorkExperienceDTO workDto = new WorkExperienceDTO();
             workDto.setCompany(work.getCompany());
             workDto.setDescription(work.getDescription());
@@ -189,7 +185,7 @@ public class UserServiceImpl implements IUserService {
         if (user == null) {
             throw new RuntimeException("Error: User not found!");
         }
-        if(!user.getEmail().equals(passwordChangeDTO.getEmail())){
+        if (!user.getEmail().equals(passwordChangeDTO.getEmail())) {
             throw new RuntimeException("Error: Invalid email!");
         }
 

@@ -42,8 +42,7 @@ public class JobOfferController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Map<String, Object> updates)
-    {
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
         try {
             jobOfferService.updateJobOffer(id, updates);
             return ResponseEntity.ok("JobOffer updated successfully!");
@@ -63,8 +62,8 @@ public class JobOfferController {
     }
 
     @GetMapping("/company/{companyId}")
-    public List<JobOfferDTO> findJobOffersByCompany_Id(@PathVariable Long companyId) {
-        return jobOfferService.findJobOffersByCompany_Id(companyId);
+    public List<JobOfferDTO> findJobOffersByCompanyId(@PathVariable Long companyId) {
+        return jobOfferService.findJobOffersByCompanyId(companyId);
     }
 
 

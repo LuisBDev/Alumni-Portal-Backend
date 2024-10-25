@@ -36,7 +36,7 @@ public class SkillDAOImpl implements ISkillDAO {
     }
 
     @Override
-    public List<Skill> findSkillsByUser_Id(Long userId) {
-        return skillRepository.findSkillsByUser_Id(userId);
+    public List<Skill> findSkillsByUserId(Long userId) {
+        return skillRepository.findSkillsByUserId(userId);
     }
 }

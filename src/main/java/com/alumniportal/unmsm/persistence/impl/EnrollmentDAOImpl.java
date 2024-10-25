@@ -35,12 +35,17 @@ public class EnrollmentDAOImpl implements IEnrollmentDAO {
     }
 
     @Override
-    public List<Enrollment> findEnrollmentsByUser_Id(Long userId) {
-        return enrollmentRepository.findEnrollmentsByUser_Id(userId);
+    public List<Enrollment> findEnrollmentsByUserId(Long userId) {
+        return enrollmentRepository.findEnrollmentsByUserId(userId);
     }
 
     @Override
-    public List<Enrollment> findEnrollmentsByActivity_Id(Long activityId) {
-        return enrollmentRepository.findEnrollmentsByActivity_Id(activityId);
+    public List<Enrollment> findEnrollmentsByActivityId(Long activityId) {
+        return enrollmentRepository.findEnrollmentsByActivityId(activityId);
+    }
+
+    @Override
+    public Enrollment findEnrollmentByUserIdAndActivityId(Long userId, Long activityId) {
+        return enrollmentRepository.findEnrollmentByUserIdAndActivityId(userId, activityId);
     }
 }

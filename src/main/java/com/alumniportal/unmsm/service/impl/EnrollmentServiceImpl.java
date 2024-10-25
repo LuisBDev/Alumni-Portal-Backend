@@ -58,20 +58,30 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
     }
 
     @Override
-    public List<EnrollmentDTO> findEnrollmentsByUser_Id(Long userId) {
-        return enrollmentDAO.findEnrollmentsByUser_Id(userId)
+    public List<EnrollmentDTO> findEnrollmentsByUserId(Long userId) {
+        return enrollmentDAO.findEnrollmentsByUserId(userId)
                 .stream()
                 .map(enrollment -> modelMapper.map(enrollment, EnrollmentDTO.class))
                 .toList();
     }
 
     @Override
-    public List<EnrollmentDTO> findEnrollmentsByActivity_Id(Long activityId) {
-        return enrollmentDAO.findEnrollmentsByActivity_Id(activityId)
+    public List<EnrollmentDTO> findEnrollmentsByActivityId(Long activityId) {
+        return enrollmentDAO.findEnrollmentsByActivityId(activityId)
                 .stream()
                 .map(enrollment -> modelMapper.map(enrollment, EnrollmentDTO.class))
                 .toList();
     }
+
+    @Override
+    public EnrollmentDTO findEnrollmentByUserIdAndActivityId(Long userId, Long activityId) {
+        Enrollment enrollment = enrollmentDAO.findEnrollmentByUserIdAndActivityId(userId, activityId);
+        if (enrollment == null) {
+            return null;
+        }
+        return modelMapper.map(enrollment, EnrollmentDTO.class);
+    }
+
 
     public void saveEnrollment(Enrollment enrollment) {
         User user = userDAO.findById(enrollment.getUser().getId());

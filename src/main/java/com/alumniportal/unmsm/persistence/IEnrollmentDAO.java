@@ -14,9 +14,11 @@ public interface IEnrollmentDAO {
 
     void deleteById(Long id);
 
-    List<Enrollment> findEnrollmentsByUser_Id(Long userId);
+    List<Enrollment> findEnrollmentsByUserId(Long userId);
 
-    List<Enrollment> findEnrollmentsByActivity_Id(Long activityId);
+    List<Enrollment> findEnrollmentsByActivityId(Long activityId);
+
+    Enrollment findEnrollmentByUserIdAndActivityId(Long userId, Long activityId);
 
 
 }

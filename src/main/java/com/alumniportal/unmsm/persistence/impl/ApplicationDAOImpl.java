@@ -35,13 +35,18 @@ public class ApplicationDAOImpl implements IApplicationDAO {
     }
 
     @Override
-    public List<Application> findApplicationsByUser_Id(Long userId) {
-        return applicationRepository.findApplicationsByUser_Id(userId);
+    public List<Application> findApplicationsByUserId(Long userId) {
+        return applicationRepository.findApplicationsByUserId(userId);
     }
 
     @Override
-    public List<Application> findApplicationsByJobOffer_Id(Long jobOfferId) {
-        return applicationRepository.findApplicationsByJobOffer_Id(jobOfferId);
+    public List<Application> findApplicationsByJobOfferId(Long jobOfferId) {
+        return applicationRepository.findApplicationsByJobOfferId(jobOfferId);
+    }
+
+    @Override
+    public Application findApplicationByUserIdAndJobOfferId(Long userId, Long jobOfferId) {
+        return applicationRepository.findApplicationByUserIdAndJobOfferId(userId, jobOfferId);
     }
 
 

@@ -3,7 +3,6 @@ package com.alumniportal.unmsm.service.impl;
 import com.alumniportal.unmsm.dto.JobOfferDTO;
 import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.model.JobOffer;
-import com.alumniportal.unmsm.model.Project;
 import com.alumniportal.unmsm.persistence.ICompanyDAO;
 import com.alumniportal.unmsm.persistence.IJobOfferDAO;
 import com.alumniportal.unmsm.service.IJobOfferService;
@@ -57,8 +56,8 @@ public class JobOfferServiceImpl implements IJobOfferService {
     }
 
     @Override
-    public List<JobOfferDTO> findJobOffersByCompany_Id(Long id) {
-        return jobOfferDAO.findJobOffersByCompany_Id(id)
+    public List<JobOfferDTO> findJobOffersByCompanyId(Long id) {
+        return jobOfferDAO.findJobOffersByCompanyId(id)
                 .stream()
                 .map(jobOffer -> modelMapper.map(jobOffer, JobOfferDTO.class))
                 .toList();

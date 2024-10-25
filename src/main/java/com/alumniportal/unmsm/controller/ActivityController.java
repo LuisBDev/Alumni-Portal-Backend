@@ -59,8 +59,8 @@ public class ActivityController {
     }
 
     @GetMapping("/user/{userId}")
-    public List<ActivityDTO> findActivitysByUser_Id(@PathVariable Long userId) {
-        return activityService.findActivitiesByUser_Id(userId);
+    public List<ActivityDTO> findActivitiesByUserId(@PathVariable Long userId) {
+        return activityService.findActivitiesByUserId(userId);
     }
 
 

@@ -36,7 +36,7 @@ public class ProjectDAOImpl implements IProjectDAO {
     }
 
     @Override
-    public List<Project> findProjectsByUser_Id(Long userId) {
-        return projectRepository.findProjectsByUser_Id(userId);
+    public List<Project> findProjectsByUserId(Long userId) {
+        return projectRepository.findProjectsByUserId(userId);
     }
 }

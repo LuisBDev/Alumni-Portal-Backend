@@ -50,8 +50,8 @@ public class ActivityServiceImpl implements IActivityService {
     }
 
     @Override
-    public List<ActivityDTO> findActivitiesByUser_Id(Long userId) {
-        return activityDAO.findActivitiesByUser_Id(userId)
+    public List<ActivityDTO> findActivitiesByUserId(Long userId) {
+        return activityDAO.findActivitiesByUserId(userId)
                 .stream()
                 .map(activity -> modelMapper.map(activity, ActivityDTO.class))
                 .toList();

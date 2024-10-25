@@ -15,9 +15,11 @@ public interface IApplicationService {
 
     void deleteById(Long id);
 
-    List<ApplicationDTO> findApplicationsByUser_Id(Long userId);
+    List<ApplicationDTO> findApplicationsByUserId(Long userId);
 
-    List<ApplicationDTO> findApplicationsByJobOffer_Id(Long jobOfferId);
+    List<ApplicationDTO> findApplicationsByJobOfferId(Long jobOfferId);
+
+    ApplicationDTO findApplicationByUserIdAndJobOfferId(Long userId, Long jobOfferId);
 
     public void saveApplication(Application application);
 }

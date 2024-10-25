@@ -16,7 +16,7 @@ public interface IEducationService {
 
     void deleteById(Long id);
 
-    List<EducationDTO> findEducationsByUser_Id(Long userId);
+    List<EducationDTO> findEducationsByUserId(Long userId);
 
     void saveEducation(Education education, Long userId);
 

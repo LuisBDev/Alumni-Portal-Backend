@@ -14,7 +14,7 @@ public interface ICertificationDAO {
 
     void deleteById(Long id);
 
-    List<Certification> findCertificationsByUser_Id(Long userId);
+    List<Certification> findCertificationsByUserId(Long userId);
 
 
 }

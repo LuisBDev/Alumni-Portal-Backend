@@ -37,7 +37,7 @@ public class JobOfferDAOImpl implements IJobOfferDAO {
     }
 
     @Override
-    public List<JobOffer> findJobOffersByCompany_Id(Long id) {
-        return jobOfferRepository.findJobOffersByCompany_Id(id);
+    public List<JobOffer> findJobOffersByCompanyId(Long id) {
+        return jobOfferRepository.findJobOffersByCompanyId(id);
     }
 }

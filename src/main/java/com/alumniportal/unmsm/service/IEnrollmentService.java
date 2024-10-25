@@ -15,9 +15,11 @@ public interface IEnrollmentService {
 
     void deleteById(Long id);
 
-    List<EnrollmentDTO> findEnrollmentsByUser_Id(Long userId);
+    List<EnrollmentDTO> findEnrollmentsByUserId(Long userId);
 
-    List<EnrollmentDTO> findEnrollmentsByActivity_Id(Long activityId);
+    List<EnrollmentDTO> findEnrollmentsByActivityId(Long activityId);
+
+    EnrollmentDTO findEnrollmentByUserIdAndActivityId(Long userId, Long activityId);
 
     public void saveEnrollment(Enrollment enrollment);
 

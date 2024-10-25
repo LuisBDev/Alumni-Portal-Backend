@@ -36,7 +36,7 @@ public class EducationDAOImpl implements IEducationDAO {
     }
 
     @Override
-    public List<Education> findEducationsByUser_Id(Long userId) {
-        return educationRepository.findEducationsByUser_Id(userId);
+    public List<Education> findEducationsByUserId(Long userId) {
+        return educationRepository.findEducationsByUserId(userId);
     }
 }

@@ -17,7 +17,7 @@ public interface IProjectService {
     void deleteById(Long id);
 
     //    Buscar todos los projects de un usuario
-    List<ProjectDTO> findProjectsByUser_Id(Long userId);
+    List<ProjectDTO> findProjectsByUserId(Long userId);
 
     void saveProject(Project project, Long userId);
 

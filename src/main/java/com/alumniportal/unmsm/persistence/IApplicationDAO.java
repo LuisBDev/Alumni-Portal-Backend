@@ -13,9 +13,11 @@ public interface IApplicationDAO {
 
     void deleteById(Long id);
 
-    List<Application> findApplicationsByUser_Id(Long userId);
+    List<Application> findApplicationsByUserId(Long userId);
 
-    List<Application> findApplicationsByJobOffer_Id(Long jobOfferId);
+    List<Application> findApplicationsByJobOfferId(Long jobOfferId);
+
+    Application findApplicationByUserIdAndJobOfferId(Long userId, Long jobOfferId);
 
 
 }

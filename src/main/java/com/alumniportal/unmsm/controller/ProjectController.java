@@ -45,8 +45,7 @@ public class ProjectController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Map<String, Object> updates)
-    {
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
         try {
             projectService.updateProject(id, updates);
             return ResponseEntity.ok("Project updated successfully!");
@@ -62,8 +61,8 @@ public class ProjectController {
     }
 
     @GetMapping("/user/{userId}")
-    public List<ProjectDTO> findProjectsByUser_Id(@PathVariable Long userId) {
-        return projectService.findProjectsByUser_Id(userId);
+    public List<ProjectDTO> findProjectsByUserId(@PathVariable Long userId) {
+        return projectService.findProjectsByUserId(userId);
     }
 
 

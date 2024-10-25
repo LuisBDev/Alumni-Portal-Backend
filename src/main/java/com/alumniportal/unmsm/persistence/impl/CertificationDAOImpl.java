@@ -36,7 +36,7 @@ public class CertificationDAOImpl implements ICertificationDAO {
     }
 
     @Override
-    public List<Certification> findCertificationsByUser_Id(Long userId) {
-        return certificationRepository.findCertificationsByUser_Id(userId);
+    public List<Certification> findCertificationsByUserId(Long userId) {
+        return certificationRepository.findCertificationsByUserId(userId);
     }
 }

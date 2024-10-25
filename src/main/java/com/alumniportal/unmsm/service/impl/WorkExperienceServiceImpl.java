@@ -58,8 +58,8 @@ public class WorkExperienceServiceImpl implements IWorkExperienceService {
     }
 
     @Override
-    public List<WorkExperienceDTO> findWorkExperiencesByUser_Id(Long userId) {
-        return workExperienceDAO.findWorkExperiencesByUser_Id(userId)
+    public List<WorkExperienceDTO> findWorkExperiencesByUserId(Long userId) {
+        return workExperienceDAO.findWorkExperiencesByUserId(userId)
                 .stream()
                 .map(workExperience -> modelMapper.map(workExperience, WorkExperienceDTO.class))
                 .toList();

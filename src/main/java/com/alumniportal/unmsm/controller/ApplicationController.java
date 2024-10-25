@@ -52,13 +52,22 @@ public class ApplicationController {
     }
 
     @GetMapping("/user/{userId}")
-    public List<ApplicationDTO> findApplicationsByUser_Id(@PathVariable Long userId) {
-        return applicationService.findApplicationsByUser_Id(userId);
+    public List<ApplicationDTO> findApplicationsByUserId(@PathVariable Long userId) {
+        return applicationService.findApplicationsByUserId(userId);
     }
 
     @GetMapping("/job-offer/{jobOfferId}")
-    public List<ApplicationDTO> findApplicationsByJobOffer_Id(@PathVariable Long jobOfferId) {
-        return applicationService.findApplicationsByJobOffer_Id(jobOfferId);
+    public List<ApplicationDTO> findApplicationsByJobOfferId(@PathVariable Long jobOfferId) {
+        return applicationService.findApplicationsByJobOfferId(jobOfferId);
+    }
+
+    @GetMapping("/user/{userId}/job-offer/{jobOfferId}")
+    public ResponseEntity<ApplicationDTO> findApplicationByUserIdAndJobOfferId(@PathVariable Long userId, @PathVariable Long jobOfferId) {
+        ApplicationDTO applicationDTO = applicationService.findApplicationByUserIdAndJobOfferId(userId, jobOfferId);
+        if (applicationDTO == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(applicationDTO);
     }
 
 

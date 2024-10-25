@@ -15,7 +15,7 @@ public interface IJobOfferService {
 
     void deleteById(Long id);
 
-    List<JobOfferDTO> findJobOffersByCompany_Id(Long id);
+    List<JobOfferDTO> findJobOffersByCompanyId(Long id);
 
     void saveJobOffer(JobOffer jobOffer, Long companyId);
 

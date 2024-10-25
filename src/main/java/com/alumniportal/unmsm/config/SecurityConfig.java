@@ -40,12 +40,15 @@ public class SecurityConfig {
 
     private OrRequestMatcher publicEndpoints() {
         return new OrRequestMatcher(
-                new AntPathRequestMatcher("/api/user/all"),
-                new AntPathRequestMatcher("/api/company/all"),
-                new AntPathRequestMatcher("/api/user/loginAcademic"),
-                new AntPathRequestMatcher("/api/company/loginCompany"),
-                new AntPathRequestMatcher("/api/user/registerAcademic"),
-                new AntPathRequestMatcher("/api/company/registerCompany")
+//                new AntPathRequestMatcher("/api/user/all"),
+//                new AntPathRequestMatcher("/api/company/all"),
+//                new AntPathRequestMatcher("/api/user/loginAcademic"),
+//                new AntPathRequestMatcher("/api/company/loginCompany"),
+//                new AntPathRequestMatcher("/api/user/registerAcademic"),
+//                new AntPathRequestMatcher("/api/company/registerCompany")
+                
+//                Temporal hasta que se integre con el front
+                new AntPathRequestMatcher("/api/**")
         );
     }
 

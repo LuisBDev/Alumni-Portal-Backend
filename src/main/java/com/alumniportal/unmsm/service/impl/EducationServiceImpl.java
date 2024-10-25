@@ -1,7 +1,6 @@
 package com.alumniportal.unmsm.service.impl;
 
 import com.alumniportal.unmsm.dto.EducationDTO;
-import com.alumniportal.unmsm.model.Certification;
 import com.alumniportal.unmsm.model.Education;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.IEducationDAO;
@@ -58,8 +57,8 @@ public class EducationServiceImpl implements IEducationService {
     }
 
     @Override
-    public List<EducationDTO> findEducationsByUser_Id(Long userId) {
-        return educationDAO.findEducationsByUser_Id(userId)
+    public List<EducationDTO> findEducationsByUserId(Long userId) {
+        return educationDAO.findEducationsByUserId(userId)
                 .stream()
                 .map(education -> modelMapper.map(education, EducationDTO.class))
                 .toList();

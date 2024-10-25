@@ -45,8 +45,7 @@ public class SkillController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Map<String, Object> updates)
-    {
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
         try {
             skillService.updateSkill(id, updates);
             return ResponseEntity.ok("Skill updated successfully!");
@@ -62,8 +61,8 @@ public class SkillController {
     }
 
     @GetMapping("/user/{userId}")
-    public List<SkillDTO> findSkillsByUser_Id(@PathVariable Long userId) {
-        return skillService.findSkillsByUser_Id(userId);
+    public List<SkillDTO> findSkillsByUserId(@PathVariable Long userId) {
+        return skillService.findSkillsByUserId(userId);
     }
 
 

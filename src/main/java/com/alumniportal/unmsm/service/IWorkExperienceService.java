@@ -18,13 +18,11 @@ public interface IWorkExperienceService {
     void deleteById(Long id);
 
     //    Buscar todas las experiencias laborales de un usuario
-    List<WorkExperienceDTO> findWorkExperiencesByUser_Id(Long userId);
+    List<WorkExperienceDTO> findWorkExperiencesByUserId(Long userId);
 
     void saveWorkExperience(WorkExperience workExperience, Long userId);
 
     void updateWorkExperience(Long id, Map<String, Object> fields);
-
-
 
 
 }

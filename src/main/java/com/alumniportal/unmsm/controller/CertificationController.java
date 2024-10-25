@@ -66,8 +66,8 @@ public class CertificationController {
     }
 
     @GetMapping("/user/{userId}")
-    public List<CertificationDTO> findCertificationsByUser_Id(@PathVariable Long userId) {
-        return certificationService.findCertificationsByUser_Id(userId);
+    public List<CertificationDTO> findCertificationsByUserId(@PathVariable Long userId) {
+        return certificationService.findCertificationsByUserId(userId);
     }
 
 

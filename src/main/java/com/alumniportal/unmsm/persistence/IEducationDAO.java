@@ -15,7 +15,7 @@ public interface IEducationDAO {
 
     void deleteById(Long id);
 
-    List<Education> findEducationsByUser_Id(Long userId);
+    List<Education> findEducationsByUserId(Long userId);
 
 
 }

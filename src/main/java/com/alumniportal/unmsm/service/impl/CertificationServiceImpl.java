@@ -2,7 +2,6 @@ package com.alumniportal.unmsm.service.impl;
 
 import com.alumniportal.unmsm.dto.CertificationDTO;
 import com.alumniportal.unmsm.model.Certification;
-import com.alumniportal.unmsm.model.JobOffer;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.ICertificationDAO;
 import com.alumniportal.unmsm.persistence.IUserDAO;
@@ -58,8 +57,8 @@ public class CertificationServiceImpl implements ICertificationService {
     }
 
     @Override
-    public List<CertificationDTO> findCertificationsByUser_Id(Long userId) {
-        return certificationDAO.findCertificationsByUser_Id(userId)
+    public List<CertificationDTO> findCertificationsByUserId(Long userId) {
+        return certificationDAO.findCertificationsByUserId(userId)
                 .stream()
                 .map(certification -> modelMapper.map(certification, CertificationDTO.class))
                 .toList();

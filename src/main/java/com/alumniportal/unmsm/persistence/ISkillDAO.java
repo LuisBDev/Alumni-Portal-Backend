@@ -15,7 +15,7 @@ public interface ISkillDAO {
     void deleteById(Long id);
 
     //    Buscar todos los skills de un usuario
-    List<Skill> findSkillsByUser_Id(Long userId);
+    List<Skill> findSkillsByUserId(Long userId);
 
 
 }

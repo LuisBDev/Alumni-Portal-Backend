@@ -15,7 +15,7 @@ public interface IWorkExperienceDAO {
     void deleteById(Long id);
 
     //    Buscar todas las experiencias laborales de un usuario
-    List<WorkExperience> findWorkExperiencesByUser_Id(Long userId);
+    List<WorkExperience> findWorkExperiencesByUserId(Long userId);
 
 
 }

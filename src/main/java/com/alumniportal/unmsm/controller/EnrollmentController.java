@@ -53,13 +53,22 @@ public class EnrollmentController {
     }
 
     @GetMapping("/user/{userId}")
-    public List<EnrollmentDTO> findEnrollmentsByUser_Id(@PathVariable Long userId) {
-        return enrollmentService.findEnrollmentsByUser_Id(userId);
+    public List<EnrollmentDTO> findEnrollmentsByUserId(@PathVariable Long userId) {
+        return enrollmentService.findEnrollmentsByUserId(userId);
     }
 
     @GetMapping("/activity/{activityId}")
-    public List<EnrollmentDTO> findEnrollmentsByActivity_Id(@PathVariable Long activityId) {
-        return enrollmentService.findEnrollmentsByActivity_Id(activityId);
+    public List<EnrollmentDTO> findEnrollmentsByActivityId(@PathVariable Long activityId) {
+        return enrollmentService.findEnrollmentsByActivityId(activityId);
+    }
+
+    @GetMapping("/user/{userId}/activity/{activityId}")
+    public ResponseEntity<EnrollmentDTO> findEnrollmentByUserIdAndActivityId(@PathVariable Long userId, @PathVariable Long activityId) {
+        EnrollmentDTO enrollmentDTO = enrollmentService.findEnrollmentByUserIdAndActivityId(userId, activityId);
+        if (enrollmentDTO == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(enrollmentDTO);
     }
 
 

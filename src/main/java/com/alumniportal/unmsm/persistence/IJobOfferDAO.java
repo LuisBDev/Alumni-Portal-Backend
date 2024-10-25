@@ -14,7 +14,7 @@ public interface IJobOfferDAO {
 
     void deleteById(Long id);
 
-    List<JobOffer> findJobOffersByCompany_Id(Long id);
+    List<JobOffer> findJobOffersByCompanyId(Long id);
 
 
 }

@@ -15,7 +15,7 @@ public interface IProjectDAO {
     void deleteById(Long id);
 
     //    Buscar todos los projects de un usuario
-    List<Project> findProjectsByUser_Id(Long userId);
+    List<Project> findProjectsByUserId(Long userId);
 
 
 }

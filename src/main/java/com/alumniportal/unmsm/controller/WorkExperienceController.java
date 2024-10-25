@@ -47,8 +47,7 @@ public class WorkExperienceController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Map<String, Object> updates)
-    {
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
         try {
             workExperienceService.updateWorkExperience(id, updates);
             return ResponseEntity.ok("Work Experience updated successfully!");
@@ -64,11 +63,9 @@ public class WorkExperienceController {
     }
 
     @GetMapping("/user/{userId}")
-    public List<WorkExperienceDTO> findWorkExperiencesByUser_Id(@PathVariable Long userId) {
-        return workExperienceService.findWorkExperiencesByUser_Id(userId);
+    public List<WorkExperienceDTO> findWorkExperiencesByUserId(@PathVariable Long userId) {
+        return workExperienceService.findWorkExperiencesByUserId(userId);
     }
-
-
 
 
 }

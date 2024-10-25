@@ -16,7 +16,7 @@ public interface ICertificationService {
 
     void deleteById(Long id);
 
-    List<CertificationDTO> findCertificationsByUser_Id(Long userId);
+    List<CertificationDTO> findCertificationsByUserId(Long userId);
 
     void saveCertification(Certification certification, Long userId);
 

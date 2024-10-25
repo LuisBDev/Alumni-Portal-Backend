@@ -36,7 +36,7 @@ public class ActivityDAOImpl implements IActivityDAO {
     }
 
     @Override
-    public List<Activity> findActivitiesByUser_Id(Long userId) {
-        return activityRepository.findActivitiesByUser_Id(userId);
+    public List<Activity> findActivitiesByUserId(Long userId) {
+        return activityRepository.findActivitiesByUserId(userId);
     }
 }

@@ -13,6 +13,6 @@ public interface IActivityDAO {
 
     void deleteById(Long id);
 
-    List<Activity> findActivitiesByUser_Id(Long userId);
+    List<Activity> findActivitiesByUserId(Long userId);
 
 }
