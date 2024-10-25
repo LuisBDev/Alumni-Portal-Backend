@@ -4,8 +4,12 @@ package com.alumniportal.unmsm.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -15,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Table(name = "tblUser")
-public class User extends AbstractEntity {
+public class User extends AbstractEntity implements UserDetails {
 
 
     @Id
@@ -70,6 +74,9 @@ public class User extends AbstractEntity {
     @Column(nullable = true)
     private String headline;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
 
 //    Relacion con WorkExperience, Education, Project, Certification, Skill, Interest, Enrollment, Activity, Application
 
@@ -115,4 +122,33 @@ public class User extends AbstractEntity {
     private List<Skill> skillList;
 
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

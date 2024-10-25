@@ -32,27 +32,26 @@ public class CompanyController {
         return companyService.findById(id);
     }
 
-    @PostMapping("/loginCompany")
-    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDTO) {
-        try {
-            CompanyDTO companyDTO = companyService.validateLogin(loginRequestDTO.getEmail(), loginRequestDTO.getPassword());
-            return ResponseEntity.ok(companyDTO);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-
-    }
-
-    @PostMapping("/registerCompany")
-    public ResponseEntity<?> save(@RequestBody Company company) {
-        try {
-            companyService.saveCompany(company);
-            return ResponseEntity.ok("Company registered successfully!");
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-
-    }
+//    @PostMapping("/loginCompany")
+//    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDTO) {
+//        try {
+//            CompanyDTO companyDTO = companyService.validateLogin(loginRequestDTO.getEmail(), loginRequestDTO.getPassword());
+//            return ResponseEntity.ok(companyDTO);
+//        } catch (RuntimeException e) {
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//        }
+//
+//    }
+//
+//    @PostMapping("/registerCompany")
+//    public ResponseEntity<?> save(@RequestBody Company company) {
+//        try {
+//            companyService.saveCompany(company);
+//            return ResponseEntity.ok("Company registered successfully!");
+//        } catch (RuntimeException e) {
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//        }
+//    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id) {

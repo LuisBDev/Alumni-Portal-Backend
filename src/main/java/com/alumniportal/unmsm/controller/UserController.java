@@ -28,6 +28,25 @@ public class UserController {
     @Autowired
     private IUserService userService;
 
+//    @PostMapping("/loginAcademic")
+//    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDTO) {
+//        UserDTO userDTO = userService.validateLogin(loginRequestDTO.getEmail(), loginRequestDTO.getPassword());
+//        if (userDTO == null) {
+//            return ResponseEntity.status(401).body("Invalid email or password");
+//        }
+//        return ResponseEntity.ok(userDTO);
+//
+//    }
+//
+//    @PostMapping("/registerAcademic")
+//    public ResponseEntity<?> save(@RequestBody User user) {
+//        try {
+//            userService.saveUser(user);
+//            return ResponseEntity.ok("User registered successfully!");
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//        }
+//    }
 
 
     @GetMapping("/all")
@@ -56,25 +75,6 @@ public class UserController {
         return ResponseEntity.ok("User deleted successfully!");
     }
 
-    @PostMapping("/loginAcademic")
-    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDTO) {
-        UserDTO userDTO = userService.validateLogin(loginRequestDTO.getEmail(), loginRequestDTO.getPassword());
-        if (userDTO == null) {
-            return ResponseEntity.status(401).body("Invalid email or password");
-        }
-        return ResponseEntity.ok(userDTO);
-
-    }
-
-    @PostMapping("/registerAcademic")
-    public ResponseEntity<?> save(@RequestBody User user) {
-        try {
-            userService.saveUser(user);
-            return ResponseEntity.ok("User registered successfully!");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
 
     @PatchMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
@@ -113,8 +113,6 @@ public class UserController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
-
 
 
 }

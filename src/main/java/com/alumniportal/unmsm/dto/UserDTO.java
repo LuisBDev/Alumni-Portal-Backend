@@ -27,6 +27,7 @@ public class UserDTO {
     private String permanence;
     private String studentCode;
     private String headline;
+    private String role;
 
 
 }
