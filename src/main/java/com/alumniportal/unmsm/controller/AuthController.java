@@ -1,6 +1,8 @@
 package com.alumniportal.unmsm.controller;
 
+import com.alumniportal.unmsm.dto.AuthCompanyResponse;
 import com.alumniportal.unmsm.dto.AuthResponseDTO;
+import com.alumniportal.unmsm.dto.AuthUserResponse;
 import com.alumniportal.unmsm.dto.LoginRequestDTO;
 import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.model.User;
@@ -20,25 +22,23 @@ public class AuthController {
     private IAuthService authService;
 
     @PostMapping("/user/loginAcademic")
-    public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginRequestDTO loginRequestDTO) {
-        return ResponseEntity.ok(authService.login(loginRequestDTO, User.class));
+    public ResponseEntity<AuthUserResponse> loginAcademic(@RequestBody LoginRequestDTO loginRequestDTO) {
+        return ResponseEntity.ok(authService.loginAcademic(loginRequestDTO));
     }
-
-
-    @PostMapping("/company/loginCompany")
-    public ResponseEntity<AuthResponseDTO> loginCompany(@RequestBody LoginRequestDTO loginRequestDTO) {
-        return ResponseEntity.ok(authService.login(loginRequestDTO, Company.class));
-    }
-
 
     @PostMapping("/user/registerAcademic")
-    public ResponseEntity<?> registerAcademic(@RequestBody User user) {
-        return ResponseEntity.ok(authService.register(user, User.class));
+    public ResponseEntity<AuthUserResponse> registerAcademic(@RequestBody User user) {
+        return ResponseEntity.ok(authService.registerAcademic(user));
+    }
+
+    @PostMapping("/company/loginCompany")
+    public ResponseEntity<AuthCompanyResponse> loginCompany(@RequestBody LoginRequestDTO loginRequestDTO) {
+        return ResponseEntity.ok(authService.loginCompany(loginRequestDTO));
     }
 
     @PostMapping("/company/registerCompany")
-    public ResponseEntity<?> registerCompany(@RequestBody Company company) {
-        return ResponseEntity.ok(authService.register(company, Company.class));
+    public ResponseEntity<AuthCompanyResponse> registerCompany(@RequestBody Company company) {
+        return ResponseEntity.ok(authService.registerCompany(company));
     }
 
 

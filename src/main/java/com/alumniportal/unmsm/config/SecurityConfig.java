@@ -46,8 +46,8 @@ public class SecurityConfig {
 //                new AntPathRequestMatcher("/api/company/loginCompany"),
 //                new AntPathRequestMatcher("/api/user/registerAcademic"),
 //                new AntPathRequestMatcher("/api/company/registerCompany")
-                
-//                Temporal hasta que se integre con el front
+
+//                Temporal se permiten todas las api hasta que se integre con el front
                 new AntPathRequestMatcher("/api/**")
         );
     }
