@@ -21,6 +21,10 @@ public class Application {
     @Column
     private LocalDate applicationDate;
 
+    @Column
+    private String status;
+
+
     //    para mapear cuando un User aplica a un JobOffer
     @ManyToOne
     @JoinColumn(name = "user_id")

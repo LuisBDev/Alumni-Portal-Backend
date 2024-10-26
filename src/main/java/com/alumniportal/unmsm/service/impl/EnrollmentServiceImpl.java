@@ -93,6 +93,14 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
             throw new IllegalArgumentException("Error: Activity not found!");
         }
 
+        if (!activity.isEnrollable()) {
+            throw new IllegalArgumentException("Error: Activity is not enrollable!");
+        }
+
+        if (enrollmentDAO.findEnrollmentByUserIdAndActivityId(user.getId(), activity.getId()) != null) {
+            throw new IllegalArgumentException("Error: User is already enrolled in this activity!");
+        }
+
 //        Persistir enrollment
         enrollment.setUser(user);
         enrollment.setActivity(activity);

@@ -15,6 +15,7 @@ public class ApplicationDTO {
 
     private Long id;
     private LocalDate applicationDate;
+    private String status;
     private Long userId;       // Solo el ID del User en lugar de la entidad completa
     private Long jobOfferId;   // Solo el ID del JobOffer en lugar de la entidad completa
 }

@@ -41,7 +41,7 @@ public class User extends AbstractEntity implements UserDetails {
     @Column
     private String name;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String about;
 
     @Column

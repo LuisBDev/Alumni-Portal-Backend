@@ -30,7 +30,7 @@ public class WorkExperience {
     @Column(nullable = true)
     private LocalDate endDate;
 
-    @Column(nullable = false)
+    @Column(nullable = true, columnDefinition = "TEXT")
     private String description;
 
     //    Relation with User

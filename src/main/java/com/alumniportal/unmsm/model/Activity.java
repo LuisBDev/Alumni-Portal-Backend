@@ -23,7 +23,7 @@ public class Activity {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
 
 //    event_type ENUM('workshop', 'conference', 'seminar', 'post', 'other')

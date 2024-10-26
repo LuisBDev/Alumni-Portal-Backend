@@ -95,10 +95,16 @@ public class ApplicationServiceImpl implements IApplicationService {
             throw new IllegalArgumentException("Error: JobOffer not found!");
         }
 
+        if (applicationDAO.findApplicationByUserIdAndJobOfferId(user.getId(), jobOffer.getId()) != null) {
+            throw new IllegalArgumentException("Error: User already applied to this JobOffer!");
+        }
+
+
         // Establecemos las relaciones
         application.setUser(user);
         application.setJobOffer(jobOffer);
         application.setApplicationDate(LocalDate.now());
+        application.setStatus("PENDING");
 
         // Persistimos la aplicación
         applicationDAO.save(application);
