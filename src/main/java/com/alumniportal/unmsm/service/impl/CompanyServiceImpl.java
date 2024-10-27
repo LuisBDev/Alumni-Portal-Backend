@@ -6,6 +6,7 @@ import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.ICompanyDAO;
 import com.alumniportal.unmsm.service.ICompanyService;
+import com.alumniportal.unmsm.util.ImageManagement;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,9 @@ public class CompanyServiceImpl implements ICompanyService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private ImageManagement imageManagement;
 
     @Override
     public List<CompanyDTO> findAll() {
@@ -50,8 +54,15 @@ public class CompanyServiceImpl implements ICompanyService {
 
     @Override
     public void deleteById(Long id) {
-
+        Company company = companyDAO.findById(id);
+        if (company == null) {
+            throw new RuntimeException("Error: Company not found!");
+        }
+        if (company.getPhotoUrl() != null) {
+            imageManagement.deleteImageByUrl(company.getPhotoUrl());
+        }
         companyDAO.deleteById(id);
+
     }
 
     @Override
@@ -110,7 +121,7 @@ public class CompanyServiceImpl implements ICompanyService {
         if (company == null) {
             throw new RuntimeException("Error: Company not found!");
         }
-        if(!company.getEmail().equals(passwordChangeDTO.getEmail())){
+        if (!company.getEmail().equals(passwordChangeDTO.getEmail())) {
             throw new RuntimeException("Error: Invalid email!");
         }
 
