@@ -14,7 +14,7 @@ public interface IActivityService {
 
     void save(Activity activity);
 
-    void deleteById(Long id);
+    void deleteById(Long id) throws Exception;
 
     List<ActivityDTO> findActivitiesByUserId(Long userId);
 

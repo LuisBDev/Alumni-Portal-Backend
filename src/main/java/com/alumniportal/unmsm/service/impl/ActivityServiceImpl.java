@@ -62,7 +62,16 @@ public class ActivityServiceImpl implements IActivityService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Long id) throws Exception {
+        Activity activity = activityDAO.findById(id);
+        if (activity == null) {
+            throw new RuntimeException("Activity with id " + id + " not found and cannot be deleted");
+        }
+        try {
+            deleteActivityImage(id);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to delete activity image", e);
+        }
         activityDAO.deleteById(id);
     }
 
@@ -120,6 +129,9 @@ public class ActivityServiceImpl implements IActivityService {
     @Override
     public String uploadActivityImage(Long activityId, MultipartFile file) throws IOException {
         Activity activityDB = activityDAO.findById(activityId);
+        if (activityDB == null) {
+            throw new RuntimeException("Activity with id " + activityId + " not found");
+        }
         try {
             String fileName = file.getOriginalFilename();
 
@@ -171,6 +183,9 @@ public class ActivityServiceImpl implements IActivityService {
     @Override
     public void deleteActivityImage(Long activityId) throws Exception {
         Activity activityDB = activityDAO.findById(activityId);
+        if (activityDB == null) {
+            throw new Exception("Activity with id " + activityId + " not found");
+        }
         try {
             String key = activityDB.getUrl();
             if (key == null) {

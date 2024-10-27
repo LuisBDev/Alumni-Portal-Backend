@@ -26,4 +26,5 @@ public class ActivityDTO {
     private LocalDate createdAt;
     private LocalDate updatedAt;
 
+
 }

@@ -77,8 +77,13 @@ public class ActivityController {
 
 
     @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable Long id) {
-        activityService.deleteById(id);
+    public ResponseEntity<?> deleteById(@PathVariable Long id) throws Exception {
+        try {
+            activityService.deleteById(id);
+            return ResponseEntity.ok("Activity deleted successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/user/{userId}")

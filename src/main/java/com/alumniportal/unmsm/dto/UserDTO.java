@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -21,8 +23,8 @@ public class UserDTO {
     private String about;
     private String photoUrl;
     private String contactNumber;
-    private String createdAt;
-    private String updatedAt;
+    private LocalDate createdAt;
+    private LocalDate updatedAt;
     private String plan;
     private String permanence;
     private String studentCode;
