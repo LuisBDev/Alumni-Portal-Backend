@@ -91,7 +91,7 @@ public class ActivityServiceImpl implements IActivityService {
             String carpeta = "activityimages/";
             String key = carpeta + activityDB.getId() + "_" + fileName;
 
-            // Verificar si la activity ya tiene imagen y eliminarla si es necesario
+            // Se verifica si la activity ya tiene imagen y eliminarla si es necesario
             if (activityDB.getUrl() != null) {
                 s3Client.deleteObject(builder -> builder.bucket("alumniportals3").key(activityDB.getUrl()).build());
             }
@@ -154,7 +154,7 @@ public class ActivityServiceImpl implements IActivityService {
         }
     }
 
-    // Método adicional para obtener el tipo de contenido
+
     @Override
     public String getFileContentType(Long activityId) {
 
@@ -162,7 +162,7 @@ public class ActivityServiceImpl implements IActivityService {
 
         String key = activityDB.getUrl();
 
-        // Puedes definir una lógica para determinar el tipo de contenido basado en la clave del archivo
+
         String fileExtension = key.substring(key.lastIndexOf('.') + 1).toLowerCase();
 
         switch (fileExtension) {
@@ -176,7 +176,7 @@ public class ActivityServiceImpl implements IActivityService {
                 return "image/gif";
             case "pdf":
                 return "application/pdf";
-            // Agrega más tipos de archivo según sea necesario
+
             default:
                 return "application/octet-stream"; // Tipo de contenido genérico
         }
@@ -192,7 +192,7 @@ public class ActivityServiceImpl implements IActivityService {
         }
 
         // Retorna el nombre del archivo desde la clave (key)
-        return key.substring(key.lastIndexOf('/') + 1); // Esto devuelve solo el nombre del archivo con la extensión
+        return key.substring(key.lastIndexOf('/') + 1);
     }
 
 
