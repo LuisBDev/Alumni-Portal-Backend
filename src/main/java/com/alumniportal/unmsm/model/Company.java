@@ -67,6 +67,13 @@ public class Company extends AbstractEntity implements UserDetails {
     @JsonIgnore
     private List<JobOffer> jobOfferList;
 
+
+    //    Relacion con Activity
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Activity> activityList;
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));

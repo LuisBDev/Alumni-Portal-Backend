@@ -6,6 +6,7 @@ import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.ICompanyDAO;
 import com.alumniportal.unmsm.persistence.IUserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -67,7 +68,8 @@ public class ImageManagement<T extends AbstractEntity> {
         return filePath;
     }
 
-    private void deleteImageByUrl(String photoUrl) {
+
+    public void deleteImageByUrl(String photoUrl) {
         if (photoUrl != null) {
             File fileToDelete = new File(photoUrl);
             fileToDelete.delete();
@@ -112,8 +114,6 @@ public class ImageManagement<T extends AbstractEntity> {
         }
         deleteImageByUrl(photoUrl);
     }
-
-
 
 
 }

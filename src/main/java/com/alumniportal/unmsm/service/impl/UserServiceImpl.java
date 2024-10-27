@@ -1,9 +1,11 @@
 package com.alumniportal.unmsm.service.impl;
 
 import com.alumniportal.unmsm.dto.*;
+import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.*;
 import com.alumniportal.unmsm.service.IUserService;
+import com.alumniportal.unmsm.util.ImageManagement;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,6 +41,9 @@ public class UserServiceImpl implements IUserService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private ImageManagement imageManagement;
+
 
     @Override
     public List<UserDTO> findAll() {
@@ -63,7 +68,15 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public void deleteById(Long id) {
+        User user = userDAO.findById(id);
+        if (user == null) {
+            throw new RuntimeException("Error: User not found!");
+        }
+        if (user.getPhotoUrl() != null) {
+            imageManagement.deleteImageByUrl(user.getPhotoUrl());
+        }
         userDAO.deleteById(id);
+
     }
 
     @Override
