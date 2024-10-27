@@ -18,7 +18,11 @@ public interface IActivityService {
 
     List<ActivityDTO> findActivitiesByUserId(Long userId);
 
-    void saveActivity(Activity activity, Long userId);
+    List<ActivityDTO> findActivitiesByCompanyId(Long companyId);
+
+    void saveActivityByUserId(Activity activity, Long userId);
+
+    void saveActivityByCompanyId(Activity activity, Long companyId);
 
     String uploadActivityImage(Long userId, MultipartFile file) throws IOException;
 

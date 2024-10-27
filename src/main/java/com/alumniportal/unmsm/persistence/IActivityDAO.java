@@ -15,4 +15,6 @@ public interface IActivityDAO {
 
     List<Activity> findActivitiesByUserId(Long userId);
 
+    List<Activity> findActivitiesByCompanyId(Long companyId);
+
 }

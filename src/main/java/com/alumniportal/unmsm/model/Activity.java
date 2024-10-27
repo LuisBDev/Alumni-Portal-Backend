@@ -57,6 +57,11 @@ public class Activity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    //    Relation with Company
+    @ManyToOne
+    @JoinColumn(name = "company_id", nullable = true)
+    private Company company;
+    
 
     //    Relation with Enrollment
     @OneToMany(mappedBy = "activity", orphanRemoval = true)

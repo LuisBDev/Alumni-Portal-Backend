@@ -49,12 +49,25 @@ public class ActivityController {
         return ResponseEntity.ok(activityDTO);
     }
 
-    @PostMapping("/save/{userId}")
-    public ResponseEntity<?> save(@RequestBody Activity activity, @PathVariable Long userId) {
+    @PostMapping("/save-user/{userId}")
+    public ResponseEntity<?> saveActivityByUserId(@RequestBody Activity activity, @PathVariable Long userId) {
 
         try {
-            activityService.saveActivity(activity, userId);
-            return ResponseEntity.ok(activity);
+            activityService.saveActivityByUserId(activity, userId);
+            return ResponseEntity.ok("Actividad creada por el usuario correctamente: " + userId);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error al guardar la actividad");
+        }
+    }
+
+    @PostMapping("/save-company/{companyId}")
+    public ResponseEntity<?> saveActivityByCompanyId(@RequestBody Activity activity, @PathVariable Long companyId) {
+
+        try {
+            activityService.saveActivityByCompanyId(activity, companyId);
+            return ResponseEntity.ok("Actividad creada por la empresa correctamente: " + companyId);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
@@ -72,6 +85,12 @@ public class ActivityController {
     public List<ActivityDTO> findActivitiesByUserId(@PathVariable Long userId) {
         return activityService.findActivitiesByUserId(userId);
     }
+
+    @GetMapping("/company/{companyId}")
+    public List<ActivityDTO> findActivitiesByCompanyId(@PathVariable Long companyId) {
+        return activityService.findActivitiesByCompanyId(companyId);
+    }
+
 
     @PostMapping("/activity-image/{activityId}")
     public ResponseEntity<?> uploadActivityImage(@PathVariable Long activityId, @RequestParam("image") MultipartFile file) throws IOException {

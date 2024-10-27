@@ -2,8 +2,10 @@ package com.alumniportal.unmsm.service.impl;
 
 import com.alumniportal.unmsm.dto.ActivityDTO;
 import com.alumniportal.unmsm.model.Activity;
+import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.IActivityDAO;
+import com.alumniportal.unmsm.persistence.ICompanyDAO;
 import com.alumniportal.unmsm.persistence.IUserDAO;
 import com.alumniportal.unmsm.service.IActivityService;
 import org.modelmapper.ModelMapper;
@@ -29,6 +31,9 @@ public class ActivityServiceImpl implements IActivityService {
     private IUserDAO userDAO;
 
     @Autowired
+    private ICompanyDAO companyDAO;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
@@ -45,6 +50,9 @@ public class ActivityServiceImpl implements IActivityService {
     @Override
     public ActivityDTO findById(Long id) {
         Activity activity = activityDAO.findById(id);
+        if (activity == null) {
+            return null;
+        }
         return modelMapper.map(activity, ActivityDTO.class);
     }
 
@@ -66,7 +74,16 @@ public class ActivityServiceImpl implements IActivityService {
                 .toList();
     }
 
-    public void saveActivity(Activity activity, Long userId) {
+    @Override
+    public List<ActivityDTO> findActivitiesByCompanyId(Long companyId) {
+        return activityDAO.findActivitiesByCompanyId(companyId)
+                .stream()
+                .map(activity -> modelMapper.map(activity, ActivityDTO.class))
+                .toList();
+    }
+
+    @Override
+    public void saveActivityByUserId(Activity activity, Long userId) {
         User user = userDAO.findById(userId);
         if (user == null) {
             throw new RuntimeException("User not found");
@@ -79,6 +96,24 @@ public class ActivityServiceImpl implements IActivityService {
 //        Agregando la actividad a la lista de actividades del usuario
         user.getActivityList().add(activity);
         userDAO.save(user);
+        System.out.println(user.getActivityList());
+
+    }
+
+    @Override
+    public void saveActivityByCompanyId(Activity activity, Long companyId) {
+        Company company = companyDAO.findById(companyId);
+        if (company == null) {
+            throw new RuntimeException("Company not found");
+        }
+
+        activity.setCompany(company);
+        activity.setCreatedAt(LocalDate.now());
+        activityDAO.save(activity);
+        System.out.println(company.getActivityList());
+
+
+//        No se agrega la actividad a la lista de actividades de la empresa por el cascading de la relación
 
     }
 

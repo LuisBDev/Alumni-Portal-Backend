@@ -13,4 +13,8 @@ public interface IActivityRepository extends JpaRepository<Activity, Long> {
     @Query("select a from Activity a where a.user.id = ?1")
     List<Activity> findActivitiesByUserId(Long userId);
 
+    @Query("select a from Activity a where a.company.id = ?1")
+    List<Activity> findActivitiesByCompanyId(Long companyId);
+
+
 }
