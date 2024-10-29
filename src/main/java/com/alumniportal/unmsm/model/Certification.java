@@ -27,10 +27,10 @@ public class Certification {
     @Column
     private LocalDate issueDate;
 
-    @Column
+    @Column(nullable = true)
     private LocalDate expirationDate;
 
-    @Column
+    @Column(nullable = true)
     private String credentialUrl;
 
     //    Relation with User

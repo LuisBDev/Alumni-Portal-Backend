@@ -50,10 +50,12 @@ public class ActivityController {
     }
 
     @PostMapping("/save-user/{userId}")
-    public ResponseEntity<?> saveActivityByUserId(@RequestBody Activity activity, @PathVariable Long userId) {
-
+    public ResponseEntity<?> saveActivityByUserId(
+            @RequestPart(value = "activity") Activity activity,
+            @RequestPart(value = "image", required = false) MultipartFile image,
+            @PathVariable Long userId) {
         try {
-            activityService.saveActivityByUserId(activity, userId);
+            activityService.saveActivityWithImageByUserId(activity, userId, image);
             return ResponseEntity.ok("Actividad creada por el usuario correctamente: " + userId);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -63,10 +65,12 @@ public class ActivityController {
     }
 
     @PostMapping("/save-company/{companyId}")
-    public ResponseEntity<?> saveActivityByCompanyId(@RequestBody Activity activity, @PathVariable Long companyId) {
-
+    public ResponseEntity<?> saveActivityByCompanyId(
+            @RequestPart(value = "activity") Activity activity,
+            @RequestPart(value = "image", required = false) MultipartFile image,
+            @PathVariable Long companyId) {
         try {
-            activityService.saveActivityByCompanyId(activity, companyId);
+            activityService.saveActivityWithImageByCompanyId(activity, companyId, image);
             return ResponseEntity.ok("Actividad creada por la empresa correctamente: " + companyId);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -101,7 +105,8 @@ public class ActivityController {
     public ResponseEntity<?> uploadActivityImage(@PathVariable Long activityId, @RequestParam("image") MultipartFile file) throws IOException {
 
         try {
-            return ResponseEntity.ok(activityService.uploadActivityImage(activityId, file));
+            activityService.uploadActivityImage(activityId, file);
+            return ResponseEntity.ok("File uploaded successfully");
         } catch (IOException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

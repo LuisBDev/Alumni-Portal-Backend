@@ -5,6 +5,7 @@ import com.alumniportal.unmsm.dto.PasswordChangeDTO;
 import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.ICompanyDAO;
+import com.alumniportal.unmsm.service.IActivityService;
 import com.alumniportal.unmsm.service.ICompanyService;
 import com.alumniportal.unmsm.util.ImageManagement;
 import org.modelmapper.ModelMapper;
@@ -28,6 +29,9 @@ public class CompanyServiceImpl implements ICompanyService {
 
     @Autowired
     private ImageManagement imageManagement;
+
+    @Autowired
+    private IActivityService activityService;
 
     @Override
     public List<CompanyDTO> findAll() {
@@ -61,6 +65,20 @@ public class CompanyServiceImpl implements ICompanyService {
         if (company.getPhotoUrl() != null) {
             imageManagement.deleteImageByUrl(company.getPhotoUrl());
         }
+
+        if (!company.getActivityList().isEmpty()) {
+            company.getActivityList().stream()
+                    .filter(activity -> activity.getUrl() != null)
+                    .forEach(activity -> {
+                        try {
+                            activityService.deleteActivityImage(activity.getId());
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+        }
+
+
         companyDAO.deleteById(id);
 
     }

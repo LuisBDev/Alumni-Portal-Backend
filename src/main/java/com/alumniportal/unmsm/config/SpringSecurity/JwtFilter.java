@@ -1,4 +1,4 @@
-package com.alumniportal.unmsm.config;
+package com.alumniportal.unmsm.config.SpringSecurity;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -1,11 +1,9 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.config.JwtService;
+import com.alumniportal.unmsm.config.SpringSecurity.JwtService;
 import com.alumniportal.unmsm.dto.AuthCompanyResponse;
-import com.alumniportal.unmsm.dto.AuthResponseDTO;
 import com.alumniportal.unmsm.dto.AuthUserResponse;
 import com.alumniportal.unmsm.dto.LoginRequestDTO;
-import com.alumniportal.unmsm.model.AbstractEntity;
 import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.model.Role;
 import com.alumniportal.unmsm.model.User;
@@ -16,7 +14,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

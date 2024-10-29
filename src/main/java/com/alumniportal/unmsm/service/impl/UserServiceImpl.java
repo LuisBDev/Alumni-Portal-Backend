@@ -4,6 +4,7 @@ import com.alumniportal.unmsm.dto.*;
 import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.*;
+import com.alumniportal.unmsm.service.IActivityService;
 import com.alumniportal.unmsm.service.IUserService;
 import com.alumniportal.unmsm.util.ImageManagement;
 import org.modelmapper.ModelMapper;
@@ -44,6 +45,9 @@ public class UserServiceImpl implements IUserService {
     @Autowired
     private ImageManagement imageManagement;
 
+    @Autowired
+    private IActivityService activityService;
+
 
     @Override
     public List<UserDTO> findAll() {
@@ -75,8 +79,19 @@ public class UserServiceImpl implements IUserService {
         if (user.getPhotoUrl() != null) {
             imageManagement.deleteImageByUrl(user.getPhotoUrl());
         }
+//TODO: Hacer mas eficiente la eliminación de las imagenes de las actividades a traves de url
+        if (!user.getActivityList().isEmpty()) {
+            user.getActivityList().stream()
+                    .filter(activity -> activity.getUrl() != null)
+                    .forEach(activity -> {
+                        try {
+                            activityService.deleteActivityImage(activity.getId());
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+        }
         userDAO.deleteById(id);
-
     }
 
     @Override

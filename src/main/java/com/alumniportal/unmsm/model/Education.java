@@ -33,7 +33,7 @@ public class Education {
     @Column(nullable = true)
     private LocalDate endDate;
 
-    @Column(nullable = true, columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     //    Relation with User

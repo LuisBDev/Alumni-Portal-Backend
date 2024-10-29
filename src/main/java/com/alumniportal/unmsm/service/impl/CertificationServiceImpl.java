@@ -90,16 +90,19 @@ public class CertificationServiceImpl implements ICertificationService {
             Field field = ReflectionUtils.findField(Certification.class, k);
             field.setAccessible(true);
 
-            if ("issueDate".equals(k) || "expirationDate".equals(k)) {
-                // Convertir el valor de String a LocalDate
-                LocalDate date = LocalDate.parse(v.toString());
-                ReflectionUtils.setField(field, certification, date);
-            } else {
-                ReflectionUtils.setField(field, certification, v);
+            // Si el valor es una cadena vacía, asignar null
+            Object valueToSet = (v instanceof String && ((String) v).isEmpty()) ? null : v;
+
+            // Convertir a LocalDate solo para campos de fecha
+            if ((k.equals("issueDate") || k.equals("expirationDate")) && valueToSet != null) {
+                valueToSet = LocalDate.parse(valueToSet.toString());
             }
+
+            ReflectionUtils.setField(field, certification, valueToSet);
         });
 
         certificationDAO.save(certification);
     }
+
 
 }

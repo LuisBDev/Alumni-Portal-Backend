@@ -1,4 +1,4 @@
-package com.alumniportal.unmsm.config;
+package com.alumniportal.unmsm.config.SpringSecurity;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

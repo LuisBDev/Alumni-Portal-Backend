@@ -1,4 +1,4 @@
-package com.alumniportal.unmsm.config;
+package com.alumniportal.unmsm.config.SpringSecurity;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

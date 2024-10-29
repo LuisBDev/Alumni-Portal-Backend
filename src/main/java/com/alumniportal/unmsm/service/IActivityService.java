@@ -20,11 +20,11 @@ public interface IActivityService {
 
     List<ActivityDTO> findActivitiesByCompanyId(Long companyId);
 
-    void saveActivityByUserId(Activity activity, Long userId);
+    void saveActivityWithImageByUserId(Activity activity, Long userId, MultipartFile image) throws IOException;
 
-    void saveActivityByCompanyId(Activity activity, Long companyId);
+    void saveActivityWithImageByCompanyId(Activity activity, Long companyId, MultipartFile image) throws IOException;
 
-    String uploadActivityImage(Long userId, MultipartFile file) throws IOException;
+    void uploadActivityImage(Long activityId, MultipartFile file) throws IOException;
 
     byte[] downloadActivityImage(Long activityId) throws Exception;
 

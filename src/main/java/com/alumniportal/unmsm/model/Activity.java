@@ -23,7 +23,7 @@ public class Activity {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT")
     private String description;
 
 //    event_type ENUM('workshop', 'conference', 'seminar', 'post', 'other')
@@ -61,7 +61,7 @@ public class Activity {
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = true)
     private Company company;
-    
+
 
     //    Relation with Enrollment
     @OneToMany(mappedBy = "activity", orphanRemoval = true)

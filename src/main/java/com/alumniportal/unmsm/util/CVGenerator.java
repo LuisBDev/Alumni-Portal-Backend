@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.pdfbox.pdmodel.font.PDFont;
 
 public class CVGenerator {
@@ -38,8 +39,12 @@ public class CVGenerator {
         float maxWidth = pageWidth - leftMargin * 2; // Max width for the text
 
         // Header (Name and Contact Info)
-        String fullName = cv.getName() + " " + cv.getPaternalSurname() + " " + cv.getMaternalSurname();
-        String contactInfo = cv.getContactNumber() + " | " + cv.getEmail();
+        String fullName = (cv.getName() != null ? cv.getName() : "") + " " +
+                (cv.getPaternalSurname() != null ? cv.getPaternalSurname() : "") + " " +
+                (cv.getMaternalSurname() != null ? cv.getMaternalSurname() : "");
+        String contactInfo = (cv.getContactNumber() != null ? cv.getContactNumber() : "") + " | " +
+                (cv.getEmail() != null ? cv.getEmail() : "");
+
 
         // Centering Name
         contentStream.setFont(boldFont, 18);
@@ -68,7 +73,7 @@ public class CVGenerator {
         contentStream.showText("About");
         contentStream.newLine();
         contentStream.setFont(regularFont, 12);
-        for (String line : splitTextIntoLines(cv.getAbout(), maxWidth, regularFont, 12)) {
+        for (String line : splitTextIntoLines(cv.getAbout() != null ? cv.getAbout() : "", maxWidth, regularFont, 12)) {
             contentStream.showText(line);
             contentStream.newLine();
         }

@@ -24,7 +24,7 @@ public class Project {
     @Column(nullable = false)
     private LocalDate date;
 
-    @Column(nullable = true, columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     //    Relation with User

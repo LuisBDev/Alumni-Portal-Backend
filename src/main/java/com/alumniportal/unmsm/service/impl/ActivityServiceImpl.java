@@ -65,12 +65,14 @@ public class ActivityServiceImpl implements IActivityService {
     public void deleteById(Long id) throws Exception {
         Activity activity = activityDAO.findById(id);
         if (activity == null) {
-            throw new RuntimeException("Activity with id " + id + " not found and cannot be deleted");
+            throw new Exception("Activity with id " + id + " not found");
         }
-        try {
-            deleteActivityImage(id);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to delete activity image", e);
+        if (activity.getUrl() != null) {
+            try {
+                deleteActivityImage(id);
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to delete activity image", e);
+            }
         }
         activityDAO.deleteById(id);
     }
@@ -92,55 +94,70 @@ public class ActivityServiceImpl implements IActivityService {
     }
 
     @Override
-    public void saveActivityByUserId(Activity activity, Long userId) {
+    public void saveActivityWithImageByUserId(Activity activity, Long userId, MultipartFile image) throws IOException {
         User user = userDAO.findById(userId);
         if (user == null) {
             throw new RuntimeException("User not found");
         }
-//        Setteando el usuario y fecha de creacion en la actividad
+
+        // Setea el usuario y la fecha de creación
         activity.setUser(user);
         activity.setCreatedAt(LocalDate.now());
+
+        // Guarda la actividad antes de subir la imagen
         activityDAO.save(activity);
 
-//        Agregando la actividad a la lista de actividades del usuario
+        // Subir la imagen si está presente
+        if (image != null && !image.isEmpty()) {
+            uploadActivityImage(activity.getId(), image);
+        }
+
+        // Agrega la actividad a la lista de actividades del usuario
         user.getActivityList().add(activity);
         userDAO.save(user);
-        System.out.println(user.getActivityList());
 
     }
 
     @Override
-    public void saveActivityByCompanyId(Activity activity, Long companyId) {
+    public void saveActivityWithImageByCompanyId(Activity activity, Long companyId, MultipartFile image) throws IOException {
         Company company = companyDAO.findById(companyId);
         if (company == null) {
             throw new RuntimeException("Company not found");
         }
 
+        // Setea la compañía y la fecha de creación
         activity.setCompany(company);
         activity.setCreatedAt(LocalDate.now());
+
+        // Guarda la actividad antes de subir la imagen
         activityDAO.save(activity);
-        System.out.println(company.getActivityList());
 
+        // Subir la imagen si está presente
+        if (image != null && !image.isEmpty()) {
+            uploadActivityImage(activity.getId(), image);
+        }
 
-//        No se agrega la actividad a la lista de actividades de la empresa por el cascading de la relación
-
+//        company.getActivityList().add(activity);
+//        No se agrega la actividad a la lista de actividades de la compañía por el tipo de cascading
+//        companyDAO.save(company);
     }
 
+
     @Override
-    public String uploadActivityImage(Long activityId, MultipartFile file) throws IOException {
-        Activity activityDB = activityDAO.findById(activityId);
-        if (activityDB == null) {
+    public void uploadActivityImage(Long activityId, MultipartFile file) throws IOException {
+        Activity activity = activityDAO.findById(activityId);
+        if (activity == null) {
             throw new RuntimeException("Activity with id " + activityId + " not found");
         }
         try {
             String fileName = file.getOriginalFilename();
 
             String carpeta = "activityimages/";
-            String key = carpeta + activityDB.getId() + "_" + fileName;
+            String key = carpeta + activity.getId() + "_" + fileName;
 
             // Se verifica si la activity ya tiene imagen y eliminarla si es necesario
-            if (activityDB.getUrl() != null) {
-                s3Client.deleteObject(builder -> builder.bucket("alumniportals3").key(activityDB.getUrl()).build());
+            if (activity.getUrl() != null) {
+                s3Client.deleteObject(builder -> builder.bucket("alumniportals3").key(activity.getUrl()).build());
             }
 
             PutObjectRequest objectRequest = PutObjectRequest.builder()
@@ -149,10 +166,9 @@ public class ActivityServiceImpl implements IActivityService {
                     .build();
             s3Client.putObject(objectRequest, RequestBody.fromBytes(file.getBytes()));
 
-            activityDB.setUrl(key);
-            activityDAO.save(activityDB);
+            activity.setUrl(key);
+            activityDAO.save(activity);
 
-            return "File uploaded successfully";
 
         } catch (IOException e) {
             throw new IOException(e.getMessage());

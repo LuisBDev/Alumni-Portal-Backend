@@ -36,7 +36,7 @@ public class Company extends AbstractEntity implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = true, columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column(nullable = true)
