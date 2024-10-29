@@ -1,7 +1,6 @@
 package com.alumniportal.unmsm.service.impl;
 
 import com.alumniportal.unmsm.dto.*;
-import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.*;
 import com.alumniportal.unmsm.service.IActivityService;
@@ -9,6 +8,7 @@ import com.alumniportal.unmsm.service.IUserService;
 import com.alumniportal.unmsm.util.ImageManagement;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
@@ -47,6 +47,9 @@ public class UserServiceImpl implements IUserService {
 
     @Autowired
     private IActivityService activityService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -217,10 +220,10 @@ public class UserServiceImpl implements IUserService {
             throw new RuntimeException("Error: Invalid email!");
         }
 
-        if (!user.getPassword().equals(passwordChangeDTO.getPassword())) {
-            throw new RuntimeException("Error: Tu old password no coincide en la bd!");
+        if (!passwordEncoder.matches(passwordChangeDTO.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Error: Old password does not match!");
         }
-        user.setPassword(passwordChangeDTO.getNewPassword());
+        user.setPassword(passwordEncoder.encode(passwordChangeDTO.getNewPassword()));
         user.setUpdatedAt(LocalDate.now());
         userDAO.save(user);
     }
