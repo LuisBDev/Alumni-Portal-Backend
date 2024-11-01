@@ -223,6 +223,8 @@ public class UserServiceImpl implements IUserService {
         if (!passwordEncoder.matches(passwordChangeDTO.getPassword(), user.getPassword())) {
             throw new RuntimeException("Error: Old password does not match!");
         }
+
+
         user.setPassword(passwordEncoder.encode(passwordChangeDTO.getNewPassword()));
         user.setUpdatedAt(LocalDate.now());
         userDAO.save(user);

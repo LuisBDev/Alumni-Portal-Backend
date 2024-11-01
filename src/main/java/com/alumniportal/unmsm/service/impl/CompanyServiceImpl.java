@@ -10,6 +10,7 @@ import com.alumniportal.unmsm.service.ICompanyService;
 import com.alumniportal.unmsm.util.ImageManagement;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
@@ -32,6 +33,9 @@ public class CompanyServiceImpl implements ICompanyService {
 
     @Autowired
     private IActivityService activityService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public List<CompanyDTO> findAll() {
@@ -143,10 +147,10 @@ public class CompanyServiceImpl implements ICompanyService {
             throw new RuntimeException("Error: Invalid email!");
         }
 
-        if (!company.getPassword().equals(passwordChangeDTO.getPassword())) {
-            throw new RuntimeException("Error: Tu old password no coincide en la bd!");
+        if (!passwordEncoder.matches(passwordChangeDTO.getPassword(), company.getPassword())) {
+            throw new RuntimeException("Error: Old password does not match!");
         }
-        company.setPassword(passwordChangeDTO.getNewPassword());
+        company.setPassword(passwordEncoder.encode(passwordChangeDTO.getNewPassword()));
         company.setUpdatedAt(LocalDate.now());
         companyDAO.save(company);
     }
