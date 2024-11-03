@@ -1,6 +1,7 @@
 package com.alumniportal.unmsm.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,5 +27,30 @@ public class ActivityDTO {
     private LocalDate createdAt;
     private LocalDate updatedAt;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String userId;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String userRole;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String userName;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String userPaternalSurname;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String userMaternalSurname;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String companyId;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String companyRole;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String companyName;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String companyRuc;
 }
