@@ -22,6 +22,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +43,9 @@ public class ActivityServiceImpl implements IActivityService {
 
     @Autowired
     private S3Client s3Client;
+
+    @Autowired
+    private EmailService emailService;
 
     @Override
     public List<ActivityDTO> findAll() {
@@ -99,34 +103,135 @@ public class ActivityServiceImpl implements IActivityService {
 
     @Override
     public void saveActivityWithImageByUserId(Activity activity, Long userId, MultipartFile image) throws IOException {
+        // Buscar el usuario
         User user = userDAO.findById(userId);
         if (user == null) {
-            throw new RuntimeException("User not found");
+            throw new IllegalArgumentException("Usuario no encontrado");
         }
 
-        // Setea el usuario y la fecha de creación
+        // Setear el usuario y la fecha de creación
         activity.setUser(user);
         activity.setCreatedAt(LocalDate.now());
 
-        // Guarda la actividad antes de subir la imagen
+        // Guardar la actividad
         activityDAO.save(activity);
+
+        // Configurar el asunto y el cuerpo del correo en formato HTML
+        String subject = "Nueva Actividad: " + activity.getTitle();
+        String htmlContent = """
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <style>
+                body { 
+                    font-family: Arial, sans-serif;
+                    line-height: 1.6;
+                    color: #333;
+                }
+                .container {
+                    max-width: 600px;
+                    margin: 0 auto;
+                    padding: 20px;
+                    background-color: #f9f9f9;
+                }
+                .header {
+                    background-color: #4CAF50;
+                    color: white;
+                    padding: 10px;
+                    text-align: center;
+                    border-radius: 5px;
+                }
+                .content {
+                    background-color: white;
+                    padding: 20px;
+                    margin-top: 20px;
+                    border-radius: 5px;
+                    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                }
+                .details {
+                    margin: 15px 0;
+                }
+                .detail-item {
+                    margin: 10px 0;
+                }
+                .footer {
+                    text-align: center;
+                    margin-top: 20px;
+                    padding: 10px;
+                    color: #666;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="header">
+                    <h1>Nueva Actividad Publicada</h1>
+                </div>
+                <div class="content">
+                    <h2>%s</h2>
+                    <div class="details">
+                        <div class="detail-item">
+                            <strong>Descripción:</strong>
+                            <p>%s</p>
+                        </div>
+                        <div class="detail-item">
+                            <strong>Tipo de evento:</strong> %s
+                        </div>
+                        <div class="detail-item">
+                            <strong>Fecha de inicio:</strong> %s
+                        </div>
+                        <div class="detail-item">
+                            <strong>Fecha de fin:</strong> %s
+                        </div>
+                        <div class="detail-item">
+                            <strong>Ubicación:</strong> %s
+                        </div>
+                        <div class="detail-item">
+                            <strong>Inscripción disponible:</strong> %s
+                        </div>
+                    </div>
+                </div>
+                <div class="footer">
+                    <p>Este es un correo automático, por favor no responder.</p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """.formatted(
+                activity.getTitle(),
+                activity.getDescription(),
+                activity.getEventType(),
+                activity.getStartDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                activity.getEndDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                activity.getLocation(),
+                activity.isEnrollable() ? "Sí" : "No"
+        );
+
+        // Enviar correo a todos los usuarios registrados
+        List<User> users = userDAO.findAll();
+        for (User recipient : users) {
+            try {
+                emailService.sendEmail(recipient.getEmail(), subject, htmlContent);
+            } catch (Exception e) {
+                System.err.println("Error al enviar correo a " + recipient.getEmail() + ": " + e.getMessage());
+                // Continuar con el siguiente usuario incluso si falla uno
+            }
+        }
 
         // Subir la imagen si está presente
         if (image != null && !image.isEmpty()) {
             uploadActivityImage(activity.getId(), image);
         }
-
-        // Agrega la actividad a la lista de actividades del usuario
-        user.getActivityList().add(activity);
-        userDAO.save(user);
-
     }
+
+
 
     @Override
     public void saveActivityWithImageByCompanyId(Activity activity, Long companyId, MultipartFile image) throws IOException {
         Company company = companyDAO.findById(companyId);
         if (company == null) {
-            throw new RuntimeException("Company not found");
+            throw new IllegalArgumentException("Empresa no encontrada");
         }
 
         // Setea la compañía y la fecha de creación
@@ -136,17 +241,125 @@ public class ActivityServiceImpl implements IActivityService {
         // Guarda la actividad antes de subir la imagen
         activityDAO.save(activity);
 
+        // Configurar el asunto y el cuerpo del correo en formato HTML
+        String subject = "Nueva Actividad: " + activity.getTitle();
+        String htmlContent = """
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            body { 
+                font-family: Arial, sans-serif;
+                line-height: 1.6;
+                color: #333;
+            }
+            .container {
+                max-width: 600px;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #f9f9f9;
+            }
+            .header {
+                background-color: #4CAF50;
+                color: white;
+                padding: 10px;
+                text-align: center;
+                border-radius: 5px;
+            }
+            .content {
+                background-color: white;
+                padding: 20px;
+                margin-top: 20px;
+                border-radius: 5px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            .details {
+                margin: 15px 0;
+            }
+            .detail-item {
+                margin: 10px 0;
+            }
+            .company-info {
+                background-color: #f5f5f5;
+                padding: 10px;
+                margin: 15px 0;
+                border-radius: 5px;
+            }
+            .footer {
+                text-align: center;
+                margin-top: 20px;
+                padding: 10px;
+                color: #666;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>Nueva Actividad Publicada</h1>
+            </div>
+            <div class="content">
+                <div class="company-info">
+                    <strong>Publicado por:</strong> %s
+                </div>
+                <h2>%s</h2>
+                <div class="details">
+                    <div class="detail-item">
+                        <strong>Descripción:</strong>
+                        <p>%s</p>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Tipo de evento:</strong> %s
+                    </div>
+                    <div class="detail-item">
+                        <strong>Fecha de inicio:</strong> %s
+                    </div>
+                    <div class="detail-item">
+                        <strong>Fecha de fin:</strong> %s
+                    </div>
+                    <div class="detail-item">
+                        <strong>Ubicación:</strong> %s
+                    </div>
+                    <div class="detail-item">
+                        <strong>Inscripción disponible:</strong> %s
+                    </div>
+                </div>
+            </div>
+            <div class="footer">
+                <p>Este es un correo automático, por favor no responder.</p>
+            </div>
+        </div>
+    </body>
+    </html>
+    """.formatted(
+                company.getName(), // Agregamos el nombre de la empresa
+                activity.getTitle(),
+                activity.getDescription(),
+                activity.getEventType(),
+                activity.getStartDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                activity.getEndDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                activity.getLocation(),
+                activity.isEnrollable() ? "Sí" : "No"
+        );
+
+        // Enviar correo a todos los usuarios registrados
+        List<User> users = userDAO.findAll();
+        for (User user : users) {
+            try {
+                emailService.sendEmail(user.getEmail(), subject, htmlContent);
+                System.out.println("Correo enviado exitosamente a: " + user.getEmail());
+            } catch (Exception e) {
+                System.err.println("Error al enviar correo a " + user.getEmail() + ": " + e.getMessage());
+                // Continuar con el siguiente usuario incluso si falla uno
+            }
+        }
+
         // Subir la imagen si está presente
         if (image != null && !image.isEmpty()) {
             uploadActivityImage(activity.getId(), image);
         }
-
-//        company.getActivityList().add(activity);
-//        No se agrega la actividad a la lista de actividades de la compañía por el tipo de cascading
-//        companyDAO.save(company);
     }
-
-
     @Override
     public void uploadActivityImage(Long activityId, MultipartFile file) throws IOException {
         Activity activity = activityDAO.findById(activityId);
