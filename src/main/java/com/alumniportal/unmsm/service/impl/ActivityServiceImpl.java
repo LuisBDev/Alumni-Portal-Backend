@@ -19,6 +19,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -38,6 +39,9 @@ public class ActivityServiceImpl implements IActivityService {
 
     @Autowired
     private S3Client s3Client;
+
+    @Autowired
+    private EmailService emailService;
 
     @Override
     public List<ActivityDTO> findAll() {
@@ -107,6 +111,18 @@ public class ActivityServiceImpl implements IActivityService {
         // Guarda la actividad antes de subir la imagen
         activityDAO.save(activity);
 
+        // Envía el correo de notificación a todos los usuarios (excepto el que creó la actividad)
+        List<User> usuarios = userDAO.findAll();
+        usuarios.removeIf(u -> u.getId().equals(userId));  // Cambié 'user' a 'u' para evitar el conflicto
+
+        String subject = "Nueva actividad publicada: " + activity.getTitle();
+        String body = "Se ha publicado una nueva actividad: " + activity.getTitle() +
+                "\nDescripción: " + activity.getDescription();
+
+        for (User usuario : usuarios) {
+            emailService.sendEmail(usuario.getEmail(), subject, body);
+        }
+
         // Subir la imagen si está presente
         if (image != null && !image.isEmpty()) {
             uploadActivityImage(activity.getId(), image);
@@ -115,8 +131,8 @@ public class ActivityServiceImpl implements IActivityService {
         // Agrega la actividad a la lista de actividades del usuario
         user.getActivityList().add(activity);
         userDAO.save(user);
-
     }
+
 
     @Override
     public void saveActivityWithImageByCompanyId(Activity activity, Long companyId, MultipartFile image) throws IOException {
@@ -132,17 +148,21 @@ public class ActivityServiceImpl implements IActivityService {
         // Guarda la actividad antes de subir la imagen
         activityDAO.save(activity);
 
+        // Envía el correo de notificación a todos los usuarios (excluyendo compañías)
+        List<User> usuarios = userDAO.findAll();
+        String subject = "Nueva actividad publicada: " + activity.getTitle();
+        String body = "Se ha publicado una nueva actividad: " + activity.getTitle() +
+                "\nDescripción: " + activity.getDescription();
+
+        for (User usuario : usuarios) {
+            emailService.sendEmail(usuario.getEmail(), subject, body);
+        }
+
         // Subir la imagen si está presente
         if (image != null && !image.isEmpty()) {
             uploadActivityImage(activity.getId(), image);
         }
-
-//        company.getActivityList().add(activity);
-//        No se agrega la actividad a la lista de actividades de la compañía por el tipo de cascading
-//        companyDAO.save(company);
     }
-
-
     @Override
     public void uploadActivityImage(Long activityId, MultipartFile file) throws IOException {
         Activity activity = activityDAO.findById(activityId);
