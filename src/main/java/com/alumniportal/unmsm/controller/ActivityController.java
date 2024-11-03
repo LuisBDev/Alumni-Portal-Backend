@@ -66,6 +66,15 @@ public class ActivityController {
         }
     }
 
+    @PatchMapping("/update-activity/{id}")
+    public ResponseEntity<?> updateActivity(@PathVariable Long id, @RequestBody Map<String, Object> fields) {
+        try {
+            activityService.updateActivity(id, fields);
+            return ResponseEntity.ok("Activity updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
     @PostMapping("/save-company/{companyId}")
     public ResponseEntity<?> saveActivityByCompanyId(
