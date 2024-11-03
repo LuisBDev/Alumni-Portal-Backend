@@ -2,6 +2,7 @@ package com.alumniportal.unmsm.service.impl;
 
 import com.alumniportal.unmsm.dto.ActivityDTO;
 import com.alumniportal.unmsm.model.Activity;
+import com.alumniportal.unmsm.model.Certification;
 import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.IActivityDAO;
@@ -11,6 +12,7 @@ import com.alumniportal.unmsm.service.IActivityService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -18,8 +20,10 @@ import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ActivityServiceImpl implements IActivityService {
@@ -174,6 +178,32 @@ public class ActivityServiceImpl implements IActivityService {
             throw new IOException(e.getMessage());
         }
     }
+
+    @Override
+    public void updateActivity(Long id, Map<String, Object> fields) {
+        Activity activity = activityDAO.findById(id);
+        if (activity == null) {
+            throw new RuntimeException("Error: activity not found!");
+        }
+
+        fields.forEach((k, v) -> {
+            Field field = ReflectionUtils.findField(Activity.class, k);
+            field.setAccessible(true);
+
+
+            Object valueToSet = (v instanceof String && ((String) v).trim().isEmpty()) ? null : v;
+
+            // Convertir a LocalDate solo para campos de fecha
+            if ((k.equals("startDate") || k.equals("endDate")) && valueToSet != null) {
+                valueToSet = LocalDate.parse(valueToSet.toString());
+            }
+
+            ReflectionUtils.setField(field, activity, valueToSet);
+        });
+        activity.setUpdatedAt(LocalDate.now());
+        activityDAO.save(activity);
+    }
+
 
     @Override
     public byte[] downloadActivityImage(Long activityId) throws Exception {

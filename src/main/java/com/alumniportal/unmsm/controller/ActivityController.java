@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/activity")
@@ -61,6 +62,16 @@ public class ActivityController {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error al guardar la actividad");
+        }
+    }
+
+    @PatchMapping("/update-activity/{id}")
+    public ResponseEntity<?> updateActivity(@PathVariable Long id, @RequestBody Map<String, Object> fields) {
+        try {
+            activityService.updateActivity(id, fields);
+            return ResponseEntity.ok("Activity updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
