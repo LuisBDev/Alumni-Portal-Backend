@@ -8,12 +8,20 @@ import com.alumniportal.unmsm.persistence.IActivityDAO;
 import com.alumniportal.unmsm.persistence.IEnrollmentDAO;
 import com.alumniportal.unmsm.persistence.IUserDAO;
 import com.alumniportal.unmsm.service.IEnrollmentService;
+import com.alumniportal.unmsm.util.EmailTemplate;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import software.amazon.awssdk.core.SdkBytes;
+import software.amazon.awssdk.services.lambda.LambdaClient;
+import software.amazon.awssdk.services.lambda.model.InvokeRequest;
+import software.amazon.awssdk.services.lambda.model.InvokeResponse;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class EnrollmentServiceImpl implements IEnrollmentService {
@@ -29,6 +37,9 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private LambdaClient lambdaClient;
 
     @Override
     public List<EnrollmentDTO> findAll() {
@@ -116,7 +127,50 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
         activity.getEnrollmentList().add(enrollment);
         activityDAO.save(activity);
 
+        invokeLambdaWhenEnrollmentIsCreated("Confirmación de inscripción en actividad " + activity.getId(), enrollment);
+
     }
 
+    public void invokeLambdaWhenEnrollmentIsCreated(String subject, Enrollment enrollment) {
 
+        String htmlContent = EmailTemplate.generateHtmlContentEnrollCreated(
+                enrollment.getActivity().getTitle(),
+                enrollment.getActivity().getDescription(),
+                enrollment.getActivity().getEventType(),
+                enrollment.getActivity().getStartDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                enrollment.getActivity().getEndDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                enrollment.getActivity().getLocation(),
+                enrollment.getActivity().isEnrollable(),
+                enrollment.getEnrollmentDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                enrollment.getStatus()
+
+        );
+
+        List<String> recipients = List.of(userDAO.findById(enrollment.getUser().getId()).getEmail());
+
+        try {
+            // Se crea el payload en JSON
+            Map<String, Object> payload = Map.of(
+                    "subject", subject,
+                    "htmlContent", htmlContent,
+                    "recipients", recipients
+            );
+            String payloadJson = new ObjectMapper().writeValueAsString(payload);
+
+            // Se crea la solicitud para invocar Lambda
+            InvokeRequest invokeRequest = InvokeRequest.builder()
+                    .functionName("arn:aws:lambda:us-east-2:047719652432:function:alumnilambda")
+                    .payload(SdkBytes.fromUtf8String(payloadJson))
+                    .build();
+
+            // Se invoca la función Lambda
+            InvokeResponse invokeResponse = lambdaClient.invoke(invokeRequest);
+            String response = invokeResponse.payload().asUtf8String();
+            System.out.println("Lambda response: " + response);
+
+        } catch (Exception e) {
+            System.err.println("Error al invocar Lambda: " + e.getMessage());
+        }
+
+    }
 }

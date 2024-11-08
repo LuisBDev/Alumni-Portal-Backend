@@ -8,6 +8,7 @@ import com.alumniportal.unmsm.persistence.IActivityDAO;
 import com.alumniportal.unmsm.persistence.ICompanyDAO;
 import com.alumniportal.unmsm.persistence.IUserDAO;
 import com.alumniportal.unmsm.service.IActivityService;
+import com.alumniportal.unmsm.util.EmailTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -305,7 +306,7 @@ public class ActivityServiceImpl implements IActivityService {
 
         List<String> recipients = findRecipients();
 
-        String htmlContent = EmailService.generateHtmlContent(
+        String htmlContent = EmailTemplate.generateHtmlContent(
                 userName,
                 activity.getTitle(),
                 activity.getDescription(),
@@ -317,7 +318,7 @@ public class ActivityServiceImpl implements IActivityService {
         );
 
         try {
-            // Crear el payload en JSON
+            // Se crea el payload en JSON
             Map<String, Object> payload = Map.of(
                     "subject", subject,
                     "htmlContent", htmlContent,
@@ -325,13 +326,13 @@ public class ActivityServiceImpl implements IActivityService {
             );
             String payloadJson = new ObjectMapper().writeValueAsString(payload);
 
-            // Crear la solicitud para invocar Lambda
+            // Se crea la solicitud para invocar Lambda
             InvokeRequest invokeRequest = InvokeRequest.builder()
                     .functionName("arn:aws:lambda:us-east-2:047719652432:function:alumnilambda")
                     .payload(SdkBytes.fromUtf8String(payloadJson))
                     .build();
 
-            // Invocar la función Lambda
+            // Se invoca la función Lambda
             InvokeResponse invokeResponse = lambdaClient.invoke(invokeRequest);
             String response = invokeResponse.payload().asUtf8String();
             System.out.println("Lambda response: " + response);
