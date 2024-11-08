@@ -2,19 +2,23 @@ package com.alumniportal.unmsm.service.impl;
 
 import com.alumniportal.unmsm.dto.ActivityDTO;
 import com.alumniportal.unmsm.model.Activity;
-import com.alumniportal.unmsm.model.Certification;
 import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.IActivityDAO;
 import com.alumniportal.unmsm.persistence.ICompanyDAO;
 import com.alumniportal.unmsm.persistence.IUserDAO;
 import com.alumniportal.unmsm.service.IActivityService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.SdkBytes;
 import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.lambda.LambdaClient;
+import software.amazon.awssdk.services.lambda.model.InvokeRequest;
+import software.amazon.awssdk.services.lambda.model.InvokeResponse;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
@@ -44,8 +48,9 @@ public class ActivityServiceImpl implements IActivityService {
     @Autowired
     private S3Client s3Client;
 
+
     @Autowired
-    private EmailService emailService;
+    private LambdaClient lambdaClient;
 
     @Override
     public List<ActivityDTO> findAll() {
@@ -116,115 +121,16 @@ public class ActivityServiceImpl implements IActivityService {
         // Guardar la actividad
         activityDAO.save(activity);
 
-        // Configurar el asunto y el cuerpo del correo en formato HTML
-        String subject = "Nueva Actividad: " + activity.getTitle();
-        String htmlContent = """
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="UTF-8">
-            <style>
-                body { 
-                    font-family: Arial, sans-serif;
-                    line-height: 1.6;
-                    color: #333;
-                }
-                .container {
-                    max-width: 600px;
-                    margin: 0 auto;
-                    padding: 20px;
-                    background-color: #f9f9f9;
-                }
-                .header {
-                    background-color: #4CAF50;
-                    color: white;
-                    padding: 10px;
-                    text-align: center;
-                    border-radius: 5px;
-                }
-                .content {
-                    background-color: white;
-                    padding: 20px;
-                    margin-top: 20px;
-                    border-radius: 5px;
-                    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-                }
-                .details {
-                    margin: 15px 0;
-                }
-                .detail-item {
-                    margin: 10px 0;
-                }
-                .footer {
-                    text-align: center;
-                    margin-top: 20px;
-                    padding: 10px;
-                    color: #666;
-                }
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <div class="header">
-                    <h1>Nueva Actividad Publicada</h1>
-                </div>
-                <div class="content">
-                    <h2>%s</h2>
-                    <div class="details">
-                        <div class="detail-item">
-                            <strong>Descripción:</strong>
-                            <p>%s</p>
-                        </div>
-                        <div class="detail-item">
-                            <strong>Tipo de evento:</strong> %s
-                        </div>
-                        <div class="detail-item">
-                            <strong>Fecha de inicio:</strong> %s
-                        </div>
-                        <div class="detail-item">
-                            <strong>Fecha de fin:</strong> %s
-                        </div>
-                        <div class="detail-item">
-                            <strong>Ubicación:</strong> %s
-                        </div>
-                        <div class="detail-item">
-                            <strong>Inscripción disponible:</strong> %s
-                        </div>
-                    </div>
-                </div>
-                <div class="footer">
-                    <p>Este es un correo automático, por favor no responder.</p>
-                </div>
-            </div>
-        </body>
-        </html>
-        """.formatted(
-                activity.getTitle(),
-                activity.getDescription(),
-                activity.getEventType(),
-                activity.getStartDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                activity.getEndDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                activity.getLocation(),
-                activity.isEnrollable() ? "Sí" : "No"
-        );
-
-        // Enviar correo a todos los usuarios registrados
-        List<User> users = userDAO.findAll();
-        for (User recipient : users) {
-            try {
-                emailService.sendEmail(recipient.getEmail(), subject, htmlContent);
-            } catch (Exception e) {
-                System.err.println("Error al enviar correo a " + recipient.getEmail() + ": " + e.getMessage());
-                // Continuar con el siguiente usuario incluso si falla uno
-            }
-        }
+        user.getActivityList().add(activity);
 
         // Subir la imagen si está presente
         if (image != null && !image.isEmpty()) {
             uploadActivityImage(activity.getId(), image);
         }
-    }
 
+        invokeLambda("Nueva Actividad: " + activity.getTitle(), user.getName(), activity);
+
+    }
 
 
     @Override
@@ -241,125 +147,16 @@ public class ActivityServiceImpl implements IActivityService {
         // Guarda la actividad antes de subir la imagen
         activityDAO.save(activity);
 
-        // Configurar el asunto y el cuerpo del correo en formato HTML
-        String subject = "Nueva Actividad: " + activity.getTitle();
-        String htmlContent = """
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="UTF-8">
-        <style>
-            body { 
-                font-family: Arial, sans-serif;
-                line-height: 1.6;
-                color: #333;
-            }
-            .container {
-                max-width: 600px;
-                margin: 0 auto;
-                padding: 20px;
-                background-color: #f9f9f9;
-            }
-            .header {
-                background-color: #4CAF50;
-                color: white;
-                padding: 10px;
-                text-align: center;
-                border-radius: 5px;
-            }
-            .content {
-                background-color: white;
-                padding: 20px;
-                margin-top: 20px;
-                border-radius: 5px;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            }
-            .details {
-                margin: 15px 0;
-            }
-            .detail-item {
-                margin: 10px 0;
-            }
-            .company-info {
-                background-color: #f5f5f5;
-                padding: 10px;
-                margin: 15px 0;
-                border-radius: 5px;
-            }
-            .footer {
-                text-align: center;
-                margin-top: 20px;
-                padding: 10px;
-                color: #666;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <div class="header">
-                <h1>Nueva Actividad Publicada</h1>
-            </div>
-            <div class="content">
-                <div class="company-info">
-                    <strong>Publicado por:</strong> %s
-                </div>
-                <h2>%s</h2>
-                <div class="details">
-                    <div class="detail-item">
-                        <strong>Descripción:</strong>
-                        <p>%s</p>
-                    </div>
-                    <div class="detail-item">
-                        <strong>Tipo de evento:</strong> %s
-                    </div>
-                    <div class="detail-item">
-                        <strong>Fecha de inicio:</strong> %s
-                    </div>
-                    <div class="detail-item">
-                        <strong>Fecha de fin:</strong> %s
-                    </div>
-                    <div class="detail-item">
-                        <strong>Ubicación:</strong> %s
-                    </div>
-                    <div class="detail-item">
-                        <strong>Inscripción disponible:</strong> %s
-                    </div>
-                </div>
-            </div>
-            <div class="footer">
-                <p>Este es un correo automático, por favor no responder.</p>
-            </div>
-        </div>
-    </body>
-    </html>
-    """.formatted(
-                company.getName(), // Agregamos el nombre de la empresa
-                activity.getTitle(),
-                activity.getDescription(),
-                activity.getEventType(),
-                activity.getStartDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                activity.getEndDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                activity.getLocation(),
-                activity.isEnrollable() ? "Sí" : "No"
-        );
-
-        // Enviar correo a todos los usuarios registrados
-        List<User> users = userDAO.findAll();
-        for (User user : users) {
-            try {
-                emailService.sendEmail(user.getEmail(), subject, htmlContent);
-                System.out.println("Correo enviado exitosamente a: " + user.getEmail());
-            } catch (Exception e) {
-                System.err.println("Error al enviar correo a " + user.getEmail() + ": " + e.getMessage());
-                // Continuar con el siguiente usuario incluso si falla uno
-            }
-        }
 
         // Subir la imagen si está presente
         if (image != null && !image.isEmpty()) {
             uploadActivityImage(activity.getId(), image);
         }
+
+
+        invokeLambda("Nueva Actividad: " + activity.getTitle(), company.getName(), activity);
     }
+
     @Override
     public void uploadActivityImage(Long activityId, MultipartFile file) throws IOException {
         Activity activity = activityDAO.findById(activityId);
@@ -504,5 +301,47 @@ public class ActivityServiceImpl implements IActivityService {
         return key.substring(key.lastIndexOf('/') + 1);
     }
 
+    public void invokeLambda(String subject, String userName, Activity activity) {
 
+        List<String> recipients = findRecipients();
+
+        String htmlContent = EmailService.generateHtmlContent(
+                userName,
+                activity.getTitle(),
+                activity.getDescription(),
+                activity.getEventType(),
+                activity.getStartDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                activity.getEndDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                activity.getLocation(),
+                activity.isEnrollable()
+        );
+
+        try {
+            // Crear el payload en JSON
+            Map<String, Object> payload = Map.of(
+                    "subject", subject,
+                    "htmlContent", htmlContent,
+                    "recipients", recipients
+            );
+            String payloadJson = new ObjectMapper().writeValueAsString(payload);
+
+            // Crear la solicitud para invocar Lambda
+            InvokeRequest invokeRequest = InvokeRequest.builder()
+                    .functionName("arn:aws:lambda:us-east-2:047719652432:function:alumnilambda")
+                    .payload(SdkBytes.fromUtf8String(payloadJson))
+                    .build();
+
+            // Invocar la función Lambda
+            InvokeResponse invokeResponse = lambdaClient.invoke(invokeRequest);
+            String response = invokeResponse.payload().asUtf8String();
+            System.out.println("Lambda response: " + response);
+
+        } catch (Exception e) {
+            System.err.println("Error al invocar Lambda: " + e.getMessage());
+        }
+    }
+
+    private List<String> findRecipients() {
+        return userDAO.findAll().stream().map(User::getEmail).toList();
+    }
 }

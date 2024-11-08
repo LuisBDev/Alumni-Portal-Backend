@@ -1,71 +1,111 @@
 package com.alumniportal.unmsm.service.impl;
 
-import jakarta.mail.*;
-import jakarta.mail.internet.InternetAddress;
-import jakarta.mail.internet.MimeMessage;
+
 import org.springframework.stereotype.Service;
-import java.util.Properties;
+
 
 @Service
 public class EmailService {
-    private final String username = "alumnoportal123@gmail.com";
-    private final String password = "hjbfkiywctmlpohv";
-
-    public void sendEmail(String to, String subject, String htmlContent) {
-        Properties props = new Properties();
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.port", "587");
-        props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
-        props.put("mail.smtp.ssl.protocols", "TLSv1.2");
-
-        System.out.println("Iniciando configuración de correo...");
-        System.out.println("Destinatario: " + to);
-        System.out.println("Asunto: " + subject);
-
-        Session session = Session.getInstance(props, new Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(username, password);
-            }
-        });
-
-        try {
-            System.out.println("Creando mensaje de correo...");
-            Message message = new MimeMessage(session);
-
-            // Configuración del remitente
-            System.out.println("Configurando remitente: " + username);
-            message.setFrom(new InternetAddress(username));
-
-            // Configuración del destinatario
-            System.out.println("Configurando destinatario: " + to);
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
-
-            // Configuración del asunto
-            message.setSubject(subject);
-
-            // Configuración del contenido
-            System.out.println("Configurando contenido HTML");
-            message.setContent(htmlContent, "text/html; charset=utf-8");
-
-            // Debug detallado
-            session.setDebug(true);
-
-            System.out.println("Intentando enviar correo...");
-            Transport.send(message);
-            System.out.println("¡Correo enviado exitosamente!");
-
-        } catch (MessagingException e) {
-            System.err.println("Error detallado al enviar el correo:");
-            System.err.println("Tipo de error: " + e.getClass().getName());
-            System.err.println("Mensaje de error: " + e.getMessage());
-            if (e.getCause() != null) {
-                System.err.println("Causa raíz: " + e.getCause().getMessage());
-            }
-            e.printStackTrace();
-            throw new RuntimeException("Error al enviar el correo: " + e.getMessage(), e);
-        }
+    public static String generateHtmlContent(String companyName, String activityTitle, String description, String eventType,
+                                             String startDate, String endDate, String location, boolean isEnrollable) {
+        return """
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <meta charset="UTF-8">
+                        <style>
+                            body { 
+                                font-family: Arial, sans-serif;
+                                line-height: 1.6;
+                                color: #333;
+                            }
+                            .container {
+                                max-width: 600px;
+                                margin: 0 auto;
+                                padding: 20px;
+                                background-color: #f9f9f9;
+                            }
+                            .header {
+                                background-color: #4CAF50;
+                                color: white;
+                                padding: 10px;
+                                text-align: center;
+                                border-radius: 5px;
+                            }
+                            .content {
+                                background-color: white;
+                                padding: 20px;
+                                margin-top: 20px;
+                                border-radius: 5px;
+                                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                            }
+                            .details {
+                                margin: 15px 0;
+                            }
+                            .detail-item {
+                                margin: 10px 0;
+                            }
+                            .company-info {
+                                background-color: #f5f5f5;
+                                padding: 10px;
+                                margin: 15px 0;
+                                border-radius: 5px;
+                            }
+                            .footer {
+                                text-align: center;
+                                margin-top: 20px;
+                                padding: 10px;
+                                color: #666;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="container">
+                            <div class="header">
+                                <h1>Nueva Actividad Publicada</h1>
+                            </div>
+                            <div class="content">
+                                <div class="company-info">
+                                    <strong>Publicado por:</strong> %s
+                                </div>
+                                <h2>%s</h2>
+                                <div class="details">
+                                    <div class="detail-item">
+                                        <strong>Descripción:</strong>
+                                        <p>%s</p>
+                                    </div>
+                                    <div class="detail-item">
+                                        <strong>Tipo de evento:</strong> %s
+                                    </div>
+                                    <div class="detail-item">
+                                        <strong>Fecha de inicio:</strong> %s
+                                    </div>
+                                    <div class="detail-item">
+                                        <strong>Fecha de fin:</strong> %s
+                                    </div>
+                                    <div class="detail-item">
+                                        <strong>Ubicación:</strong> %s
+                                    </div>
+                                    <div class="detail-item">
+                                        <strong>Inscripción disponible:</strong> %s
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="footer">
+                                <p>Este es un correo automático, por favor no responder.</p>
+                            </div>
+                        </div>
+                    </body>
+                    </html>
+                """.formatted(
+                companyName,
+                activityTitle,
+                description,
+                eventType,
+                startDate,
+                endDate,
+                location,
+                isEnrollable ? "Sí" : "No"
+        );
     }
 }
