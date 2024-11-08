@@ -129,7 +129,7 @@ public class EmailTemplate {
                                 background-color: #f9f9f9;
                             }
                             .header {
-                                background-color: #4CAF50;
+                                background-color: #c75e00;
                                 color: white;
                                 padding: 10px;
                                 text-align: center;
@@ -216,6 +216,94 @@ public class EmailTemplate {
                 status
         );
 
+    }
+
+    public static String generateHtmlContentApplication(String status, String applicationDate, String jobOfferId, String companyId) {
+        return """
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <meta charset="UTF-8">
+                        <style>
+                            body { 
+                                font-family: Arial, sans-serif;
+                                line-height: 1.6;
+                                color: #333;
+                            }
+                            .container {
+                                max-width: 600px;
+                                margin: 0 auto;
+                                padding: 20px;
+                                background-color: #f9f9f9;
+                            }
+                            .header {
+                                background-color: #006ac8;
+                                color: white;
+                                padding: 10px;
+                                text-align: center;
+                                border-radius: 5px;
+                            }
+                            .content {
+                                background-color: white;
+                                padding: 20px;
+                                margin-top: 20px;
+                                border-radius: 5px;
+                                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                            }
+                            .details {
+                                margin: 15px 0;
+                            }
+                            .detail-item {
+                                margin: 10px 0;
+                            }
+                            .company-info {
+                                background-color: #f5f5f5;
+                                padding: 10px;
+                                margin: 15px 0;
+                                border-radius: 5px;
+                            }
+                            .footer {
+                                text-align: center;
+                                margin-top: 20px;
+                                padding: 10px;
+                                color: #666;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="container">
+                            <div class="header">
+                                <h1>Confirmación de Postulación de Empleo</h1>
+                            </div>
+                            <div class="content">
+                                <div class="company-info">
+                                    <strong>Company Id:</strong> %s
+                                </div>
+                                <div class="company-info">
+                                    <strong>Job Id:</strong> %s
+                                </div>
+                                <h2>Solicitud de Empleo</h2>
+                                <div class="details">
+                                    <div class="detail-item">
+                                        <strong>Fecha de solicitud:</strong> %s
+                                    </div>
+                                    <div class="detail-item">
+                                        <strong>Estado:</strong> %s
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="footer">
+                                <p>Este es un correo automático, por favor no responder.</p>
+                            </div>
+                        </div>
+                    </body>
+                    </html>
+                """.formatted(
+                companyId,
+                jobOfferId,
+                applicationDate,
+                status
+        );
     }
 
 }

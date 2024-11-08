@@ -6,15 +6,23 @@ import com.alumniportal.unmsm.persistence.IApplicationDAO;
 import com.alumniportal.unmsm.persistence.IJobOfferDAO;
 import com.alumniportal.unmsm.persistence.IUserDAO;
 import com.alumniportal.unmsm.service.IApplicationService;
+import com.alumniportal.unmsm.util.EmailTemplate;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.alumniportal.unmsm.model.JobOffer;
 import com.alumniportal.unmsm.model.User;
+import software.amazon.awssdk.core.SdkBytes;
+import software.amazon.awssdk.services.lambda.LambdaClient;
+import software.amazon.awssdk.services.lambda.model.InvokeRequest;
+import software.amazon.awssdk.services.lambda.model.InvokeResponse;
 
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ApplicationServiceImpl implements IApplicationService {
@@ -30,6 +38,9 @@ public class ApplicationServiceImpl implements IApplicationService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private LambdaClient lambdaClient;
 
     @Override
     public List<ApplicationDTO> findAll() {
@@ -116,6 +127,46 @@ public class ApplicationServiceImpl implements IApplicationService {
         // Actualizamos la lista de aplicaciones en el JobOffer
         jobOffer.getApplicationList().add(application);
         jobOfferDAO.save(jobOffer);
+
+
+        invokeLambdaWhenApplicationIsCreated("Postulación exitosa " + application.getId(), application);
+
+    }
+
+    public void invokeLambdaWhenApplicationIsCreated(String subject, Application application) {
+        String htmlContent = EmailTemplate.generateHtmlContentApplication(
+                application.getStatus(),
+                application.getApplicationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                application.getJobOffer().getId().toString(),
+                application.getJobOffer().getCompany().getId().toString()
+        );
+
+
+        List<String> recipients = List.of(userDAO.findById(application.getUser().getId()).getEmail());
+
+        try {
+            // Se crea el payload en JSON
+            Map<String, Object> payload = Map.of(
+                    "subject", subject,
+                    "htmlContent", htmlContent,
+                    "recipients", recipients
+            );
+            String payloadJson = new ObjectMapper().writeValueAsString(payload);
+
+            // Se crea la solicitud para invocar Lambda
+            InvokeRequest invokeRequest = InvokeRequest.builder()
+                    .functionName("arn:aws:lambda:us-east-2:047719652432:function:alumnilambda")
+                    .payload(SdkBytes.fromUtf8String(payloadJson))
+                    .build();
+
+            // Se invoca la función Lambda
+            InvokeResponse invokeResponse = lambdaClient.invoke(invokeRequest);
+            String response = invokeResponse.payload().asUtf8String();
+            System.out.println("Lambda response: " + response);
+
+        } catch (Exception e) {
+            System.err.println("Error al invocar Lambda: " + e.getMessage());
+        }
     }
 
 
