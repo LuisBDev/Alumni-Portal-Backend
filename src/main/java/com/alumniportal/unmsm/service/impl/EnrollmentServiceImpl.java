@@ -22,6 +22,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class EnrollmentServiceImpl implements IEnrollmentService {
@@ -127,7 +128,7 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
         activity.getEnrollmentList().add(enrollment);
         activityDAO.save(activity);
 
-        invokeLambdaWhenEnrollmentIsCreated("Confirmación de inscripción en actividad " + activity.getId(), enrollment);
+        invokeLambdaWhenEnrollmentIsCreated("AlumniPortal | Confirmation of Activity Registration " + activity.getId(), enrollment);
 
     }
 
@@ -164,9 +165,15 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
                     .build();
 
             // Se invoca la función Lambda
-            InvokeResponse invokeResponse = lambdaClient.invoke(invokeRequest);
-            String response = invokeResponse.payload().asUtf8String();
-            System.out.println("Lambda response: " + response);
+            CompletableFuture<InvokeResponse> futureResponse = CompletableFuture.supplyAsync(() -> lambdaClient.invoke(invokeRequest));
+
+            futureResponse.thenAccept(invokeResponse -> {
+                String response = invokeResponse.payload().asUtf8String();
+                System.out.println("Lambda response: " + response);
+            }).exceptionally(e -> {
+                System.err.println("Error al invocar Lambda: " + e.getMessage());
+                return null;
+            });
 
         } catch (Exception e) {
             System.err.println("Error al invocar Lambda: " + e.getMessage());

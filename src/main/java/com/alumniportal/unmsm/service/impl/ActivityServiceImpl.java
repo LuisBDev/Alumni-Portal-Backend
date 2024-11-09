@@ -30,6 +30,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class ActivityServiceImpl implements IActivityService {
@@ -155,7 +156,7 @@ public class ActivityServiceImpl implements IActivityService {
         }
 
 
-        invokeLambda("Nueva Actividad: " + activity.getTitle(), company.getName(), activity);
+        invokeLambda("AlumniPortal | New Activity: " + activity.getTitle(), company.getName(), activity);
     }
 
     @Override
@@ -333,9 +334,17 @@ public class ActivityServiceImpl implements IActivityService {
                     .build();
 
             // Se invoca la función Lambda
-            InvokeResponse invokeResponse = lambdaClient.invoke(invokeRequest);
-            String response = invokeResponse.payload().asUtf8String();
-            System.out.println("Lambda response: " + response);
+            CompletableFuture<InvokeResponse> futureResponse = CompletableFuture.supplyAsync(() -> lambdaClient.invoke(invokeRequest));
+
+            // Manejar la respuesta de la invocación asíncrona
+            futureResponse.thenAccept(invokeResponse -> {
+                String response = invokeResponse.payload().asUtf8String();
+                System.out.println("Lambda response: " + response);
+            }).exceptionally(e -> {
+                System.err.println("Error al invocar Lambda: " + e.getMessage());
+                return null;
+            });
+
 
         } catch (Exception e) {
             System.err.println("Error al invocar Lambda: " + e.getMessage());

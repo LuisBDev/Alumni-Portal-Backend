@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class ApplicationServiceImpl implements IApplicationService {
@@ -129,7 +130,7 @@ public class ApplicationServiceImpl implements IApplicationService {
         jobOfferDAO.save(jobOffer);
 
 
-        invokeLambdaWhenApplicationIsCreated("Postulación exitosa " + application.getId(), application);
+        invokeLambdaWhenApplicationIsCreated("AlumniPortal | Successful Application " + application.getId(), application);
 
     }
 
@@ -160,9 +161,21 @@ public class ApplicationServiceImpl implements IApplicationService {
                     .build();
 
             // Se invoca la función Lambda
-            InvokeResponse invokeResponse = lambdaClient.invoke(invokeRequest);
-            String response = invokeResponse.payload().asUtf8String();
-            System.out.println("Lambda response: " + response);
+//            InvokeResponse invokeResponse = lambdaClient.invoke(invokeRequest);
+//            String response = invokeResponse.payload().asUtf8String();
+//            System.out.println("Lambda response: " + response);
+
+            // Se invoca la función Lambda de manera asíncrona
+            CompletableFuture<InvokeResponse> futureResponse = CompletableFuture.supplyAsync(() -> lambdaClient.invoke(invokeRequest));
+
+            // Manejar la respuesta de la invocación asíncrona
+            futureResponse.thenAccept(invokeResponse -> {
+                String response = invokeResponse.payload().asUtf8String();
+                System.out.println("Lambda response: " + response);
+            }).exceptionally(e -> {
+                System.err.println("Error al invocar Lambda: " + e.getMessage());
+                return null;
+            });
 
         } catch (Exception e) {
             System.err.println("Error al invocar Lambda: " + e.getMessage());
