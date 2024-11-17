@@ -1,6 +1,6 @@
 package com.alumniportal.unmsm.config.awsConfig;
 
-import io.github.cdimascio.dotenv.Dotenv;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
@@ -12,14 +12,14 @@ import software.amazon.awssdk.services.s3.S3Client;
 @Configuration
 public class AwsConfig {
 
-    private final Dotenv dotenv = Dotenv.load();
 
-    String accessKey = dotenv.get("AWS_ACCESS_KEY_ID");
-    String secretKey = dotenv.get("AWS_SECRET_ACCESS_KEY");
-    String region = dotenv.get("AWS_S3_REGION");
+    String accessKey = System.getenv("AWS_ACCESS_KEY_ID");
+    String secretKey = System.getenv("AWS_SECRET_ACCESS_KEY");
+    String region = System.getenv("AWS_S3_REGION");
 
     @Bean
     public LambdaClient lambdaClient() {
+
 
         AwsBasicCredentials credentials = AwsBasicCredentials.create(accessKey, secretKey);
 

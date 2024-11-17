@@ -123,11 +123,6 @@
             <version>2.29.0</version>
         </dependency>
 
-        <dependency>
-            <groupId>io.github.cdimascio</groupId>
-            <artifactId>dotenv-java</artifactId>
-            <version>3.0.2</version>
-        </dependency>
 
         <!-- https://mvnrepository.com/artifact/software.amazon.awssdk/lambda -->
         <dependency>

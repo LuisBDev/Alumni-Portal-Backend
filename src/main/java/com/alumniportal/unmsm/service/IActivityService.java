@@ -38,4 +38,8 @@ public interface IActivityService {
     String getFileContentType(Long activityId);
 
     String getFileName(Long activityId);
+
+    void saveActivityByUserId(Activity activity, Long userId);
+
+    void saveActivityByCompanyId(Activity activity, Long companyId);
 }
