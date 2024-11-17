@@ -155,12 +155,55 @@ public class ActivityServiceImpl implements IActivityService {
             uploadActivityImage(activity.getId(), image);
         }
 
-
         invokeLambda("AlumniPortal | New Activity: " + activity.getTitle(), company.getName(), activity);
     }
 
     @Override
+    public void saveActivityByUserId(Activity activity, Long userId) {
+        // Buscar el usuario
+        User user = userDAO.findById(userId);
+        if (user == null) {
+            throw new IllegalArgumentException("Usuario no encontrado");
+        }
+
+        // Setear el usuario y la fecha de creación
+        activity.setUser(user);
+        activity.setCreatedAt(LocalDate.now());
+
+        // Guardar la actividad
+        activityDAO.save(activity);
+
+        user.getActivityList().add(activity);
+
+        invokeLambda("Nueva Actividad: " + activity.getTitle(), user.getName(), activity);
+    }
+
+    @Override
+    public void saveActivityByCompanyId(Activity activity, Long companyId) {
+
+        Company company = companyDAO.findById(companyId);
+        if (company == null) {
+            throw new IllegalArgumentException("Empresa no encontrada");
+        }
+
+        // Setea la compañía y la fecha de creación
+        activity.setCompany(company);
+        activity.setCreatedAt(LocalDate.now());
+
+        // Guarda la actividad antes de subir la imagen
+        activityDAO.save(activity);
+
+
+        invokeLambda("AlumniPortal | New Activity: " + activity.getTitle(), company.getName(), activity);
+
+    }
+
+    @Override
     public void uploadActivityImage(Long activityId, MultipartFile file) throws IOException {
+        if (file == null || file.isEmpty()) {
+            throw new RuntimeException("File is empty");
+        }
+
         Activity activity = activityDAO.findById(activityId);
         if (activity == null) {
             throw new RuntimeException("Activity with id " + activityId + " not found");
@@ -302,6 +345,7 @@ public class ActivityServiceImpl implements IActivityService {
         // Retorna el nombre del archivo desde la clave (key)
         return key.substring(key.lastIndexOf('/') + 1);
     }
+
 
     public void invokeLambda(String subject, String userName, Activity activity) {
 
