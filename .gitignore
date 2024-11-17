@@ -5,6 +5,10 @@ target/*
 # No ignorar los archivos .jar en la carpeta target
 !target/**/*.jar
 
+#Ignorar archivos de docker
+docker-compose.yml
+Dockerfile
+
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/

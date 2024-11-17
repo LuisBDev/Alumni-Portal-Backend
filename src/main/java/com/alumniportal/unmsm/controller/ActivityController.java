@@ -6,6 +6,7 @@ import com.alumniportal.unmsm.model.Activity;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.IActivityDAO;
 import com.alumniportal.unmsm.service.IActivityService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -50,14 +51,62 @@ public class ActivityController {
         return ResponseEntity.ok(activityDTO);
     }
 
+    //Subir actividad con MultiPartFile
+
+//    @PostMapping("/save-user/{userId}")
+//    public ResponseEntity<?> saveActivityByUserId(
+//            @RequestPart(value = "activity") Activity activity,
+//            @RequestPart(value = "image", required = false) MultipartFile image,
+//            @PathVariable Long userId) {
+//        try {
+//            activityService.saveActivityWithImageByUserId(activity, userId, image);
+//            return ResponseEntity.ok("Actividad creada por el usuario correctamente: " + userId);
+//        } catch (IllegalArgumentException e) {
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().body("Error al guardar la actividad");
+//        }
+//    }
+//
+//    @PostMapping("/save-company/{companyId}")
+//    public ResponseEntity<?> saveActivityByCompanyId(
+//            @RequestPart(value = "activity") Activity activity,
+//            @RequestPart(value = "image", required = false) MultipartFile image,
+//            @PathVariable Long companyId) {
+//        try {
+//            activityService.saveActivityWithImageByCompanyId(activity, companyId, image);
+//            return ResponseEntity.ok()
+//                    .body(Map.of(
+//                            "message", "Actividad creada exitosamente",
+//                            "companyId", companyId,
+//                            "activityTitle", activity.getTitle()
+//                    ));
+//        } catch (IllegalArgumentException e) {
+//            return ResponseEntity.badRequest()
+//                    .body(Map.of("error", e.getMessage()));
+//        } catch (Exception e) {
+//            return ResponseEntity.internalServerError()
+//                    .body(Map.of("error", "Error al guardar la actividad: " + e.getMessage()));
+//        }
+//    }
+
     @PostMapping("/save-user/{userId}")
-    public ResponseEntity<?> saveActivityByUserId(
-            @RequestPart(value = "activity") Activity activity,
-            @RequestPart(value = "image", required = false) MultipartFile image,
-            @PathVariable Long userId) {
+    public ResponseEntity<?> saveActivityByUserId(@RequestBody Activity activity, @PathVariable Long userId) {
         try {
-            activityService.saveActivityWithImageByUserId(activity, userId, image);
+            activityService.saveActivityByUserId(activity, userId);
             return ResponseEntity.ok("Actividad creada por el usuario correctamente: " + userId);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error al guardar la actividad");
+        }
+    }
+
+    @PostMapping("/save-company/{companyId}")
+    public ResponseEntity<?> saveActivityByCompanyId(@RequestBody Activity activity, @PathVariable Long companyId) {
+        try {
+            activityService.saveActivityByCompanyId(activity, companyId);
+            return ResponseEntity.ok("Actividad creada por la empresa correctamente: " + companyId);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
@@ -72,21 +121,6 @@ public class ActivityController {
             return ResponseEntity.ok("Activity updated successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
-    @PostMapping("/save-company/{companyId}")
-    public ResponseEntity<?> saveActivityByCompanyId(
-            @RequestPart(value = "activity") Activity activity,
-            @RequestPart(value = "image", required = false) MultipartFile image,
-            @PathVariable Long companyId) {
-        try {
-            activityService.saveActivityWithImageByCompanyId(activity, companyId, image);
-            return ResponseEntity.ok("Actividad creada por la empresa correctamente: " + companyId);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al guardar la actividad");
         }
     }
 
