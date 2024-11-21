@@ -24,4 +24,6 @@ public class EnrollmentDTO {
     private String userCareer;
     private LocalDate enrollmentDate;
     private String status;
+
+    private Long activityId;
 }
