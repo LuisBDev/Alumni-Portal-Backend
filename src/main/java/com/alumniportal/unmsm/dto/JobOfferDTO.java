@@ -23,6 +23,10 @@ public class JobOfferDTO {
     private Integer experience;
     private LocalDate createdAt;
     private LocalDate updatedAt;
-    
+
     private Long companyId;
+    private String companyName;
+    private String companyRuc;
+    private String companyEmail;
+    private String companyPhone;
 }
