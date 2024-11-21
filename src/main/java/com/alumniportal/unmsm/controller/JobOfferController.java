@@ -12,8 +12,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/job-offer")
-@CrossOrigin(origins = "*", allowedHeaders = "*",
-        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.PATCH})
 public class JobOfferController {
 
     @Autowired

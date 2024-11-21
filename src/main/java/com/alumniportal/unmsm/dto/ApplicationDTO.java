@@ -14,8 +14,7 @@ import java.time.LocalDate;
 public class ApplicationDTO {
 
     private Long id;
-    private LocalDate applicationDate;
-    private String status;
+
     private Long userId;
     private String userStudentCode;
     private String userName;
@@ -24,5 +23,11 @@ public class ApplicationDTO {
     private String userEmail;
     private String userFaculty;
     private String userCareer;
+
+    private LocalDate applicationDate;
+    private String status;
+
     private Long jobOfferId;
+    private String jobOfferTitle;
+
 }

@@ -14,8 +14,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/certification")
-@CrossOrigin(origins = "*", allowedHeaders = "*",
-        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.PATCH})
 public class CertificationController {
 
     @Autowired

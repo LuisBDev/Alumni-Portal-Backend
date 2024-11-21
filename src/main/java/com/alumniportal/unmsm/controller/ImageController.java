@@ -16,8 +16,6 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/image")
-@CrossOrigin(origins = "*", allowedHeaders = "*",
-        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.PATCH})
 public class ImageController {
 
 
@@ -32,7 +30,6 @@ public class ImageController {
 
     @Autowired
     private IUserDAO userDAO;
-
 
 
     @PostMapping("/upload-user/{userId}")
@@ -72,6 +69,7 @@ public class ImageController {
 
         }
     }
+
     @GetMapping("/download-company/{companyId}")
     public ResponseEntity<?> downloadCompanyImage(@PathVariable Long companyId) throws IOException {
 
@@ -108,8 +106,6 @@ public class ImageController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
-
 
 
 }
