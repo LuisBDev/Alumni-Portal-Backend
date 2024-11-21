@@ -4,8 +4,7 @@ package com.alumniportal.unmsm.controller;
 import com.alumniportal.unmsm.dto.CertificationDTO;
 import com.alumniportal.unmsm.model.Certification;
 import com.alumniportal.unmsm.service.ICertificationService;
-import com.alumniportal.unmsm.service.IUserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,14 +12,12 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/certification")
 public class CertificationController {
 
-    @Autowired
-    private ICertificationService certificationService;
+    private final ICertificationService certificationService;
 
-    @Autowired
-    private IUserService userService;
 
     @GetMapping("/all")
     public List<CertificationDTO> findAll() {

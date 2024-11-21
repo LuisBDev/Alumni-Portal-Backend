@@ -3,16 +3,18 @@ package com.alumniportal.unmsm.persistence.impl;
 import com.alumniportal.unmsm.model.Project;
 import com.alumniportal.unmsm.persistence.IProjectDAO;
 import com.alumniportal.unmsm.repository.IProjectRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class ProjectDAOImpl implements IProjectDAO {
 
-    @Autowired
-    private IProjectRepository projectRepository;
+
+    private final IProjectRepository projectRepository;
 
 
     @Override

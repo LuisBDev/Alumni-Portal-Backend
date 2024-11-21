@@ -3,16 +3,17 @@ package com.alumniportal.unmsm.persistence.impl;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.IUserDAO;
 import com.alumniportal.unmsm.repository.IUserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class UserDAOImpl implements IUserDAO {
 
-    @Autowired
-    private IUserRepository userRepository;
+    private final IUserRepository userRepository;
 
 
     @Override

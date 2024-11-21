@@ -11,11 +11,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/application")
 public class ApplicationController {
 
-    @Autowired
-    private IApplicationService applicationService;
+
+    private final IApplicationService applicationService;
 
     @GetMapping("/all")
     public List<ApplicationDTO> findAll() {

@@ -3,6 +3,7 @@ package com.alumniportal.unmsm.controller;
 import com.alumniportal.unmsm.dto.WorkExperienceDTO;
 import com.alumniportal.unmsm.model.WorkExperience;
 import com.alumniportal.unmsm.service.IWorkExperienceService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,11 +12,11 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/work-experience")
 public class WorkExperienceController {
 
-    @Autowired
-    private IWorkExperienceService workExperienceService;
+    private final IWorkExperienceService workExperienceService;
 
 
     @GetMapping("/all")

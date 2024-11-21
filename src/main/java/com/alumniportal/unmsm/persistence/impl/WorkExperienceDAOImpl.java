@@ -3,16 +3,18 @@ package com.alumniportal.unmsm.persistence.impl;
 import com.alumniportal.unmsm.model.WorkExperience;
 import com.alumniportal.unmsm.persistence.IWorkExperienceDAO;
 import com.alumniportal.unmsm.repository.IWorkExperienceRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class WorkExperienceDAOImpl implements IWorkExperienceDAO {
 
-    @Autowired
-    private IWorkExperienceRepository workExperienceRepository;
+
+    private final IWorkExperienceRepository workExperienceRepository;
 
 
     @Override

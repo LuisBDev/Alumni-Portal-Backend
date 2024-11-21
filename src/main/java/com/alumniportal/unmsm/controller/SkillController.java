@@ -3,6 +3,7 @@ package com.alumniportal.unmsm.controller;
 import com.alumniportal.unmsm.dto.SkillDTO;
 import com.alumniportal.unmsm.model.Skill;
 import com.alumniportal.unmsm.service.ISkillService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,11 +12,11 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/skill")
 public class SkillController {
 
-    @Autowired
-    private ISkillService skillService;
+    private final ISkillService skillService;
 
     @GetMapping("/all")
     public List<SkillDTO> findAll() {

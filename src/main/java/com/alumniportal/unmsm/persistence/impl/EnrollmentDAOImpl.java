@@ -3,16 +3,18 @@ package com.alumniportal.unmsm.persistence.impl;
 import com.alumniportal.unmsm.model.Enrollment;
 import com.alumniportal.unmsm.persistence.IEnrollmentDAO;
 import com.alumniportal.unmsm.repository.IEnrollmentRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class EnrollmentDAOImpl implements IEnrollmentDAO {
 
-    @Autowired
-    private IEnrollmentRepository enrollmentRepository;
+
+    private final IEnrollmentRepository enrollmentRepository;
 
     @Override
     public List<Enrollment> findAll() {

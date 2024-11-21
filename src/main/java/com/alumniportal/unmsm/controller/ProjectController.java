@@ -3,6 +3,7 @@ package com.alumniportal.unmsm.controller;
 import com.alumniportal.unmsm.dto.ProjectDTO;
 import com.alumniportal.unmsm.model.Project;
 import com.alumniportal.unmsm.service.IProjectService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,11 +12,11 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/project")
 public class ProjectController {
 
-    @Autowired
-    private IProjectService projectService;
+    private final IProjectService projectService;
 
     @GetMapping("/all")
     public List<ProjectDTO> findAll() {

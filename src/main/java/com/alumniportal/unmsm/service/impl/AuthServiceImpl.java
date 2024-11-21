@@ -10,6 +10,7 @@ import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.ICompanyDAO;
 import com.alumniportal.unmsm.persistence.IUserDAO;
 import com.alumniportal.unmsm.service.IAuthService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,25 +21,20 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 
 @Service
+@RequiredArgsConstructor
 public class AuthServiceImpl implements IAuthService {
+    
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
 
-    @Autowired
-    private JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final IUserDAO userDAO;
 
-    @Autowired
-    private IUserDAO userDAO;
+    private final ICompanyDAO companyDAO;
 
-    @Autowired
-    private ICompanyDAO companyDAO;
-
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     @Override
     public AuthUserResponse loginAcademic(LoginRequestDTO loginRequestDTO) {

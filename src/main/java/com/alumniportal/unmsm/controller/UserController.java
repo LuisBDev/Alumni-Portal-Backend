@@ -7,6 +7,7 @@ import com.alumniportal.unmsm.dto.UserDTO;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.service.IUserService;
 import com.alumniportal.unmsm.util.CVGenerator;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,11 +21,11 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/user")
 public class UserController {
 
-    @Autowired
-    private IUserService userService;
+    private final IUserService userService;
 
 //    @PostMapping("/loginAcademic")
 //    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDTO) {

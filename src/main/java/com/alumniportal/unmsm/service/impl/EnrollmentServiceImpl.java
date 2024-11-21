@@ -10,6 +10,7 @@ import com.alumniportal.unmsm.persistence.IUserDAO;
 import com.alumniportal.unmsm.service.IEnrollmentService;
 import com.alumniportal.unmsm.util.EmailTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,22 +26,18 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 @Service
+@RequiredArgsConstructor
 public class EnrollmentServiceImpl implements IEnrollmentService {
 
-    @Autowired
-    private IEnrollmentDAO enrollmentDAO;
+    private final IEnrollmentDAO enrollmentDAO;
+    
+    private final IUserDAO userDAO;
 
-    @Autowired
-    private IUserDAO userDAO;
+    private final IActivityDAO activityDAO;
 
-    @Autowired
-    private IActivityDAO activityDAO;
+    private final ModelMapper modelMapper;
 
-    @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
-    private LambdaClient lambdaClient;
+    private final LambdaClient lambdaClient;
 
     @Override
     public List<EnrollmentDTO> findAll() {

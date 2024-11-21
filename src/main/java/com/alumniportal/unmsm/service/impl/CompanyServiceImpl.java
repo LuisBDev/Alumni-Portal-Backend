@@ -8,6 +8,7 @@ import com.alumniportal.unmsm.persistence.ICompanyDAO;
 import com.alumniportal.unmsm.service.IActivityService;
 import com.alumniportal.unmsm.service.ICompanyService;
 import com.alumniportal.unmsm.util.ImageManagement;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,22 +21,18 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class CompanyServiceImpl implements ICompanyService {
+    
+    private final ICompanyDAO companyDAO;
 
-    @Autowired
-    private ICompanyDAO companyDAO;
+    private final ModelMapper modelMapper;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ImageManagement imageManagement;
 
-    @Autowired
-    private ImageManagement imageManagement;
+    private final IActivityService activityService;
 
-    @Autowired
-    private IActivityService activityService;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public List<CompanyDTO> findAll() {

@@ -6,6 +6,7 @@ import com.alumniportal.unmsm.model.JobOffer;
 import com.alumniportal.unmsm.persistence.ICompanyDAO;
 import com.alumniportal.unmsm.persistence.IJobOfferDAO;
 import com.alumniportal.unmsm.service.IJobOfferService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,16 +18,14 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class JobOfferServiceImpl implements IJobOfferService {
 
-    @Autowired
-    private IJobOfferDAO jobOfferDAO;
+    private final IJobOfferDAO jobOfferDAO;
 
-    @Autowired
-    private ICompanyDAO companyDAO;
+    private final ICompanyDAO companyDAO;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     @Override
     public List<JobOfferDTO> findAll() {

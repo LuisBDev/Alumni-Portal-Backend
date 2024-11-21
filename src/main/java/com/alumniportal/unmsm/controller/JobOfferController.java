@@ -3,6 +3,7 @@ package com.alumniportal.unmsm.controller;
 import com.alumniportal.unmsm.dto.JobOfferDTO;
 import com.alumniportal.unmsm.model.JobOffer;
 import com.alumniportal.unmsm.service.IJobOfferService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,11 +12,11 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/job-offer")
 public class JobOfferController {
 
-    @Autowired
-    private IJobOfferService jobOfferService;
+    private final IJobOfferService jobOfferService;
 
 
     @GetMapping("/all")

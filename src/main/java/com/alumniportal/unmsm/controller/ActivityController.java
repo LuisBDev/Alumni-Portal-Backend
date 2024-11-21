@@ -7,6 +7,7 @@ import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.IActivityDAO;
 import com.alumniportal.unmsm.service.IActivityService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -25,11 +26,7 @@ public class ActivityController {
 
     private final IActivityService activityService;
 
-    @Autowired
-    private IActivityDAO activityDAO;
-
     // Inyección por constructor
-    @Autowired
     public ActivityController(IActivityService activityService) {
         this.activityService = activityService;
     }
