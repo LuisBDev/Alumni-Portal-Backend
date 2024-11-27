@@ -52,12 +52,12 @@
         <dependency>
             <groupId>org.checkerframework</groupId>
             <artifactId>checker-qual</artifactId>
-            <version>3.36.0</version> <!-- Use the latest stable version -->
+            <version>3.36.0</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
-            <version>2.14.0</version> <!-- Asegúrate de que coincida con la versión de Jackson que estás usando -->
+            <version>2.14.0</version>
         </dependency>
 
         <dependency>
@@ -129,6 +129,12 @@
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>lambda</artifactId>
             <version>2.29.7</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
         </dependency>
 
 
