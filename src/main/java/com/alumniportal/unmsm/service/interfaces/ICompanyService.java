@@ -23,8 +23,6 @@ public interface ICompanyService {
     void saveCompany(Company company);
 
     void updateCompany(Long id, Map<String, Object> fields);
-
-    CompanyDTO validateLogin(String email, String password);
-
+    
     void updatePassword(Long id, PasswordChangeDTO passwordChangeDTO);
 }

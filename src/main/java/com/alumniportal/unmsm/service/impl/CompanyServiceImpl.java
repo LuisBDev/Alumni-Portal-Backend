@@ -77,7 +77,6 @@ public class CompanyServiceImpl implements ICompanyService {
                     });
         }
 
-
         companyDAO.deleteById(id);
 
     }
@@ -114,23 +113,14 @@ public class CompanyServiceImpl implements ICompanyService {
         fields.forEach((k, v) -> {
             Field field = ReflectionUtils.findField(Company.class, k);
             field.setAccessible(true);
-            ReflectionUtils.setField(field, companyFound, v);
+            Object valueToSet = (v instanceof String && ((String) v).trim().isEmpty()) ? null : v;
+            ReflectionUtils.setField(field, companyFound, valueToSet);
+
         });
         companyFound.setUpdatedAt(LocalDate.now());
         companyDAO.save(companyFound);
     }
 
-    @Override
-    public CompanyDTO validateLogin(String email, String password) {
-        Company company = companyDAO.findByEmail(email);
-        if (company == null) {
-            throw new RuntimeException("Error: Company not found!");
-        }
-        if (!company.getPassword().equals(password)) {
-            throw new RuntimeException("Error: Password incorrect!");
-        }
-        return modelMapper.map(company, CompanyDTO.class);
-    }
 
     @Override
     public void updatePassword(Long id, PasswordChangeDTO passwordChangeDTO) {
