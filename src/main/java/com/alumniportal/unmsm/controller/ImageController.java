@@ -2,10 +2,10 @@ package com.alumniportal.unmsm.controller;
 
 import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.model.User;
-import com.alumniportal.unmsm.persistence.ICompanyDAO;
-import com.alumniportal.unmsm.persistence.IUserDAO;
+import com.alumniportal.unmsm.persistence.interfaces.ICompanyDAO;
+import com.alumniportal.unmsm.persistence.interfaces.IUserDAO;
 import com.alumniportal.unmsm.util.ImageManagement;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,21 +15,18 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/image")
 public class ImageController {
 
 
-    @Autowired
-    private ImageManagement<User> userImageManagement;
+    private final ImageManagement<User> userImageManagement;
 
-    @Autowired
-    private ImageManagement<Company> companyImageManagement;
+    private final ImageManagement<Company> companyImageManagement;
 
-    @Autowired
-    private ICompanyDAO companyDAO;
+    private final ICompanyDAO companyDAO;
 
-    @Autowired
-    private IUserDAO userDAO;
+    private final IUserDAO userDAO;
 
 
     @PostMapping("/upload-user/{userId}")

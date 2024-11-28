@@ -3,13 +3,12 @@ package com.alumniportal.unmsm.service.impl;
 import com.alumniportal.unmsm.dto.CompanyDTO;
 import com.alumniportal.unmsm.dto.PasswordChangeDTO;
 import com.alumniportal.unmsm.model.Company;
-import com.alumniportal.unmsm.model.User;
-import com.alumniportal.unmsm.persistence.ICompanyDAO;
-import com.alumniportal.unmsm.service.IActivityService;
-import com.alumniportal.unmsm.service.ICompanyService;
+import com.alumniportal.unmsm.persistence.interfaces.ICompanyDAO;
+import com.alumniportal.unmsm.service.interfaces.IActivityService;
+import com.alumniportal.unmsm.service.interfaces.ICompanyService;
 import com.alumniportal.unmsm.util.ImageManagement;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
@@ -20,22 +19,18 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class CompanyServiceImpl implements ICompanyService {
 
-    @Autowired
-    private ICompanyDAO companyDAO;
+    private final ICompanyDAO companyDAO;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
-    @Autowired
-    private ImageManagement imageManagement;
+    private final ImageManagement imageManagement;
 
-    @Autowired
-    private IActivityService activityService;
+    private final IActivityService activityService;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public List<CompanyDTO> findAll() {
@@ -82,7 +77,6 @@ public class CompanyServiceImpl implements ICompanyService {
                     });
         }
 
-
         companyDAO.deleteById(id);
 
     }
@@ -119,23 +113,14 @@ public class CompanyServiceImpl implements ICompanyService {
         fields.forEach((k, v) -> {
             Field field = ReflectionUtils.findField(Company.class, k);
             field.setAccessible(true);
-            ReflectionUtils.setField(field, companyFound, v);
+            Object valueToSet = (v instanceof String && ((String) v).trim().isEmpty()) ? null : v;
+            ReflectionUtils.setField(field, companyFound, valueToSet);
+
         });
         companyFound.setUpdatedAt(LocalDate.now());
         companyDAO.save(companyFound);
     }
 
-    @Override
-    public CompanyDTO validateLogin(String email, String password) {
-        Company company = companyDAO.findByEmail(email);
-        if (company == null) {
-            throw new RuntimeException("Error: Company not found!");
-        }
-        if (!company.getPassword().equals(password)) {
-            throw new RuntimeException("Error: Password incorrect!");
-        }
-        return modelMapper.map(company, CompanyDTO.class);
-    }
 
     @Override
     public void updatePassword(Long id, PasswordChangeDTO passwordChangeDTO) {

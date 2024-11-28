@@ -1,18 +1,19 @@
 package com.alumniportal.unmsm.persistence.impl;
 
 import com.alumniportal.unmsm.model.Application;
-import com.alumniportal.unmsm.persistence.IApplicationDAO;
+import com.alumniportal.unmsm.persistence.interfaces.IApplicationDAO;
 import com.alumniportal.unmsm.repository.IApplicationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class ApplicationDAOImpl implements IApplicationDAO {
 
-    @Autowired
-    private IApplicationRepository applicationRepository;
+
+    private final IApplicationRepository applicationRepository;
 
     @Override
     public List<Application> findAll() {

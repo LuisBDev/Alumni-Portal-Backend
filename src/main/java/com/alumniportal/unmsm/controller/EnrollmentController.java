@@ -2,19 +2,19 @@ package com.alumniportal.unmsm.controller;
 
 import com.alumniportal.unmsm.dto.EnrollmentDTO;
 import com.alumniportal.unmsm.model.Enrollment;
-import com.alumniportal.unmsm.service.IEnrollmentService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.alumniportal.unmsm.service.interfaces.IEnrollmentService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/enrollment")
 public class EnrollmentController {
 
-    @Autowired
-    private IEnrollmentService enrollmentService;
+    private final IEnrollmentService enrollmentService;
 
 
     @GetMapping("/all")

@@ -1,11 +1,9 @@
 package com.alumniportal.unmsm.controller;
 
 import com.alumniportal.unmsm.dto.CompanyDTO;
-import com.alumniportal.unmsm.dto.LoginRequestDTO;
 import com.alumniportal.unmsm.dto.PasswordChangeDTO;
-import com.alumniportal.unmsm.model.Company;
-import com.alumniportal.unmsm.service.ICompanyService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.alumniportal.unmsm.service.interfaces.ICompanyService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
@@ -14,11 +12,11 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/company")
 public class CompanyController {
 
-    @Autowired
-    private ICompanyService companyService;
+    private final ICompanyService companyService;
 
     @GetMapping("/all")
     public List<CompanyDTO> findAll() {
