@@ -71,9 +71,7 @@ public class EducationServiceImpl implements IEducationService {
 //        Setteando el usuario en la educacion y persistiendo
         education.setUser(user);
         educationDAO.save(education);
-//        Agregando la educacion al usuario y persistiendo
-        user.getEducationList().add(education);
-        userDAO.save(user);
+
     }
 
     @Override

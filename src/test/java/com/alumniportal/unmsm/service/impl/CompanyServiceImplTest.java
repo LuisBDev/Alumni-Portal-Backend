@@ -389,6 +389,8 @@ class CompanyServiceImplTest {
 
         assertThrows(Exception.class, () -> companyService.deleteById(1L));
         verify(companyDAO, never()).deleteById(1L);
+
+        
     }
 
 

@@ -131,11 +131,11 @@
             <version>2.29.7</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>test</scope>
-        </dependency>
+        <!--                <dependency>-->
+        <!--                    <groupId>com.h2database</groupId>-->
+        <!--                    <artifactId>h2</artifactId>-->
+        <!--                    <scope>test</scope>-->
+        <!--                </dependency>-->
 
 
     </dependencies>
@@ -181,6 +181,9 @@
                             <excludes>
                                 <exclude>**/model/**</exclude>
                                 <exclude>**/UnmsmApplication.class</exclude>
+                                <!--                                Exclude the package com.alumniportal.unmsm.config-->
+                                <exclude>**/config/**</exclude>
+                                <!--                                <exclude>**/util/**</exclude>-->
                             </excludes>
                         </configuration>
                     </execution>
