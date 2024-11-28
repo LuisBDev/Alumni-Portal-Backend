@@ -94,7 +94,7 @@ public class User extends AbstractEntity implements UserDetails {
     private List<Education> educationList;
 
     //    Relacion con Certification
-    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Certification> certificationList;
 

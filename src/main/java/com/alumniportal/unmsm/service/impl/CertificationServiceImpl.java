@@ -72,9 +72,6 @@ public class CertificationServiceImpl implements ICertificationService {
         certification.setUser(user);
         certificationDAO.save(certification);
 
-//    Agregar el certificado a la lista de certificados del usuario
-        user.getCertificationList().add(certification);
-        userDAO.save(user);
     }
 
     @Override
