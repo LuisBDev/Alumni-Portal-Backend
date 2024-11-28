@@ -4,14 +4,14 @@ import com.alumniportal.unmsm.dto.ActivityDTO;
 import com.alumniportal.unmsm.model.Activity;
 import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.model.User;
-import com.alumniportal.unmsm.persistence.IActivityDAO;
-import com.alumniportal.unmsm.persistence.ICompanyDAO;
-import com.alumniportal.unmsm.persistence.IUserDAO;
-import com.alumniportal.unmsm.service.IActivityService;
+import com.alumniportal.unmsm.persistence.interfaces.IActivityDAO;
+import com.alumniportal.unmsm.persistence.interfaces.ICompanyDAO;
+import com.alumniportal.unmsm.persistence.interfaces.IUserDAO;
+import com.alumniportal.unmsm.service.interfaces.IActivityService;
 import com.alumniportal.unmsm.util.EmailTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,26 +33,20 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 @Service
+@RequiredArgsConstructor
 public class ActivityServiceImpl implements IActivityService {
 
-    @Autowired
-    private IActivityDAO activityDAO;
+    private final IActivityDAO activityDAO;
 
-    @Autowired
-    private IUserDAO userDAO;
+    private final IUserDAO userDAO;
 
-    @Autowired
-    private ICompanyDAO companyDAO;
+    private final ICompanyDAO companyDAO;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
-    @Autowired
-    private S3Client s3Client;
+    private final S3Client s3Client;
 
-
-    @Autowired
-    private LambdaClient lambdaClient;
+    private final LambdaClient lambdaClient;
 
     @Override
     public List<ActivityDTO> findAll() {
@@ -123,8 +117,6 @@ public class ActivityServiceImpl implements IActivityService {
         // Guardar la actividad
         activityDAO.save(activity);
 
-        user.getActivityList().add(activity);
-
         // Subir la imagen si está presente
         if (image != null && !image.isEmpty()) {
             uploadActivityImage(activity.getId(), image);
@@ -173,7 +165,6 @@ public class ActivityServiceImpl implements IActivityService {
         // Guardar la actividad
         activityDAO.save(activity);
 
-        user.getActivityList().add(activity);
 
         invokeLambda("Nueva Actividad: " + activity.getTitle(), user.getName(), activity);
     }

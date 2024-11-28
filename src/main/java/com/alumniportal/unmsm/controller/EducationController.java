@@ -2,9 +2,8 @@ package com.alumniportal.unmsm.controller;
 
 import com.alumniportal.unmsm.dto.EducationDTO;
 import com.alumniportal.unmsm.model.Education;
-import com.alumniportal.unmsm.service.IEducationService;
-import com.alumniportal.unmsm.service.IUserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.alumniportal.unmsm.service.interfaces.IEducationService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,14 +11,12 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/education")
 public class EducationController {
 
-    @Autowired
-    private IEducationService educationService;
+    private final IEducationService educationService;
 
-    @Autowired
-    private IUserService userService;
 
     @GetMapping("/all")
     public List<EducationDTO> findAll() {

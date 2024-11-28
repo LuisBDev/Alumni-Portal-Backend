@@ -3,11 +3,11 @@ package com.alumniportal.unmsm.service.impl;
 import com.alumniportal.unmsm.dto.SkillDTO;
 import com.alumniportal.unmsm.model.Skill;
 import com.alumniportal.unmsm.model.User;
-import com.alumniportal.unmsm.persistence.ISkillDAO;
-import com.alumniportal.unmsm.persistence.IUserDAO;
-import com.alumniportal.unmsm.service.ISkillService;
+import com.alumniportal.unmsm.persistence.interfaces.ISkillDAO;
+import com.alumniportal.unmsm.persistence.interfaces.IUserDAO;
+import com.alumniportal.unmsm.service.interfaces.ISkillService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
@@ -16,16 +16,14 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class SkillServiceImpl implements ISkillService {
 
-    @Autowired
-    private ISkillDAO skillDAO;
+    private final ISkillDAO skillDAO;
 
-    @Autowired
-    private IUserDAO userDAO;
+    private final IUserDAO userDAO;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
 
     @Override

@@ -3,11 +3,11 @@ package com.alumniportal.unmsm.service.impl;
 import com.alumniportal.unmsm.dto.EducationDTO;
 import com.alumniportal.unmsm.model.Education;
 import com.alumniportal.unmsm.model.User;
-import com.alumniportal.unmsm.persistence.IEducationDAO;
-import com.alumniportal.unmsm.persistence.IUserDAO;
-import com.alumniportal.unmsm.service.IEducationService;
+import com.alumniportal.unmsm.persistence.interfaces.IEducationDAO;
+import com.alumniportal.unmsm.persistence.interfaces.IUserDAO;
+import com.alumniportal.unmsm.service.interfaces.IEducationService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
@@ -17,16 +17,14 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class EducationServiceImpl implements IEducationService {
 
-    @Autowired
-    private IEducationDAO educationDAO;
+    private final IEducationDAO educationDAO;
 
-    @Autowired
-    private IUserDAO userDAO;
+    private final IUserDAO userDAO;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
 
     @Override
@@ -73,9 +71,7 @@ public class EducationServiceImpl implements IEducationService {
 //        Setteando el usuario en la educacion y persistiendo
         education.setUser(user);
         educationDAO.save(education);
-//        Agregando la educacion al usuario y persistiendo
-        user.getEducationList().add(education);
-        userDAO.save(user);
+
     }
 
     @Override

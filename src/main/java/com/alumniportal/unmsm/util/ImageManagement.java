@@ -3,10 +3,9 @@ package com.alumniportal.unmsm.util;
 import com.alumniportal.unmsm.model.AbstractEntity;
 import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.model.User;
-import com.alumniportal.unmsm.persistence.ICompanyDAO;
-import com.alumniportal.unmsm.persistence.IUserDAO;
+import com.alumniportal.unmsm.persistence.interfaces.ICompanyDAO;
+import com.alumniportal.unmsm.persistence.interfaces.IUserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 

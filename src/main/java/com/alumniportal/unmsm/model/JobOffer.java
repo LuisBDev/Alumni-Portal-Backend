@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -66,7 +67,7 @@ public class JobOffer {
     //    Relation with Application
     @OneToMany(mappedBy = "jobOffer", orphanRemoval = true)
     @JsonIgnore
-    private List<Application> applicationList;
+    private List<Application> applicationList = new ArrayList<>();
 
 //    Relation with Skill
 

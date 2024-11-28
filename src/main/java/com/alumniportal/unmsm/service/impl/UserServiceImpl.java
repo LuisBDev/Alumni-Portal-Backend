@@ -2,12 +2,12 @@ package com.alumniportal.unmsm.service.impl;
 
 import com.alumniportal.unmsm.dto.*;
 import com.alumniportal.unmsm.model.User;
-import com.alumniportal.unmsm.persistence.*;
-import com.alumniportal.unmsm.service.IActivityService;
-import com.alumniportal.unmsm.service.IUserService;
+import com.alumniportal.unmsm.persistence.interfaces.*;
+import com.alumniportal.unmsm.service.interfaces.IActivityService;
+import com.alumniportal.unmsm.service.interfaces.IUserService;
 import com.alumniportal.unmsm.util.ImageManagement;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
@@ -19,37 +19,28 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements IUserService {
 
-    @Autowired
-    private IUserDAO userDAO;
+    private final IUserDAO userDAO;
 
-    @Autowired
-    private ICertificationDAO certificationDAO;
+    private final ICertificationDAO certificationDAO;
 
-    @Autowired
-    private IEducationDAO educationDAO;
+    private final IEducationDAO educationDAO;
 
-    @Autowired
-    private IProjectDAO projectDAO;
+    private final IProjectDAO projectDAO;
 
-    @Autowired
-    private IWorkExperienceDAO workExperienceDAO;
+    private final IWorkExperienceDAO workExperienceDAO;
 
-    @Autowired
-    private ISkillDAO skillDAO;
+    private final ISkillDAO skillDAO;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
-    @Autowired
-    private ImageManagement imageManagement;
+    private final ImageManagement imageManagement;
 
-    @Autowired
-    private IActivityService activityService;
+    private final IActivityService activityService;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Override

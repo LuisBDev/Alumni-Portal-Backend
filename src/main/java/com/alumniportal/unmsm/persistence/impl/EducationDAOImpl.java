@@ -1,18 +1,19 @@
 package com.alumniportal.unmsm.persistence.impl;
 
 import com.alumniportal.unmsm.model.Education;
-import com.alumniportal.unmsm.persistence.IEducationDAO;
+import com.alumniportal.unmsm.persistence.interfaces.IEducationDAO;
 import com.alumniportal.unmsm.repository.IEducationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class EducationDAOImpl implements IEducationDAO {
 
-    @Autowired
-    private IEducationRepository educationRepository;
+
+    private final IEducationRepository educationRepository;
 
 
     @Override

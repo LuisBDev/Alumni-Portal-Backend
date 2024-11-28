@@ -1,18 +1,19 @@
 package com.alumniportal.unmsm.persistence.impl;
 
 import com.alumniportal.unmsm.model.Company;
-import com.alumniportal.unmsm.persistence.ICompanyDAO;
+import com.alumniportal.unmsm.persistence.interfaces.ICompanyDAO;
 import com.alumniportal.unmsm.repository.ICompanyRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class CompanyDAOImpl implements ICompanyDAO {
 
-    @Autowired
-    private ICompanyRepository companyRepository;
+
+    private final ICompanyRepository companyRepository;
 
 
     @Override

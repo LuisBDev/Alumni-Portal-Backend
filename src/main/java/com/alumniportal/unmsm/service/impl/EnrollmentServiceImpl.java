@@ -4,14 +4,14 @@ import com.alumniportal.unmsm.dto.EnrollmentDTO;
 import com.alumniportal.unmsm.model.Activity;
 import com.alumniportal.unmsm.model.Enrollment;
 import com.alumniportal.unmsm.model.User;
-import com.alumniportal.unmsm.persistence.IActivityDAO;
-import com.alumniportal.unmsm.persistence.IEnrollmentDAO;
-import com.alumniportal.unmsm.persistence.IUserDAO;
-import com.alumniportal.unmsm.service.IEnrollmentService;
+import com.alumniportal.unmsm.persistence.interfaces.IActivityDAO;
+import com.alumniportal.unmsm.persistence.interfaces.IEnrollmentDAO;
+import com.alumniportal.unmsm.persistence.interfaces.IUserDAO;
+import com.alumniportal.unmsm.service.interfaces.IEnrollmentService;
 import com.alumniportal.unmsm.util.EmailTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.core.SdkBytes;
 import software.amazon.awssdk.services.lambda.LambdaClient;
@@ -25,22 +25,18 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 @Service
+@RequiredArgsConstructor
 public class EnrollmentServiceImpl implements IEnrollmentService {
 
-    @Autowired
-    private IEnrollmentDAO enrollmentDAO;
+    private final IEnrollmentDAO enrollmentDAO;
 
-    @Autowired
-    private IUserDAO userDAO;
+    private final IUserDAO userDAO;
 
-    @Autowired
-    private IActivityDAO activityDAO;
+    private final IActivityDAO activityDAO;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
-    @Autowired
-    private LambdaClient lambdaClient;
+    private final LambdaClient lambdaClient;
 
     @Override
     public List<EnrollmentDTO> findAll() {

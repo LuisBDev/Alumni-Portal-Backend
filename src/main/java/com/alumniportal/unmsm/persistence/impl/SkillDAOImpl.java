@@ -1,18 +1,19 @@
 package com.alumniportal.unmsm.persistence.impl;
 
 import com.alumniportal.unmsm.model.Skill;
-import com.alumniportal.unmsm.persistence.ISkillDAO;
+import com.alumniportal.unmsm.persistence.interfaces.ISkillDAO;
 import com.alumniportal.unmsm.repository.ISkillRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class SkillDAOImpl implements ISkillDAO {
 
-    @Autowired
-    private ISkillRepository skillRepository;
+
+    private final ISkillRepository skillRepository;
 
 
     @Override
@@ -39,4 +40,5 @@ public class SkillDAOImpl implements ISkillDAO {
     public List<Skill> findSkillsByUserId(Long userId) {
         return skillRepository.findSkillsByUserId(userId);
     }
+
 }

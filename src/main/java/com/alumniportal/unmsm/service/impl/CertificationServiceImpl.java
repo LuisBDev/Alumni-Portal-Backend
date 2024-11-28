@@ -3,11 +3,11 @@ package com.alumniportal.unmsm.service.impl;
 import com.alumniportal.unmsm.dto.CertificationDTO;
 import com.alumniportal.unmsm.model.Certification;
 import com.alumniportal.unmsm.model.User;
-import com.alumniportal.unmsm.persistence.ICertificationDAO;
-import com.alumniportal.unmsm.persistence.IUserDAO;
-import com.alumniportal.unmsm.service.ICertificationService;
+import com.alumniportal.unmsm.persistence.interfaces.ICertificationDAO;
+import com.alumniportal.unmsm.persistence.interfaces.IUserDAO;
+import com.alumniportal.unmsm.service.interfaces.ICertificationService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
@@ -17,16 +17,14 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class CertificationServiceImpl implements ICertificationService {
 
-    @Autowired
-    private ICertificationDAO certificationDAO;
+    private final ICertificationDAO certificationDAO;
 
-    @Autowired
-    private IUserDAO userDAO;
+    private final IUserDAO userDAO;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
 
     @Override
@@ -74,9 +72,6 @@ public class CertificationServiceImpl implements ICertificationService {
         certification.setUser(user);
         certificationDAO.save(certification);
 
-//    Agregar el certificado a la lista de certificados del usuario
-        user.getCertificationList().add(certification);
-        userDAO.save(user);
     }
 
     @Override
