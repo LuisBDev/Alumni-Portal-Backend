@@ -40,4 +40,5 @@ public class SkillDAOImpl implements ISkillDAO {
     public List<Skill> findSkillsByUserId(Long userId) {
         return skillRepository.findSkillsByUserId(userId);
     }
+
 }
