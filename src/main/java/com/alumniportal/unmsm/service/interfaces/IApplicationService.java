@@ -1,4 +1,4 @@
-package com.alumniportal.unmsm.service;
+package com.alumniportal.unmsm.service.interfaces;
 
 import com.alumniportal.unmsm.dto.ApplicationDTO;
 import com.alumniportal.unmsm.model.Application;

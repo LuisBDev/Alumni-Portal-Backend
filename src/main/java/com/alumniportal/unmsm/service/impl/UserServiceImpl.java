@@ -2,13 +2,12 @@ package com.alumniportal.unmsm.service.impl;
 
 import com.alumniportal.unmsm.dto.*;
 import com.alumniportal.unmsm.model.User;
-import com.alumniportal.unmsm.persistence.*;
-import com.alumniportal.unmsm.service.IActivityService;
-import com.alumniportal.unmsm.service.IUserService;
+import com.alumniportal.unmsm.persistence.interfaces.*;
+import com.alumniportal.unmsm.service.interfaces.IActivityService;
+import com.alumniportal.unmsm.service.interfaces.IUserService;
 import com.alumniportal.unmsm.util.ImageManagement;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;

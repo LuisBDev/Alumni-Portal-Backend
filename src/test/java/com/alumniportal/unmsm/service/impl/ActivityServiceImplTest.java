@@ -3,20 +3,29 @@ package com.alumniportal.unmsm.service.impl;
 import com.alumniportal.unmsm.Data.ActivityProvider;
 import com.alumniportal.unmsm.dto.ActivityDTO;
 import com.alumniportal.unmsm.model.Activity;
-import com.alumniportal.unmsm.persistence.IActivityDAO;
-import com.alumniportal.unmsm.persistence.ICompanyDAO;
-import com.alumniportal.unmsm.persistence.IUserDAO;
+import com.alumniportal.unmsm.model.Company;
+import com.alumniportal.unmsm.model.User;
+import com.alumniportal.unmsm.persistence.interfaces.IActivityDAO;
+import com.alumniportal.unmsm.persistence.interfaces.ICompanyDAO;
+import com.alumniportal.unmsm.persistence.interfaces.IUserDAO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
+import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.SdkBytes;
 import software.amazon.awssdk.services.lambda.LambdaClient;
+import software.amazon.awssdk.services.lambda.model.InvokeRequest;
+import software.amazon.awssdk.services.lambda.model.InvokeResponse;
 import software.amazon.awssdk.services.s3.S3Client;
 
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -42,13 +51,13 @@ public class ActivityServiceImplTest {
     // ModelMapper real
     private ModelMapper modelMapper;
 
-    @InjectMocks
+    //    @InjectMocks
     private ActivityServiceImpl activityService;
 
     @BeforeEach
     void setUp() {
         modelMapper = new ModelMapper();
-        activityService = new ActivityServiceImpl(activityDAO, userDAO, companyDAO, modelMapper, s3Client, lambdaClient);
+        activityService = spy(new ActivityServiceImpl(activityDAO, userDAO, companyDAO, modelMapper, s3Client, lambdaClient));
     }
 
     @Test
@@ -172,6 +181,331 @@ public class ActivityServiceImplTest {
 
         verify(activityDAO, times(1)).deleteById(activityId);
 
+    }
+
+    @Test
+    void testSaveActivityByUserId() {
+        User user = User.builder().id(1L).name("Luis").activityList(new ArrayList<>()).build();
+
+        Activity activity = ActivityProvider.activityOne();
+
+        when(userDAO.findById(anyLong())).thenReturn(user);
+
+        doNothing().when(activityService).invokeLambda(anyString(), anyString(), any(Activity.class));
+
+        activityService.saveActivityByUserId(activity, user.getId());
+        verify(activityDAO, times(1)).save(any(Activity.class));
+    }
+
+    @Test
+    void testSaveActivityByUserId_WhenUserIsNull() {
+        Activity activity = ActivityProvider.activityOne();
+
+        when(userDAO.findById(anyLong())).thenReturn(null);
+
+        assertThrows(IllegalArgumentException.class, () -> activityService.saveActivityByUserId(activity, 1L));
+    }
+
+    @Test
+    void testSaveActivityByCompanyId() {
+
+        Company company = Company.builder().id(1L).name("UNMSM").activityList(new ArrayList<>()).build();
+
+        Activity activity = ActivityProvider.activityOne();
+
+        when(companyDAO.findById(anyLong())).thenReturn(company);
+
+        doNothing().when(activityService).invokeLambda(anyString(), anyString(), any(Activity.class));
+
+        activityService.saveActivityByCompanyId(activity, company.getId());
+        verify(activityDAO, times(1)).save(any(Activity.class));
+
+    }
+
+    @Test
+    void testSaveActivityByCompanyId_WhenCompanyIsNull() {
+        Activity activity = ActivityProvider.activityOne();
+
+        when(companyDAO.findById(anyLong())).thenReturn(null);
+
+        assertThrows(IllegalArgumentException.class, () -> activityService.saveActivityByCompanyId(activity, 1L));
+
+//        No se necesita generar el doNothing para invokeLambda porque no se llama a ese método en el caso de que la compañía sea nula.
+    }
+
+    @Test
+    void testSaveActivityWithImageByUserId() throws IOException {
+
+        User user = User.builder().id(1L).name("Luis").activityList(new ArrayList<>()).build();
+
+        MultipartFile image = mock(MultipartFile.class);
+
+        Activity activity = ActivityProvider.activityOne();
+
+        when(userDAO.findById(anyLong())).thenReturn(user);
+
+        doNothing().when(activityService).invokeLambda(anyString(), anyString(), any(Activity.class));
+
+        doNothing().when(activityService).uploadActivityImage(anyLong(), any(MultipartFile.class));
+
+        activityService.saveActivityWithImageByUserId(activity, user.getId(), image);
+
+        verify(activityDAO, times(1)).save(any(Activity.class));
+    }
+
+    @Test
+    void testSaveActivityWithImageByUserId_WhenUserIsNull() {
+
+        MultipartFile image = mock(MultipartFile.class);
+
+        Activity activity = ActivityProvider.activityOne();
+
+        when(userDAO.findById(anyLong())).thenReturn(null);
+
+        assertThrows(IllegalArgumentException.class, () -> activityService.saveActivityWithImageByUserId(activity, 1L, image));
+
+    }
+
+    @Test
+    void testSaveActivityWithImageByUserId_WhenImageIsNull() throws IOException {
+
+        User user = User.builder().id(1L).name("Luis").activityList(new ArrayList<>()).build();
+
+        Activity activity = ActivityProvider.activityOne();
+
+        when(userDAO.findById(anyLong())).thenReturn(user);
+
+        doNothing().when(activityService).invokeLambda(anyString(), anyString(), any(Activity.class));
+
+        activityService.saveActivityWithImageByUserId(activity, user.getId(), null);
+
+        verify(activityDAO, times(1)).save(any(Activity.class));
+    }
+
+    @Test
+    void testSaveActivityWithImageByUserId_WhenImageIsEmpty() throws IOException {
+
+        User user = User.builder().id(1L).name("Luis").activityList(new ArrayList<>()).build();
+
+        MultipartFile imageEmpty = mock(MultipartFile.class);
+        when(imageEmpty.isEmpty()).thenReturn(true);
+
+        Activity activity = ActivityProvider.activityOne();
+
+        when(userDAO.findById(anyLong())).thenReturn(user);
+
+        doNothing().when(activityService).invokeLambda(anyString(), anyString(), any(Activity.class));
+
+        activityService.saveActivityWithImageByUserId(activity, user.getId(), imageEmpty);
+
+        verify(activityDAO, times(1)).save(any(Activity.class));
+
+    }
+
+    @Test
+    void testSaveActivityWithImageByCompanyId() throws IOException {
+
+        Company company = Company.builder().id(1L).name("TechCorp").activityList(new ArrayList<>()).build();
+
+        MultipartFile image = mock(MultipartFile.class);
+
+        Activity activity = ActivityProvider.activityOne();
+
+        when(companyDAO.findById(anyLong())).thenReturn(company);
+
+        doNothing().when(activityService).invokeLambda(anyString(), anyString(), any(Activity.class));
+
+        doNothing().when(activityService).uploadActivityImage(anyLong(), any(MultipartFile.class));
+
+        activityService.saveActivityWithImageByCompanyId(activity, company.getId(), image);
+
+        verify(activityDAO, times(1)).save(any(Activity.class));
+    }
+
+    @Test
+    void testSaveActivityWithImageByCompanyId_WhenCompanyIsNull() {
+
+        MultipartFile image = mock(MultipartFile.class);
+
+        Activity activity = ActivityProvider.activityOne();
+
+        when(companyDAO.findById(anyLong())).thenReturn(null);
+
+        assertThrows(IllegalArgumentException.class, () -> activityService.saveActivityWithImageByCompanyId(activity, 1L, image));
+    }
+
+    @Test
+    void testSaveActivityWithImageByCompanyId_WhenImageIsNull() throws IOException {
+
+        Company company = Company.builder().id(1L).name("TechCorp").activityList(new ArrayList<>()).build();
+
+        Activity activity = ActivityProvider.activityOne();
+
+        when(companyDAO.findById(anyLong())).thenReturn(company);
+
+        doNothing().when(activityService).invokeLambda(anyString(), anyString(), any(Activity.class));
+
+        activityService.saveActivityWithImageByCompanyId(activity, company.getId(), null);
+
+        verify(activityDAO, times(1)).save(any(Activity.class));
+    }
+
+    @Test
+    void testSaveActivityWithImageByCompanyId_WhenImageIsEmpty() throws IOException {
+
+        Company company = Company.builder().id(1L).name("TechCorp").activityList(new ArrayList<>()).build();
+
+        MultipartFile imageEmpty = mock(MultipartFile.class);
+        when(imageEmpty.isEmpty()).thenReturn(true);
+
+        Activity activity = ActivityProvider.activityOne();
+
+        when(companyDAO.findById(anyLong())).thenReturn(company);
+
+        doNothing().when(activityService).invokeLambda(anyString(), anyString(), any(Activity.class));
+
+        activityService.saveActivityWithImageByCompanyId(activity, company.getId(), imageEmpty);
+
+        verify(activityDAO, times(1)).save(any(Activity.class));
+    }
+
+
+    @Test
+    void updateActivity_UpdatesFieldsSuccessfully() {
+        Long activityId = 1L;
+        Activity activity = Activity.builder().
+                id(activityId).
+                title("Original Title").
+                description("Original Description").
+                build();
+
+        when(activityDAO.findById(activityId)).thenReturn(activity);
+
+
+        Map<String, Object> fields = Map.of(
+                "title", "Updated Title",
+                "description", "Updated Description"
+        );
+
+        activityService.updateActivity(activityId, fields);
+
+        assertEquals("Updated Title", activity.getTitle());
+        assertEquals("Updated Description", activity.getDescription());
+        verify(activityDAO, times(1)).save(activity);
+    }
+
+    @Test
+    void updateActivity_ThrowsException_WhenActivityNotFound() {
+
+        when(activityDAO.findById(anyLong())).thenReturn(null);
+
+        Map<String, Object> fields = Map.of("title", "Updated Title");
+
+        assertThrows(RuntimeException.class, () -> activityService.updateActivity(1L, fields));
+    }
+
+    @Test
+    void updateActivity_SetsFieldToNull_WhenEmptyStringProvided() {
+        Long activityId = 1L;
+        Activity activity = new Activity();
+        activity.setId(activityId);
+        activity.setTitle("Original Title");
+        when(activityDAO.findById(activityId)).thenReturn(activity);
+
+        Map<String, Object> fields = Map.of("title", "");
+
+        activityService.updateActivity(activityId, fields);
+
+        assertNull(activity.getTitle());
+        verify(activityDAO, times(1)).save(activity);
+    }
+
+    @Test
+    void updateActivity_ConvertsStringToLocalDate_ForDateFields() {
+        Long activityId = 1L;
+        Activity activity = new Activity();
+        activity.setId(activityId);
+        when(activityDAO.findById(activityId)).thenReturn(activity);
+
+        Map<String, Object> fields = Map.of(
+                "startDate", "2023-01-01",
+                "endDate", "2023-12-31"
+        );
+
+        activityService.updateActivity(activityId, fields);
+
+        assertEquals(LocalDate.of(2023, 1, 1), activity.getStartDate());
+        assertEquals(LocalDate.of(2023, 12, 31), activity.getEndDate());
+        verify(activityDAO, times(1)).save(activity);
+    }
+
+    @Test
+    void getFileName_ReturnsFileName_WhenActivityHasImage() {
+        Long activityId = 1L;
+        Activity activity = new Activity();
+        activity.setId(activityId);
+        activity.setUrl("activityimages/1_image.jpg");
+        when(activityDAO.findById(activityId)).thenReturn(activity);
+
+        String fileName = activityService.getFileName(activityId);
+
+        assertEquals("1_image.jpg", fileName);
+    }
+
+    @Test
+    void getFileName_ThrowsException_WhenActivityHasNoImage() {
+        Long activityId = 1L;
+        Activity activity = new Activity();
+        activity.setId(activityId);
+        activity.setUrl(null);
+        when(activityDAO.findById(activityId)).thenReturn(activity);
+
+        assertThrows(RuntimeException.class, () -> activityService.getFileName(activityId));
+    }
+
+    @Test
+    void invokeLambda_SuccessfullyInvokesLambda() {
+        // Arrange
+        Activity activity = ActivityProvider.activityOne();
+        when(userDAO.findAll()).thenReturn(List.of(User.builder().email("test@example.com").build()));
+
+        //payload simulado
+        String responsePayload = "{\"status\":\"success\"}";
+        InvokeResponse mockResponse = InvokeResponse.builder()
+                .statusCode(200)
+                .payload(SdkBytes.fromUtf8String(responsePayload))
+                .build();
+
+        when(lambdaClient.invoke(any(InvokeRequest.class))).thenReturn(mockResponse);
+
+        // Act
+        activityService.invokeLambda("Subject", "User", activity);
+
+        // Assert
+        verify(lambdaClient, times(1)).invoke(any(InvokeRequest.class));
+    }
+
+
+    @Test
+    void invokeLambda_HandlesExceptionDuringInvocation() {
+        // Arrange
+        Activity activity = ActivityProvider.activityOne();
+        when(userDAO.findAll()).thenReturn(List.of(User.builder().email("asd@gmail.com").build()));
+
+        // Simular que la invocación lanza una excepción
+        when(lambdaClient.invoke(any(InvokeRequest.class)))
+                .thenThrow(new RuntimeException("Error invoking Lambda"));
+
+        // Act & Assert
+        try {
+            activityService.invokeLambda("Subject", "User", activity);
+        } catch (RuntimeException e) {
+            // Aseguramos que la excepción es la esperada
+            assertEquals("Error invoking Lambda", e.getMessage());
+        }
+
+        // Verificar que se intentó invocar Lambda
+        verify(lambdaClient, times(1)).invoke(any(InvokeRequest.class));
     }
 
 

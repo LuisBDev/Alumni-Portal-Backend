@@ -1,10 +1,9 @@
 package com.alumniportal.unmsm.persistence.impl;
 
 import com.alumniportal.unmsm.model.Enrollment;
-import com.alumniportal.unmsm.persistence.IEnrollmentDAO;
+import com.alumniportal.unmsm.persistence.interfaces.IEnrollmentDAO;
 import com.alumniportal.unmsm.repository.IEnrollmentRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

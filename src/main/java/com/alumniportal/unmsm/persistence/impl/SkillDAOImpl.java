@@ -1,10 +1,9 @@
 package com.alumniportal.unmsm.persistence.impl;
 
 import com.alumniportal.unmsm.model.Skill;
-import com.alumniportal.unmsm.persistence.ISkillDAO;
+import com.alumniportal.unmsm.persistence.interfaces.ISkillDAO;
 import com.alumniportal.unmsm.repository.ISkillRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

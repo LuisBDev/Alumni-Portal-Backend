@@ -2,15 +2,14 @@ package com.alumniportal.unmsm.service.impl;
 
 import com.alumniportal.unmsm.dto.ApplicationDTO;
 import com.alumniportal.unmsm.model.Application;
-import com.alumniportal.unmsm.persistence.IApplicationDAO;
-import com.alumniportal.unmsm.persistence.IJobOfferDAO;
-import com.alumniportal.unmsm.persistence.IUserDAO;
-import com.alumniportal.unmsm.service.IApplicationService;
+import com.alumniportal.unmsm.persistence.interfaces.IApplicationDAO;
+import com.alumniportal.unmsm.persistence.interfaces.IJobOfferDAO;
+import com.alumniportal.unmsm.persistence.interfaces.IUserDAO;
+import com.alumniportal.unmsm.service.interfaces.IApplicationService;
 import com.alumniportal.unmsm.util.EmailTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.alumniportal.unmsm.model.JobOffer;
 import com.alumniportal.unmsm.model.User;
@@ -29,7 +28,7 @@ import java.util.concurrent.CompletableFuture;
 @Service
 @RequiredArgsConstructor
 public class ApplicationServiceImpl implements IApplicationService {
-    
+
     private final IApplicationDAO applicationDAO;
 
     private final IUserDAO userDAO;

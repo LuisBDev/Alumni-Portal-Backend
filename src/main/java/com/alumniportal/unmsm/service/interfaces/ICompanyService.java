@@ -1,4 +1,4 @@
-package com.alumniportal.unmsm.service;
+package com.alumniportal.unmsm.service.interfaces;
 
 import com.alumniportal.unmsm.dto.CompanyDTO;
 import com.alumniportal.unmsm.dto.PasswordChangeDTO;

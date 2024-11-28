@@ -9,6 +9,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -102,7 +104,7 @@ public class User extends AbstractEntity implements UserDetails {
     private List<Project> projectList;
 
     //    Relacion con Activity
-    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Activity> activityList;
 
@@ -114,7 +116,7 @@ public class User extends AbstractEntity implements UserDetails {
     //    Relacion con Application
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     @JsonIgnore
-    private List<Application> applicationList;
+    private List<Application> applicationList = new ArrayList<>();
 
     //    Relacion con Skill
     @OneToMany(mappedBy = "user", orphanRemoval = true)

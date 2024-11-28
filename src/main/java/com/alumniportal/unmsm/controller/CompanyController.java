@@ -1,12 +1,9 @@
 package com.alumniportal.unmsm.controller;
 
 import com.alumniportal.unmsm.dto.CompanyDTO;
-import com.alumniportal.unmsm.dto.LoginRequestDTO;
 import com.alumniportal.unmsm.dto.PasswordChangeDTO;
-import com.alumniportal.unmsm.model.Company;
-import com.alumniportal.unmsm.service.ICompanyService;
+import com.alumniportal.unmsm.service.interfaces.ICompanyService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;

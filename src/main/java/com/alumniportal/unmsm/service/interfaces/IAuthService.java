@@ -1,10 +1,8 @@
-package com.alumniportal.unmsm.service;
+package com.alumniportal.unmsm.service.interfaces;
 
 import com.alumniportal.unmsm.dto.AuthCompanyResponse;
-import com.alumniportal.unmsm.dto.AuthResponseDTO;
 import com.alumniportal.unmsm.dto.AuthUserResponse;
 import com.alumniportal.unmsm.dto.LoginRequestDTO;
-import com.alumniportal.unmsm.model.AbstractEntity;
 import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.model.User;
 

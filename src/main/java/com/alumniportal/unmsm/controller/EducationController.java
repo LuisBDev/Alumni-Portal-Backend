@@ -2,7 +2,7 @@ package com.alumniportal.unmsm.controller;
 
 import com.alumniportal.unmsm.dto.EducationDTO;
 import com.alumniportal.unmsm.model.Education;
-import com.alumniportal.unmsm.service.IEducationService;
+import com.alumniportal.unmsm.service.interfaces.IEducationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

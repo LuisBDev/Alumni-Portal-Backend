@@ -3,12 +3,7 @@ package com.alumniportal.unmsm.controller;
 
 import com.alumniportal.unmsm.dto.ActivityDTO;
 import com.alumniportal.unmsm.model.Activity;
-import com.alumniportal.unmsm.model.User;
-import com.alumniportal.unmsm.persistence.IActivityDAO;
-import com.alumniportal.unmsm.service.IActivityService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.alumniportal.unmsm.service.interfaces.IActivityService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

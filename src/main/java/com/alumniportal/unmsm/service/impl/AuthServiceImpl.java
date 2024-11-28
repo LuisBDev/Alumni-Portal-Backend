@@ -7,12 +7,11 @@ import com.alumniportal.unmsm.dto.LoginRequestDTO;
 import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.model.Role;
 import com.alumniportal.unmsm.model.User;
-import com.alumniportal.unmsm.persistence.ICompanyDAO;
-import com.alumniportal.unmsm.persistence.IUserDAO;
-import com.alumniportal.unmsm.service.IAuthService;
+import com.alumniportal.unmsm.persistence.interfaces.ICompanyDAO;
+import com.alumniportal.unmsm.persistence.interfaces.IUserDAO;
+import com.alumniportal.unmsm.service.interfaces.IAuthService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,7 +22,7 @@ import java.time.LocalDate;
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements IAuthService {
-    
+
     private final AuthenticationManager authenticationManager;
 
     private final JwtService jwtService;

@@ -3,12 +3,11 @@ package com.alumniportal.unmsm.service.impl;
 import com.alumniportal.unmsm.dto.JobOfferDTO;
 import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.model.JobOffer;
-import com.alumniportal.unmsm.persistence.ICompanyDAO;
-import com.alumniportal.unmsm.persistence.IJobOfferDAO;
-import com.alumniportal.unmsm.service.IJobOfferService;
+import com.alumniportal.unmsm.persistence.interfaces.ICompanyDAO;
+import com.alumniportal.unmsm.persistence.interfaces.IJobOfferDAO;
+import com.alumniportal.unmsm.service.interfaces.IJobOfferService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 

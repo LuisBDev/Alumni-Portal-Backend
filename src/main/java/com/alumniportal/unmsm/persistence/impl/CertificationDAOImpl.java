@@ -1,10 +1,9 @@
 package com.alumniportal.unmsm.persistence.impl;
 
 import com.alumniportal.unmsm.model.Certification;
-import com.alumniportal.unmsm.persistence.ICertificationDAO;
+import com.alumniportal.unmsm.persistence.interfaces.ICertificationDAO;
 import com.alumniportal.unmsm.repository.ICertificationRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

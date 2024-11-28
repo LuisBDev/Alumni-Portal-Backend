@@ -1,14 +1,11 @@
 package com.alumniportal.unmsm.controller;
 
-import com.alumniportal.unmsm.dto.LoginRequestDTO;
 import com.alumniportal.unmsm.dto.PasswordChangeDTO;
 import com.alumniportal.unmsm.dto.UserCVDTO;
 import com.alumniportal.unmsm.dto.UserDTO;
-import com.alumniportal.unmsm.model.User;
-import com.alumniportal.unmsm.service.IUserService;
+import com.alumniportal.unmsm.service.interfaces.IUserService;
 import com.alumniportal.unmsm.util.CVGenerator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

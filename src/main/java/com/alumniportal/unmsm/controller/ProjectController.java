@@ -2,9 +2,8 @@ package com.alumniportal.unmsm.controller;
 
 import com.alumniportal.unmsm.dto.ProjectDTO;
 import com.alumniportal.unmsm.model.Project;
-import com.alumniportal.unmsm.service.IProjectService;
+import com.alumniportal.unmsm.service.interfaces.IProjectService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

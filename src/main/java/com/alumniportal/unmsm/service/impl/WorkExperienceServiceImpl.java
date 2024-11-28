@@ -3,12 +3,11 @@ package com.alumniportal.unmsm.service.impl;
 import com.alumniportal.unmsm.dto.WorkExperienceDTO;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.model.WorkExperience;
-import com.alumniportal.unmsm.persistence.IUserDAO;
-import com.alumniportal.unmsm.persistence.IWorkExperienceDAO;
-import com.alumniportal.unmsm.service.IWorkExperienceService;
+import com.alumniportal.unmsm.persistence.interfaces.IUserDAO;
+import com.alumniportal.unmsm.persistence.interfaces.IWorkExperienceDAO;
+import com.alumniportal.unmsm.service.interfaces.IWorkExperienceService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 

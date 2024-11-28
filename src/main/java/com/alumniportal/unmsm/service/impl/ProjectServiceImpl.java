@@ -3,12 +3,11 @@ package com.alumniportal.unmsm.service.impl;
 import com.alumniportal.unmsm.dto.ProjectDTO;
 import com.alumniportal.unmsm.model.Project;
 import com.alumniportal.unmsm.model.User;
-import com.alumniportal.unmsm.persistence.IProjectDAO;
-import com.alumniportal.unmsm.persistence.IUserDAO;
-import com.alumniportal.unmsm.service.IProjectService;
+import com.alumniportal.unmsm.persistence.interfaces.IProjectDAO;
+import com.alumniportal.unmsm.persistence.interfaces.IUserDAO;
+import com.alumniportal.unmsm.service.interfaces.IProjectService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
@@ -20,7 +19,7 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class ProjectServiceImpl implements IProjectService {
-    
+
     private final IProjectDAO projectDAO;
 
     private final IUserDAO userDAO;

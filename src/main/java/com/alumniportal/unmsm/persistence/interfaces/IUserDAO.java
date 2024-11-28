@@ -1,4 +1,4 @@
-package com.alumniportal.unmsm.persistence;
+package com.alumniportal.unmsm.persistence.interfaces;
 
 import com.alumniportal.unmsm.model.User;
 
@@ -18,5 +18,5 @@ public interface IUserDAO {
 
     User findByEmail(String email);
 
-    
+
 }

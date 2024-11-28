@@ -3,14 +3,12 @@ package com.alumniportal.unmsm.service.impl;
 import com.alumniportal.unmsm.dto.CompanyDTO;
 import com.alumniportal.unmsm.dto.PasswordChangeDTO;
 import com.alumniportal.unmsm.model.Company;
-import com.alumniportal.unmsm.model.User;
-import com.alumniportal.unmsm.persistence.ICompanyDAO;
-import com.alumniportal.unmsm.service.IActivityService;
-import com.alumniportal.unmsm.service.ICompanyService;
+import com.alumniportal.unmsm.persistence.interfaces.ICompanyDAO;
+import com.alumniportal.unmsm.service.interfaces.IActivityService;
+import com.alumniportal.unmsm.service.interfaces.ICompanyService;
 import com.alumniportal.unmsm.util.ImageManagement;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
@@ -23,7 +21,7 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class CompanyServiceImpl implements ICompanyService {
-    
+
     private final ICompanyDAO companyDAO;
 
     private final ModelMapper modelMapper;

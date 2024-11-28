@@ -2,9 +2,8 @@ package com.alumniportal.unmsm.controller;
 
 import com.alumniportal.unmsm.dto.WorkExperienceDTO;
 import com.alumniportal.unmsm.model.WorkExperience;
-import com.alumniportal.unmsm.service.IWorkExperienceService;
+import com.alumniportal.unmsm.service.interfaces.IWorkExperienceService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

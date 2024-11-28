@@ -1,4 +1,4 @@
-package com.alumniportal.unmsm.persistence;
+package com.alumniportal.unmsm.persistence.interfaces;
 
 import com.alumniportal.unmsm.model.JobOffer;
 

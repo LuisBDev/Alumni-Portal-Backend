@@ -4,15 +4,14 @@ import com.alumniportal.unmsm.dto.EnrollmentDTO;
 import com.alumniportal.unmsm.model.Activity;
 import com.alumniportal.unmsm.model.Enrollment;
 import com.alumniportal.unmsm.model.User;
-import com.alumniportal.unmsm.persistence.IActivityDAO;
-import com.alumniportal.unmsm.persistence.IEnrollmentDAO;
-import com.alumniportal.unmsm.persistence.IUserDAO;
-import com.alumniportal.unmsm.service.IEnrollmentService;
+import com.alumniportal.unmsm.persistence.interfaces.IActivityDAO;
+import com.alumniportal.unmsm.persistence.interfaces.IEnrollmentDAO;
+import com.alumniportal.unmsm.persistence.interfaces.IUserDAO;
+import com.alumniportal.unmsm.service.interfaces.IEnrollmentService;
 import com.alumniportal.unmsm.util.EmailTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.core.SdkBytes;
 import software.amazon.awssdk.services.lambda.LambdaClient;
@@ -30,7 +29,7 @@ import java.util.concurrent.CompletableFuture;
 public class EnrollmentServiceImpl implements IEnrollmentService {
 
     private final IEnrollmentDAO enrollmentDAO;
-    
+
     private final IUserDAO userDAO;
 
     private final IActivityDAO activityDAO;

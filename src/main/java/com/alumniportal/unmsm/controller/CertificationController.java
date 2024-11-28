@@ -3,7 +3,7 @@ package com.alumniportal.unmsm.controller;
 
 import com.alumniportal.unmsm.dto.CertificationDTO;
 import com.alumniportal.unmsm.model.Certification;
-import com.alumniportal.unmsm.service.ICertificationService;
+import com.alumniportal.unmsm.service.interfaces.ICertificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
