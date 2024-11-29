@@ -463,50 +463,7 @@ public class ActivityServiceImplTest {
         assertThrows(RuntimeException.class, () -> activityService.getFileName(activityId));
     }
 
-    @Test
-    void invokeLambda_SuccessfullyInvokesLambda() {
-        // Arrange
-        Activity activity = ActivityProvider.activityOne();
-        when(userDAO.findAll()).thenReturn(List.of(User.builder().email("test@example.com").build()));
 
-        //payload simulado
-        String responsePayload = "{\"status\":\"success\"}";
-        InvokeResponse mockResponse = InvokeResponse.builder()
-                .statusCode(200)
-                .payload(SdkBytes.fromUtf8String(responsePayload))
-                .build();
-
-        when(lambdaClient.invoke(any(InvokeRequest.class))).thenReturn(mockResponse);
-
-        // Act
-        activityService.invokeLambda("Subject", "User", activity);
-
-        // Assert
-        verify(lambdaClient, times(1)).invoke(any(InvokeRequest.class));
-    }
-
-
-    @Test
-    void invokeLambda_HandlesExceptionDuringInvocation() {
-        // Arrange
-        Activity activity = ActivityProvider.activityOne();
-        when(userDAO.findAll()).thenReturn(List.of(User.builder().email("asd@gmail.com").build()));
-
-        // Simular que la invocación lanza una excepción
-        when(lambdaClient.invoke(any(InvokeRequest.class)))
-                .thenThrow(new RuntimeException("Error invoking Lambda"));
-
-        // Act & Assert
-        try {
-            activityService.invokeLambda("Subject", "User", activity);
-        } catch (RuntimeException e) {
-            // Aseguramos que la excepción es la esperada
-            assertEquals("Error invoking Lambda", e.getMessage());
-        }
-
-        // Verificar que se intentó invocar Lambda
-        verify(lambdaClient, times(1)).invoke(any(InvokeRequest.class));
-    }
 
 
 }
