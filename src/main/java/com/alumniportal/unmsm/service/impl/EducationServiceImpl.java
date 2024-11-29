@@ -68,7 +68,7 @@ public class EducationServiceImpl implements IEducationService {
         if (user == null) {
             throw new RuntimeException("User not found");
         }
-//        Setteando el usuario en la educacion y persistiendo
+
         education.setUser(user);
         educationDAO.save(education);
 
