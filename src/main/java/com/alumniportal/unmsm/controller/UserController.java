@@ -22,6 +22,7 @@ import java.util.Map;
 @RequestMapping("/api/user")
 public class UserController {
 
+    //    Inyeccion por constructor mediante la anotacion @RequiredArgsConstructor
     private final IUserService userService;
 
 //    @PostMapping("/loginAcademic")
