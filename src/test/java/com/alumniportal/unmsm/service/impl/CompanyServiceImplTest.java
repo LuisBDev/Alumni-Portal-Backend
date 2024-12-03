@@ -1,8 +1,8 @@
 package com.alumniportal.unmsm.service.impl;
 
 import com.alumniportal.unmsm.Data.CompanyProvider;
-import com.alumniportal.unmsm.dto.CompanyDTO;
-import com.alumniportal.unmsm.dto.PasswordChangeDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.CompanyResponseDTO;
+import com.alumniportal.unmsm.dto.RequestDTO.PasswordChangeRequestDTO;
 import com.alumniportal.unmsm.model.Activity;
 import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.persistence.interfaces.ICompanyDAO;
@@ -17,7 +17,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -58,7 +57,7 @@ class CompanyServiceImplTest {
         Company company2 = new Company();
         when(companyDAO.findAll()).thenReturn(List.of(company1, company2));
 
-        List<CompanyDTO> result = companyService.findAll();
+        List<CompanyResponseDTO> result = companyService.findAll();
 
         assertEquals(2, result.size());
         verify(companyDAO, times(1)).findAll();
@@ -68,7 +67,7 @@ class CompanyServiceImplTest {
     void findAll_ReturnsEmptyList_WhenNoCompaniesExist() {
         when(companyDAO.findAll()).thenReturn(List.of());
 
-        List<CompanyDTO> result = companyService.findAll();
+        List<CompanyResponseDTO> result = companyService.findAll();
 
         assertTrue(result.isEmpty());
         verify(companyDAO, times(1)).findAll();
@@ -80,7 +79,7 @@ class CompanyServiceImplTest {
         company.setId(1L);
         when(companyDAO.findById(1L)).thenReturn(company);
 
-        CompanyDTO result = companyService.findById(1L);
+        CompanyResponseDTO result = companyService.findById(1L);
 
         assertNotNull(result);
         assertEquals(1L, result.getId());
@@ -91,7 +90,7 @@ class CompanyServiceImplTest {
     void findById_ReturnsNull_WhenCompanyDoesNotExist() {
         when(companyDAO.findById(1L)).thenReturn(null);
 
-        CompanyDTO result = companyService.findById(1L);
+        CompanyResponseDTO result = companyService.findById(1L);
 
         assertNull(result);
         verify(companyDAO, times(1)).findById(1L);
@@ -133,7 +132,7 @@ class CompanyServiceImplTest {
         company.setEmail("test@example.com");
         when(companyDAO.findByEmail("test@example.com")).thenReturn(company);
 
-        CompanyDTO result = companyService.findByEmail("test@example.com");
+        CompanyResponseDTO result = companyService.findByEmail("test@example.com");
 
         assertNotNull(result);
         assertEquals("test@example.com", result.getEmail());
@@ -144,7 +143,7 @@ class CompanyServiceImplTest {
     void findByEmail_ReturnsNull_WhenEmailDoesNotExist() {
         when(companyDAO.findByEmail("test@example.com")).thenReturn(null);
 
-        CompanyDTO result = companyService.findByEmail("test@example.com");
+        CompanyResponseDTO result = companyService.findByEmail("test@example.com");
 
         assertNull(result);
         verify(companyDAO, times(1)).findByEmail("test@example.com");
@@ -225,7 +224,7 @@ class CompanyServiceImplTest {
                 .build();
 
 
-        PasswordChangeDTO passwordChangeDTO = PasswordChangeDTO.builder()
+        PasswordChangeRequestDTO passwordChangeRequestDTO = PasswordChangeRequestDTO.builder()
                 .email("test@example.com")
                 .password("oldPassword")
                 .newPassword("newPassword")
@@ -236,7 +235,7 @@ class CompanyServiceImplTest {
         when(passwordEncoder.matches("oldPassword", "encodedOldPassword")).thenReturn(true);
         when(passwordEncoder.encode("newPassword")).thenReturn("encodedNewPassword");
 
-        companyService.updatePassword(1L, passwordChangeDTO);
+        companyService.updatePassword(1L, passwordChangeRequestDTO);
 
         assertEquals("encodedNewPassword", company.getPassword());
         assertNotNull(company.getUpdatedAt());
@@ -245,7 +244,7 @@ class CompanyServiceImplTest {
 
     @Test
     void updatePassword_ThrowsException_WhenCompanyDoesNotExist() {
-        PasswordChangeDTO passwordChangeDTO = PasswordChangeDTO.builder()
+        PasswordChangeRequestDTO passwordChangeRequestDTO = PasswordChangeRequestDTO.builder()
                 .email("test@example.com")
                 .password("oldPassword")
                 .newPassword("newPassword")
@@ -253,7 +252,7 @@ class CompanyServiceImplTest {
 
         when(companyDAO.findById(anyLong())).thenReturn(null);
 
-        assertThrows(RuntimeException.class, () -> companyService.updatePassword(1L, passwordChangeDTO));
+        assertThrows(RuntimeException.class, () -> companyService.updatePassword(1L, passwordChangeRequestDTO));
         verify(companyDAO, never()).save(any(Company.class));
     }
 
@@ -264,7 +263,7 @@ class CompanyServiceImplTest {
                 .email("test@example.com")
                 .build();
 
-        PasswordChangeDTO passwordChangeDTO = PasswordChangeDTO.builder()
+        PasswordChangeRequestDTO passwordChangeRequestDTO = PasswordChangeRequestDTO.builder()
                 .email("wrongemail@example.com")
                 .password("oldPassword")
                 .newPassword("newPassword")
@@ -272,7 +271,7 @@ class CompanyServiceImplTest {
 
         when(companyDAO.findById(anyLong())).thenReturn(company);
 
-        assertThrows(RuntimeException.class, () -> companyService.updatePassword(1L, passwordChangeDTO));
+        assertThrows(RuntimeException.class, () -> companyService.updatePassword(1L, passwordChangeRequestDTO));
         verify(companyDAO, never()).save(any(Company.class));
     }
 
@@ -285,7 +284,7 @@ class CompanyServiceImplTest {
                 .password("encodedOldPassword")
                 .build();
 
-        PasswordChangeDTO passwordChangeDTO = PasswordChangeDTO.builder()
+        PasswordChangeRequestDTO passwordChangeRequestDTO = PasswordChangeRequestDTO.builder()
                 .email("test@example.com")
                 .password("wrongOldPassword")
                 .newPassword("newPassword")
@@ -295,7 +294,7 @@ class CompanyServiceImplTest {
         when(companyDAO.findById(anyLong())).thenReturn(company);
         when(passwordEncoder.matches("wrongOldPassword", "encodedOldPassword")).thenReturn(false);
 
-        assertThrows(RuntimeException.class, () -> companyService.updatePassword(1L, passwordChangeDTO));
+        assertThrows(RuntimeException.class, () -> companyService.updatePassword(1L, passwordChangeRequestDTO));
 
         verify(companyDAO, never()).save(any(Company.class));
     }

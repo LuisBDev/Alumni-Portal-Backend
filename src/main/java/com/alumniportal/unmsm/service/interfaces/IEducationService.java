@@ -1,6 +1,6 @@
 package com.alumniportal.unmsm.service.interfaces;
 
-import com.alumniportal.unmsm.dto.EducationDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.EducationResponseDTO;
 import com.alumniportal.unmsm.model.Education;
 
 import java.util.List;
@@ -8,15 +8,15 @@ import java.util.Map;
 
 public interface IEducationService {
 
-    List<EducationDTO> findAll();
+    List<EducationResponseDTO> findAll();
 
-    EducationDTO findById(Long id);
+    EducationResponseDTO findById(Long id);
 
     void save(Education education);
 
     void deleteById(Long id);
 
-    List<EducationDTO> findEducationsByUserId(Long userId);
+    List<EducationResponseDTO> findEducationsByUserId(Long userId);
 
     void saveEducation(Education education, Long userId);
 

@@ -1,21 +1,21 @@
 package com.alumniportal.unmsm.service.interfaces;
 
-import com.alumniportal.unmsm.dto.JobOfferDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.JobOfferResponseDTO;
 import com.alumniportal.unmsm.model.JobOffer;
 
 import java.util.List;
 import java.util.Map;
 
 public interface IJobOfferService {
-    List<JobOfferDTO> findAll();
+    List<JobOfferResponseDTO> findAll();
 
-    JobOfferDTO findById(Long id);
+    JobOfferResponseDTO findById(Long id);
 
     void save(JobOffer jobOffer);
 
     void deleteById(Long id);
 
-    List<JobOfferDTO> findJobOffersByCompanyId(Long id);
+    List<JobOfferResponseDTO> findJobOffersByCompanyId(Long id);
 
     void saveJobOffer(JobOffer jobOffer, Long companyId);
 

@@ -1,26 +1,27 @@
 package com.alumniportal.unmsm.service.interfaces;
 
-import com.alumniportal.unmsm.dto.EnrollmentDTO;
+import com.alumniportal.unmsm.dto.RequestDTO.EnrollmentRequestDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.EnrollmentResponseDTO;
 import com.alumniportal.unmsm.model.Enrollment;
 
 import java.util.List;
 
 public interface IEnrollmentService {
 
-    List<EnrollmentDTO> findAll();
+    List<EnrollmentResponseDTO> findAll();
 
-    EnrollmentDTO findById(Long id);
+    EnrollmentResponseDTO findById(Long id);
 
     void save(Enrollment enrollment);
 
     void deleteById(Long id);
 
-    List<EnrollmentDTO> findEnrollmentsByUserId(Long userId);
+    List<EnrollmentResponseDTO> findEnrollmentsByUserId(Long userId);
 
-    List<EnrollmentDTO> findEnrollmentsByActivityId(Long activityId);
+    List<EnrollmentResponseDTO> findEnrollmentsByActivityId(Long activityId);
 
-    EnrollmentDTO findEnrollmentByUserIdAndActivityId(Long userId, Long activityId);
+    EnrollmentResponseDTO findEnrollmentByUserIdAndActivityId(Long userId, Long activityId);
 
-    public void saveEnrollment(Enrollment enrollment);
+    public void saveEnrollment(EnrollmentRequestDTO enrollmentRequestDTO);
 
 }

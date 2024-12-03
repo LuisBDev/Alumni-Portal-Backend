@@ -1,18 +1,16 @@
-package com.alumniportal.unmsm.dto;
+package com.alumniportal.unmsm.dto.ResponseDTO;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-import java.time.LocalDate;
-
-@Getter
-@Setter
+@Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO {
-
+public class AuthUserResponseDTO {
+    
     private Long id;
     private String email;
     private String name;
@@ -23,13 +21,13 @@ public class UserDTO {
     private String about;
     private String photoUrl;
     private String contactNumber;
-    private LocalDate createdAt;
-    private LocalDate updatedAt;
+    private String createdAt;
+    private String updatedAt;
     private String plan;
     private String permanence;
     private String studentCode;
     private String headline;
     private String role;
-
+    private String token;
 
 }

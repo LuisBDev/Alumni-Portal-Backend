@@ -1,4 +1,4 @@
-package com.alumniportal.unmsm.dto;
+package com.alumniportal.unmsm.dto.ResponseDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,12 +11,12 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CertificationDTO {
+public class CertificationResponseDTO {
     private Long id;
     private String name;
     private String issuingOrganization;
     private LocalDate issueDate;
     private LocalDate expirationDate;
     private String credentialUrl;
-    private Long userId;  // Solo el ID del usuario en lugar de la entidad completa
+    private Long userId;
 }

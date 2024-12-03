@@ -1,4 +1,4 @@
-package com.alumniportal.unmsm.dto;
+package com.alumniportal.unmsm.dto.ResponseDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,8 +11,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
-public class UserCVDTO {
+public class UserCVResponseDTO {
     private String name;
     private String paternalSurname;
     private String maternalSurname;
@@ -22,9 +21,9 @@ public class UserCVDTO {
     private String about;
 
 
-    private List<CertificationDTO> certifications;
-    private List<EducationDTO> education;
-    private List<ProjectDTO> projects;
-    private List<SkillDTO> skills;
-    private List<WorkExperienceDTO> workExperience;
+    private List<CertificationResponseDTO> certifications;
+    private List<EducationResponseDTO> education;
+    private List<ProjectResponseDTO> projects;
+    private List<SkillResponseDTO> skills;
+    private List<WorkExperienceResponseDTO> workExperience;
 }

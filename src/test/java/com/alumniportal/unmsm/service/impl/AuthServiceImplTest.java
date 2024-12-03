@@ -1,9 +1,9 @@
 package com.alumniportal.unmsm.service.impl;
 
 import com.alumniportal.unmsm.config.SpringSecurity.JwtService;
-import com.alumniportal.unmsm.dto.AuthCompanyResponse;
-import com.alumniportal.unmsm.dto.AuthUserResponse;
-import com.alumniportal.unmsm.dto.LoginRequestDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.AuthCompanyResponseDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.AuthUserResponseDTO;
+import com.alumniportal.unmsm.dto.RequestDTO.LoginRequestDTO;
 import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.interfaces.ICompanyDAO;
@@ -61,7 +61,7 @@ class AuthServiceImplTest {
         when(userDAO.findByEmail("user@example.com")).thenReturn(user);
         when(jwtService.generateToken(user)).thenReturn("token");
 
-        AuthUserResponse response = authService.loginAcademic(loginRequestDTO);
+        AuthUserResponseDTO response = authService.loginAcademic(loginRequestDTO);
 
         assertNotNull(response);
         assertEquals("token", response.getToken());
@@ -99,7 +99,7 @@ class AuthServiceImplTest {
         when(companyDAO.findByEmail("company@example.com")).thenReturn(company);
         when(jwtService.generateToken(company)).thenReturn("token");
 
-        AuthCompanyResponse response = authService.loginCompany(loginRequestDTO);
+        AuthCompanyResponseDTO response = authService.loginCompany(loginRequestDTO);
 
         assertNotNull(response);
         assertEquals("token", response.getToken());
@@ -125,7 +125,7 @@ class AuthServiceImplTest {
         when(userDAO.findByEmail("newuser@example.com")).thenReturn(null);
         when(jwtService.generateToken(user)).thenReturn("token");
 
-        AuthUserResponse response = authService.registerAcademic(user);
+        AuthUserResponseDTO response = authService.registerAcademic(user);
 
         assertNotNull(response);
         assertEquals("token", response.getToken());
@@ -152,7 +152,7 @@ class AuthServiceImplTest {
         when(companyDAO.findByEmail("newcompany@example.com")).thenReturn(null);
         when(jwtService.generateToken(company)).thenReturn("token");
 
-        AuthCompanyResponse response = authService.registerCompany(company);
+        AuthCompanyResponseDTO response = authService.registerCompany(company);
 
         assertNotNull(response);
         assertEquals("token", response.getToken());

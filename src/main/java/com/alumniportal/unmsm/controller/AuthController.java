@@ -1,8 +1,8 @@
 package com.alumniportal.unmsm.controller;
 
-import com.alumniportal.unmsm.dto.AuthCompanyResponse;
-import com.alumniportal.unmsm.dto.AuthUserResponse;
-import com.alumniportal.unmsm.dto.LoginRequestDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.AuthCompanyResponseDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.AuthUserResponseDTO;
+import com.alumniportal.unmsm.dto.RequestDTO.LoginRequestDTO;
 import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.service.interfaces.IAuthService;
@@ -21,22 +21,22 @@ public class AuthController {
     private IAuthService authService;
 
     @PostMapping("/user/loginAcademic")
-    public ResponseEntity<AuthUserResponse> loginAcademic(@RequestBody LoginRequestDTO loginRequestDTO) {
+    public ResponseEntity<AuthUserResponseDTO> loginAcademic(@RequestBody LoginRequestDTO loginRequestDTO) {
         return ResponseEntity.ok(authService.loginAcademic(loginRequestDTO));
     }
 
     @PostMapping("/user/registerAcademic")
-    public ResponseEntity<AuthUserResponse> registerAcademic(@RequestBody User user) {
+    public ResponseEntity<AuthUserResponseDTO> registerAcademic(@RequestBody User user) {
         return ResponseEntity.ok(authService.registerAcademic(user));
     }
 
     @PostMapping("/company/loginCompany")
-    public ResponseEntity<AuthCompanyResponse> loginCompany(@RequestBody LoginRequestDTO loginRequestDTO) {
+    public ResponseEntity<AuthCompanyResponseDTO> loginCompany(@RequestBody LoginRequestDTO loginRequestDTO) {
         return ResponseEntity.ok(authService.loginCompany(loginRequestDTO));
     }
 
     @PostMapping("/company/registerCompany")
-    public ResponseEntity<AuthCompanyResponse> registerCompany(@RequestBody Company company) {
+    public ResponseEntity<AuthCompanyResponseDTO> registerCompany(@RequestBody Company company) {
         return ResponseEntity.ok(authService.registerCompany(company));
     }
 

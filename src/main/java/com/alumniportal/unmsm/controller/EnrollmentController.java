@@ -1,6 +1,7 @@
 package com.alumniportal.unmsm.controller;
 
-import com.alumniportal.unmsm.dto.EnrollmentDTO;
+import com.alumniportal.unmsm.dto.RequestDTO.EnrollmentRequestDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.EnrollmentResponseDTO;
 import com.alumniportal.unmsm.model.Enrollment;
 import com.alumniportal.unmsm.service.interfaces.IEnrollmentService;
 import lombok.RequiredArgsConstructor;
@@ -18,24 +19,24 @@ public class EnrollmentController {
 
 
     @GetMapping("/all")
-    public List<EnrollmentDTO> findAll() {
+    public List<EnrollmentResponseDTO> findAll() {
         return enrollmentService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
-        EnrollmentDTO enrollmentDTO = enrollmentService.findById(id);
-        if (enrollmentDTO == null) {
+        EnrollmentResponseDTO enrollmentResponseDTO = enrollmentService.findById(id);
+        if (enrollmentResponseDTO == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(enrollmentDTO);
+        return ResponseEntity.ok(enrollmentResponseDTO);
     }
 
     @PostMapping("/save")
-    public ResponseEntity<?> save(@RequestBody Enrollment enrollment) {
+    public ResponseEntity<?> save(@RequestBody EnrollmentRequestDTO enrollmentRequestDTO) {
 
         try {
-            enrollmentService.saveEnrollment(enrollment);
+            enrollmentService.saveEnrollment(enrollmentRequestDTO);
             return ResponseEntity.ok("Enrollment saved successfully!");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -51,22 +52,22 @@ public class EnrollmentController {
     }
 
     @GetMapping("/user/{userId}")
-    public List<EnrollmentDTO> findEnrollmentsByUserId(@PathVariable Long userId) {
+    public List<EnrollmentResponseDTO> findEnrollmentsByUserId(@PathVariable Long userId) {
         return enrollmentService.findEnrollmentsByUserId(userId);
     }
 
     @GetMapping("/activity/{activityId}")
-    public List<EnrollmentDTO> findEnrollmentsByActivityId(@PathVariable Long activityId) {
+    public List<EnrollmentResponseDTO> findEnrollmentsByActivityId(@PathVariable Long activityId) {
         return enrollmentService.findEnrollmentsByActivityId(activityId);
     }
 
     @GetMapping("/user/{userId}/activity/{activityId}")
-    public ResponseEntity<EnrollmentDTO> findEnrollmentByUserIdAndActivityId(@PathVariable Long userId, @PathVariable Long activityId) {
-        EnrollmentDTO enrollmentDTO = enrollmentService.findEnrollmentByUserIdAndActivityId(userId, activityId);
-        if (enrollmentDTO == null) {
+    public ResponseEntity<EnrollmentResponseDTO> findEnrollmentByUserIdAndActivityId(@PathVariable Long userId, @PathVariable Long activityId) {
+        EnrollmentResponseDTO enrollmentResponseDTO = enrollmentService.findEnrollmentByUserIdAndActivityId(userId, activityId);
+        if (enrollmentResponseDTO == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(enrollmentDTO);
+        return ResponseEntity.ok(enrollmentResponseDTO);
     }
 
 

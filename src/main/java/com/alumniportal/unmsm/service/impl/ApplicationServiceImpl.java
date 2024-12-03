@@ -1,6 +1,6 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.dto.ApplicationDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.ApplicationResponseDTO;
 import com.alumniportal.unmsm.model.Application;
 import com.alumniportal.unmsm.persistence.interfaces.IApplicationDAO;
 import com.alumniportal.unmsm.persistence.interfaces.IJobOfferDAO;
@@ -40,20 +40,20 @@ public class ApplicationServiceImpl implements IApplicationService {
     private final LambdaClient lambdaClient;
 
     @Override
-    public List<ApplicationDTO> findAll() {
+    public List<ApplicationResponseDTO> findAll() {
         return applicationDAO.findAll()
                 .stream()
-                .map(application -> modelMapper.map(application, ApplicationDTO.class))
+                .map(application -> modelMapper.map(application, ApplicationResponseDTO.class))
                 .toList();
     }
 
     @Override
-    public ApplicationDTO findById(Long id) {
+    public ApplicationResponseDTO findById(Long id) {
         Application application = applicationDAO.findById(id);
         if (application == null) {
             return null;
         }
-        return modelMapper.map(application, ApplicationDTO.class);
+        return modelMapper.map(application, ApplicationResponseDTO.class);
     }
 
     @Override
@@ -67,28 +67,28 @@ public class ApplicationServiceImpl implements IApplicationService {
     }
 
     @Override
-    public List<ApplicationDTO> findApplicationsByUserId(Long userId) {
+    public List<ApplicationResponseDTO> findApplicationsByUserId(Long userId) {
         return applicationDAO.findApplicationsByUserId(userId)
                 .stream()
-                .map(application -> modelMapper.map(application, ApplicationDTO.class))
+                .map(application -> modelMapper.map(application, ApplicationResponseDTO.class))
                 .toList();
     }
 
     @Override
-    public List<ApplicationDTO> findApplicationsByJobOfferId(Long jobOfferId) {
+    public List<ApplicationResponseDTO> findApplicationsByJobOfferId(Long jobOfferId) {
         return applicationDAO.findApplicationsByJobOfferId(jobOfferId)
                 .stream()
-                .map(application -> modelMapper.map(application, ApplicationDTO.class))
+                .map(application -> modelMapper.map(application, ApplicationResponseDTO.class))
                 .toList();
     }
 
     @Override
-    public ApplicationDTO findApplicationByUserIdAndJobOfferId(Long userId, Long jobOfferId) {
+    public ApplicationResponseDTO findApplicationByUserIdAndJobOfferId(Long userId, Long jobOfferId) {
         Application application = applicationDAO.findApplicationByUserIdAndJobOfferId(userId, jobOfferId);
         if (application == null) {
             return null;
         }
-        return modelMapper.map(application, ApplicationDTO.class);
+        return modelMapper.map(application, ApplicationResponseDTO.class);
     }
 
 

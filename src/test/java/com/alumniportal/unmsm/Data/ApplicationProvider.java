@@ -1,6 +1,5 @@
 package com.alumniportal.unmsm.Data;
 
-import com.alumniportal.unmsm.dto.ApplicationDTO;
 import com.alumniportal.unmsm.model.Application;
 import com.alumniportal.unmsm.model.JobOffer;
 import com.alumniportal.unmsm.model.User;

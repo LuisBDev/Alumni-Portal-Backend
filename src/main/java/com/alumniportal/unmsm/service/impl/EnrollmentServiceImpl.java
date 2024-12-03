@@ -1,6 +1,7 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.dto.EnrollmentDTO;
+import com.alumniportal.unmsm.dto.RequestDTO.EnrollmentRequestDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.EnrollmentResponseDTO;
 import com.alumniportal.unmsm.model.Activity;
 import com.alumniportal.unmsm.model.Enrollment;
 import com.alumniportal.unmsm.model.User;
@@ -39,20 +40,20 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
     private final LambdaClient lambdaClient;
 
     @Override
-    public List<EnrollmentDTO> findAll() {
+    public List<EnrollmentResponseDTO> findAll() {
         return enrollmentDAO.findAll()
                 .stream()
-                .map(enrollment -> modelMapper.map(enrollment, EnrollmentDTO.class))
+                .map(enrollment -> modelMapper.map(enrollment, EnrollmentResponseDTO.class))
                 .toList();
     }
 
     @Override
-    public EnrollmentDTO findById(Long id) {
+    public EnrollmentResponseDTO findById(Long id) {
         Enrollment enrollment = enrollmentDAO.findById(id);
         if (enrollment == null) {
             return null;
         }
-        return modelMapper.map(enrollment, EnrollmentDTO.class);
+        return modelMapper.map(enrollment, EnrollmentResponseDTO.class);
     }
 
     @Override
@@ -66,37 +67,37 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
     }
 
     @Override
-    public List<EnrollmentDTO> findEnrollmentsByUserId(Long userId) {
+    public List<EnrollmentResponseDTO> findEnrollmentsByUserId(Long userId) {
         return enrollmentDAO.findEnrollmentsByUserId(userId)
                 .stream()
-                .map(enrollment -> modelMapper.map(enrollment, EnrollmentDTO.class))
+                .map(enrollment -> modelMapper.map(enrollment, EnrollmentResponseDTO.class))
                 .toList();
     }
 
     @Override
-    public List<EnrollmentDTO> findEnrollmentsByActivityId(Long activityId) {
+    public List<EnrollmentResponseDTO> findEnrollmentsByActivityId(Long activityId) {
         return enrollmentDAO.findEnrollmentsByActivityId(activityId)
                 .stream()
-                .map(enrollment -> modelMapper.map(enrollment, EnrollmentDTO.class))
+                .map(enrollment -> modelMapper.map(enrollment, EnrollmentResponseDTO.class))
                 .toList();
     }
 
     @Override
-    public EnrollmentDTO findEnrollmentByUserIdAndActivityId(Long userId, Long activityId) {
+    public EnrollmentResponseDTO findEnrollmentByUserIdAndActivityId(Long userId, Long activityId) {
         Enrollment enrollment = enrollmentDAO.findEnrollmentByUserIdAndActivityId(userId, activityId);
         if (enrollment == null) {
             return null;
         }
-        return modelMapper.map(enrollment, EnrollmentDTO.class);
+        return modelMapper.map(enrollment, EnrollmentResponseDTO.class);
     }
 
 
-    public void saveEnrollment(Enrollment enrollment) {
-        User user = userDAO.findById(enrollment.getUser().getId());
+    public void saveEnrollment(EnrollmentRequestDTO enrollmentRequestDTO) {
+        User user = userDAO.findById(enrollmentRequestDTO.getUser().getId());
         if (user == null) {
             throw new IllegalArgumentException("Error: User not found!");
         }
-        Activity activity = activityDAO.findById(enrollment.getActivity().getId());
+        Activity activity = activityDAO.findById(enrollmentRequestDTO.getActivity().getId());
         if (activity == null) {
             throw new IllegalArgumentException("Error: Activity not found!");
         }
@@ -109,20 +110,16 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
             throw new IllegalArgumentException("Error: User is already enrolled in this activity!");
         }
 
-//        Persistir enrollment
-        enrollment.setUser(user);
-        enrollment.setActivity(activity);
-        enrollment.setEnrollmentDate(LocalDate.now());
-        enrollment.setStatus("ACTIVE");
+//        Enrollment enrollment = modelMapper.map(enrollmentRequestDTO, Enrollment.class);
+
+        Enrollment enrollment = Enrollment.builder()
+                .user(user)
+                .activity(activity)
+                .enrollmentDate(LocalDate.now())
+                .status("ACTIVE")
+                .build();
+
         enrollmentDAO.save(enrollment);
-
-//        Actualizar user
-        user.getEnrollmentList().add(enrollment);
-        userDAO.save(user);
-
-//        Actualizar activity
-        activity.getEnrollmentList().add(enrollment);
-        activityDAO.save(activity);
 
         invokeLambdaWhenEnrollmentIsCreated("AlumniPortal | Confirmation of Activity Registration " + activity.getId(), enrollment);
 

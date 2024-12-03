@@ -69,7 +69,7 @@ public class Activity {
 
 
     //    Relation with Enrollment
-    @OneToMany(mappedBy = "activity", orphanRemoval = true)
+    @OneToMany(mappedBy = "activity", orphanRemoval = true, cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Enrollment> enrollmentList;
 

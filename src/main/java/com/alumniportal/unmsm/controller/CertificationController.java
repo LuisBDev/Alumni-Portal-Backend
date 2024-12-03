@@ -1,7 +1,7 @@
 package com.alumniportal.unmsm.controller;
 
 
-import com.alumniportal.unmsm.dto.CertificationDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.CertificationResponseDTO;
 import com.alumniportal.unmsm.model.Certification;
 import com.alumniportal.unmsm.service.interfaces.ICertificationService;
 import lombok.RequiredArgsConstructor;
@@ -20,17 +20,17 @@ public class CertificationController {
 
 
     @GetMapping("/all")
-    public List<CertificationDTO> findAll() {
+    public List<CertificationResponseDTO> findAll() {
         return certificationService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
-        CertificationDTO certificationDTO = certificationService.findById(id);
-        if (certificationDTO == null) {
+        CertificationResponseDTO certificationResponseDTO = certificationService.findById(id);
+        if (certificationResponseDTO == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(certificationDTO);
+        return ResponseEntity.ok(certificationResponseDTO);
     }
 
     @PostMapping("/save/{userId}")
@@ -61,7 +61,7 @@ public class CertificationController {
     }
 
     @GetMapping("/user/{userId}")
-    public List<CertificationDTO> findCertificationsByUserId(@PathVariable Long userId) {
+    public List<CertificationResponseDTO> findCertificationsByUserId(@PathVariable Long userId) {
         return certificationService.findCertificationsByUserId(userId);
     }
 

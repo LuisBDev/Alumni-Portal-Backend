@@ -1,9 +1,9 @@
 package com.alumniportal.unmsm.service.impl;
 
 import com.alumniportal.unmsm.config.SpringSecurity.JwtService;
-import com.alumniportal.unmsm.dto.AuthCompanyResponse;
-import com.alumniportal.unmsm.dto.AuthUserResponse;
-import com.alumniportal.unmsm.dto.LoginRequestDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.AuthCompanyResponseDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.AuthUserResponseDTO;
+import com.alumniportal.unmsm.dto.RequestDTO.LoginRequestDTO;
 import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.model.Role;
 import com.alumniportal.unmsm.model.User;
@@ -36,7 +36,7 @@ public class AuthServiceImpl implements IAuthService {
     private final ModelMapper modelMapper;
 
     @Override
-    public AuthUserResponse loginAcademic(LoginRequestDTO loginRequestDTO) {
+    public AuthUserResponseDTO loginAcademic(LoginRequestDTO loginRequestDTO) {
 
         // Autenticar la solicitud usando el authenticationManager
         authenticationManager.authenticate(
@@ -48,13 +48,13 @@ public class AuthServiceImpl implements IAuthService {
             throw new IllegalArgumentException("User not found with email: " + loginRequestDTO.getEmail());
         }
 
-        AuthUserResponse authUserResponse = modelMapper.map(user, AuthUserResponse.class);
-        authUserResponse.setToken(jwtService.generateToken(user));
-        return authUserResponse;
+        AuthUserResponseDTO authUserResponseDTO = modelMapper.map(user, AuthUserResponseDTO.class);
+        authUserResponseDTO.setToken(jwtService.generateToken(user));
+        return authUserResponseDTO;
     }
 
     @Override
-    public AuthCompanyResponse loginCompany(LoginRequestDTO loginRequestDTO) {
+    public AuthCompanyResponseDTO loginCompany(LoginRequestDTO loginRequestDTO) {
 
         // Autenticar la solicitud usando el authenticationManager
         authenticationManager.authenticate(
@@ -66,13 +66,13 @@ public class AuthServiceImpl implements IAuthService {
             throw new IllegalArgumentException("Company not found with email: " + loginRequestDTO.getEmail());
         }
 
-        AuthCompanyResponse authCompanyResponse = modelMapper.map(company, AuthCompanyResponse.class);
-        authCompanyResponse.setToken(jwtService.generateToken(company));
-        return authCompanyResponse;
+        AuthCompanyResponseDTO authCompanyResponseDTO = modelMapper.map(company, AuthCompanyResponseDTO.class);
+        authCompanyResponseDTO.setToken(jwtService.generateToken(company));
+        return authCompanyResponseDTO;
     }
 
     @Override
-    public AuthUserResponse registerAcademic(User user) {
+    public AuthUserResponseDTO registerAcademic(User user) {
 
         // Verificar si el usuario ya existe
         if (userDAO.findByEmail(user.getEmail()) != null) {
@@ -86,13 +86,13 @@ public class AuthServiceImpl implements IAuthService {
 
         // Guardar el usuario y generar el token
         userDAO.save(user);
-        AuthUserResponse authUserResponse = modelMapper.map(user, AuthUserResponse.class);
-        authUserResponse.setToken(jwtService.generateToken(user));
-        return authUserResponse;
+        AuthUserResponseDTO authUserResponseDTO = modelMapper.map(user, AuthUserResponseDTO.class);
+        authUserResponseDTO.setToken(jwtService.generateToken(user));
+        return authUserResponseDTO;
     }
 
     @Override
-    public AuthCompanyResponse registerCompany(Company company) {
+    public AuthCompanyResponseDTO registerCompany(Company company) {
 
         // Verificar si la compañía ya existe
         if (companyDAO.findByEmail(company.getEmail()) != null) {
@@ -106,9 +106,9 @@ public class AuthServiceImpl implements IAuthService {
 
         // Guardar la compañía y generar el token
         companyDAO.save(company);
-        AuthCompanyResponse authCompanyResponse = modelMapper.map(company, AuthCompanyResponse.class);
-        authCompanyResponse.setToken(jwtService.generateToken(company));
-        return authCompanyResponse;
+        AuthCompanyResponseDTO authCompanyResponseDTO = modelMapper.map(company, AuthCompanyResponseDTO.class);
+        authCompanyResponseDTO.setToken(jwtService.generateToken(company));
+        return authCompanyResponseDTO;
     }
 
 //    @Override
