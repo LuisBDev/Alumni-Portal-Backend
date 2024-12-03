@@ -1,6 +1,6 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.dto.JobOfferDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.JobOfferResponseDTO;
 import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.model.JobOffer;
 import com.alumniportal.unmsm.persistence.interfaces.ICompanyDAO;
@@ -27,20 +27,20 @@ public class JobOfferServiceImpl implements IJobOfferService {
     private final ModelMapper modelMapper;
 
     @Override
-    public List<JobOfferDTO> findAll() {
+    public List<JobOfferResponseDTO> findAll() {
         return jobOfferDAO.findAll()
                 .stream()
-                .map(jobOffer -> modelMapper.map(jobOffer, JobOfferDTO.class))
+                .map(jobOffer -> modelMapper.map(jobOffer, JobOfferResponseDTO.class))
                 .toList();
     }
 
     @Override
-    public JobOfferDTO findById(Long id) {
+    public JobOfferResponseDTO findById(Long id) {
         JobOffer jobOffer = jobOfferDAO.findById(id);
         if (jobOffer == null) {
             return null;
         }
-        return modelMapper.map(jobOffer, JobOfferDTO.class);
+        return modelMapper.map(jobOffer, JobOfferResponseDTO.class);
     }
 
     @Override
@@ -54,10 +54,10 @@ public class JobOfferServiceImpl implements IJobOfferService {
     }
 
     @Override
-    public List<JobOfferDTO> findJobOffersByCompanyId(Long id) {
+    public List<JobOfferResponseDTO> findJobOffersByCompanyId(Long id) {
         return jobOfferDAO.findJobOffersByCompanyId(id)
                 .stream()
-                .map(jobOffer -> modelMapper.map(jobOffer, JobOfferDTO.class))
+                .map(jobOffer -> modelMapper.map(jobOffer, JobOfferResponseDTO.class))
                 .toList();
     }
 

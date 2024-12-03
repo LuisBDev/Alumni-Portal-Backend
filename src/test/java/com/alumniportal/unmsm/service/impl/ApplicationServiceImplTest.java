@@ -1,7 +1,7 @@
 package com.alumniportal.unmsm.service.impl;
 
 import com.alumniportal.unmsm.Data.ApplicationProvider;
-import com.alumniportal.unmsm.dto.ApplicationDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.ApplicationResponseDTO;
 import com.alumniportal.unmsm.model.Application;
 import com.alumniportal.unmsm.persistence.interfaces.IApplicationDAO;
 import com.alumniportal.unmsm.persistence.interfaces.IJobOfferDAO;
@@ -52,30 +52,30 @@ public class ApplicationServiceImplTest {
 
         when(applicationDAO.findAll()).thenReturn(ApplicationProvider.applicationList());
 
-        List<ApplicationDTO> applicationDTOList = applicationService.findAll();
+        List<ApplicationResponseDTO> applicationResponseDTOList = applicationService.findAll();
 
-        assertEquals("User 1", applicationDTOList.get(0).getUserName());
-        assertEquals("User 2", applicationDTOList.get(1).getUserName());
-        assertEquals("REJECTED", applicationDTOList.get(1).getStatus());
+        assertEquals("User 1", applicationResponseDTOList.get(0).getUserName());
+        assertEquals("User 2", applicationResponseDTOList.get(1).getUserName());
+        assertEquals("REJECTED", applicationResponseDTOList.get(1).getStatus());
     }
 
     @Test
     void testFindById() {
         when(applicationDAO.findById(anyLong())).thenReturn(ApplicationProvider.applicationOne());
 
-        ApplicationDTO applicationDTO = applicationService.findById(anyLong());
+        ApplicationResponseDTO applicationResponseDTO = applicationService.findById(anyLong());
 
-        assertEquals("User 1", applicationDTO.getUserName());
-        assertEquals("PENDING", applicationDTO.getStatus());
+        assertEquals("User 1", applicationResponseDTO.getUserName());
+        assertEquals("PENDING", applicationResponseDTO.getStatus());
     }
 
     @Test
     void testFindById_WhenApplicationIsNull() {
         when(applicationDAO.findById(anyLong())).thenReturn(null);
 
-        ApplicationDTO applicationDTO = applicationService.findById(anyLong());
+        ApplicationResponseDTO applicationResponseDTO = applicationService.findById(anyLong());
 
-        assertNull(applicationDTO);
+        assertNull(applicationResponseDTO);
     }
 
     @Test
@@ -104,39 +104,39 @@ public class ApplicationServiceImplTest {
     void testFindApplicationsByUserId() {
         when(applicationDAO.findApplicationsByUserId(anyLong())).thenReturn(ApplicationProvider.applicationList());
 
-        List<ApplicationDTO> applicationDTOList = applicationService.findApplicationsByUserId(anyLong());
+        List<ApplicationResponseDTO> applicationResponseDTOList = applicationService.findApplicationsByUserId(anyLong());
 
-        assertEquals("User 1", applicationDTOList.get(0).getUserName());
-        assertEquals("User 2", applicationDTOList.get(1).getUserName());
-        assertEquals("REJECTED", applicationDTOList.get(1).getStatus());
+        assertEquals("User 1", applicationResponseDTOList.get(0).getUserName());
+        assertEquals("User 2", applicationResponseDTOList.get(1).getUserName());
+        assertEquals("REJECTED", applicationResponseDTOList.get(1).getStatus());
     }
 
     @Test
     void testFindApplicationsByJobOfferId() {
         when(applicationDAO.findApplicationsByJobOfferId(anyLong())).thenReturn(ApplicationProvider.applicationList());
 
-        List<ApplicationDTO> applicationDTOList = applicationService.findApplicationsByJobOfferId(anyLong());
+        List<ApplicationResponseDTO> applicationResponseDTOList = applicationService.findApplicationsByJobOfferId(anyLong());
 
-        assertEquals("PENDING", applicationDTOList.get(0).getStatus());
+        assertEquals("PENDING", applicationResponseDTOList.get(0).getStatus());
     }
 
     @Test
     void testFindApplicationByUserIdAndJobOfferId() {
         when(applicationDAO.findApplicationByUserIdAndJobOfferId(anyLong(), anyLong())).thenReturn(ApplicationProvider.applicationOne());
 
-        ApplicationDTO applicationDTO = applicationService.findApplicationByUserIdAndJobOfferId(anyLong(), anyLong());
+        ApplicationResponseDTO applicationResponseDTO = applicationService.findApplicationByUserIdAndJobOfferId(anyLong(), anyLong());
 
-        assertEquals("User 1", applicationDTO.getUserName());
-        assertEquals("PENDING", applicationDTO.getStatus());
+        assertEquals("User 1", applicationResponseDTO.getUserName());
+        assertEquals("PENDING", applicationResponseDTO.getStatus());
     }
 
     @Test
     void testFindApplicationByUserIdAndJobOfferId_WhenApplicationIsNull() {
         when(applicationDAO.findApplicationByUserIdAndJobOfferId(anyLong(), anyLong())).thenReturn(null);
 
-        ApplicationDTO applicationDTO = applicationService.findApplicationByUserIdAndJobOfferId(anyLong(), anyLong());
+        ApplicationResponseDTO applicationResponseDTO = applicationService.findApplicationByUserIdAndJobOfferId(anyLong(), anyLong());
 
-        assertNull(applicationDTO);
+        assertNull(applicationResponseDTO);
         verify(applicationDAO, times(1)).findApplicationByUserIdAndJobOfferId(anyLong(), anyLong());
     }
 

@@ -1,7 +1,7 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.dto.CompanyDTO;
-import com.alumniportal.unmsm.dto.PasswordChangeDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.CompanyResponseDTO;
+import com.alumniportal.unmsm.dto.RequestDTO.PasswordChangeRequestDTO;
 import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.persistence.interfaces.ICompanyDAO;
 import com.alumniportal.unmsm.service.interfaces.IActivityService;
@@ -33,20 +33,20 @@ public class CompanyServiceImpl implements ICompanyService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public List<CompanyDTO> findAll() {
+    public List<CompanyResponseDTO> findAll() {
         return companyDAO.findAll()
                 .stream()
-                .map(company -> modelMapper.map(company, CompanyDTO.class))
+                .map(company -> modelMapper.map(company, CompanyResponseDTO.class))
                 .toList();
     }
 
     @Override
-    public CompanyDTO findById(Long id) {
+    public CompanyResponseDTO findById(Long id) {
         Company company = companyDAO.findById(id);
         if (company == null) {
             return null;
         }
-        return modelMapper.map(company, CompanyDTO.class);
+        return modelMapper.map(company, CompanyResponseDTO.class);
     }
 
     @Override
@@ -87,12 +87,12 @@ public class CompanyServiceImpl implements ICompanyService {
     }
 
     @Override
-    public CompanyDTO findByEmail(String email) {
+    public CompanyResponseDTO findByEmail(String email) {
         Company company = companyDAO.findByEmail(email);
         if (company == null) {
             return null;
         }
-        return modelMapper.map(company, CompanyDTO.class);
+        return modelMapper.map(company, CompanyResponseDTO.class);
     }
 
     @Override
@@ -123,19 +123,19 @@ public class CompanyServiceImpl implements ICompanyService {
 
 
     @Override
-    public void updatePassword(Long id, PasswordChangeDTO passwordChangeDTO) {
+    public void updatePassword(Long id, PasswordChangeRequestDTO passwordChangeRequestDTO) {
         Company company = companyDAO.findById(id);
         if (company == null) {
             throw new RuntimeException("Error: Company not found!");
         }
-        if (!company.getEmail().equals(passwordChangeDTO.getEmail())) {
+        if (!company.getEmail().equals(passwordChangeRequestDTO.getEmail())) {
             throw new RuntimeException("Error: Invalid email!");
         }
 
-        if (!passwordEncoder.matches(passwordChangeDTO.getPassword(), company.getPassword())) {
+        if (!passwordEncoder.matches(passwordChangeRequestDTO.getPassword(), company.getPassword())) {
             throw new RuntimeException("Error: Old password does not match!");
         }
-        company.setPassword(passwordEncoder.encode(passwordChangeDTO.getNewPassword()));
+        company.setPassword(passwordEncoder.encode(passwordChangeRequestDTO.getNewPassword()));
         company.setUpdatedAt(LocalDate.now());
         companyDAO.save(company);
     }

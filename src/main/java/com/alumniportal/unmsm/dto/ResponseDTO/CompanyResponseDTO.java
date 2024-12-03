@@ -1,4 +1,4 @@
-package com.alumniportal.unmsm.dto;
+package com.alumniportal.unmsm.dto.ResponseDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CompanyDTO {
+public class CompanyResponseDTO {
     private Long id;
     private String name;
     private String ruc;
@@ -25,5 +25,5 @@ public class CompanyDTO {
     private LocalDate updatedAt;
     private String photoUrl;
     private String role;
-    
+
 }

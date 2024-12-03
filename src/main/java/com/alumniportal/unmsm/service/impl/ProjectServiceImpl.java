@@ -1,6 +1,6 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.dto.ProjectDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.ProjectResponseDTO;
 import com.alumniportal.unmsm.model.Project;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.interfaces.IProjectDAO;
@@ -28,20 +28,20 @@ public class ProjectServiceImpl implements IProjectService {
 
 
     @Override
-    public List<ProjectDTO> findAll() {
+    public List<ProjectResponseDTO> findAll() {
         return projectDAO.findAll()
                 .stream()
-                .map(project -> modelMapper.map(project, ProjectDTO.class))
+                .map(project -> modelMapper.map(project, ProjectResponseDTO.class))
                 .toList();
     }
 
     @Override
-    public ProjectDTO findById(Long id) {
+    public ProjectResponseDTO findById(Long id) {
         Project project = projectDAO.findById(id);
         if (project == null) {
             return null;
         }
-        return modelMapper.map(project, ProjectDTO.class);
+        return modelMapper.map(project, ProjectResponseDTO.class);
     }
 
     @Override
@@ -55,10 +55,10 @@ public class ProjectServiceImpl implements IProjectService {
     }
 
     @Override
-    public List<ProjectDTO> findProjectsByUserId(Long userId) {
+    public List<ProjectResponseDTO> findProjectsByUserId(Long userId) {
         return projectDAO.findProjectsByUserId(userId)
                 .stream()
-                .map(project -> modelMapper.map(project, ProjectDTO.class))
+                .map(project -> modelMapper.map(project, ProjectResponseDTO.class))
                 .toList();
     }
 

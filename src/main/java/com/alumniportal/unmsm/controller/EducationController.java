@@ -1,6 +1,6 @@
 package com.alumniportal.unmsm.controller;
 
-import com.alumniportal.unmsm.dto.EducationDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.EducationResponseDTO;
 import com.alumniportal.unmsm.model.Education;
 import com.alumniportal.unmsm.service.interfaces.IEducationService;
 import lombok.RequiredArgsConstructor;
@@ -19,17 +19,17 @@ public class EducationController {
 
 
     @GetMapping("/all")
-    public List<EducationDTO> findAll() {
+    public List<EducationResponseDTO> findAll() {
         return educationService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
-        EducationDTO educationDTO = educationService.findById(id);
-        if (educationDTO == null) {
+        EducationResponseDTO educationResponseDTO = educationService.findById(id);
+        if (educationResponseDTO == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(educationDTO);
+        return ResponseEntity.ok(educationResponseDTO);
     }
 
     @PostMapping("/save/{userId}")
@@ -61,7 +61,7 @@ public class EducationController {
     }
 
     @GetMapping("/user/{userId}")
-    public List<EducationDTO> findEducationsByUserId(@PathVariable Long userId) {
+    public List<EducationResponseDTO> findEducationsByUserId(@PathVariable Long userId) {
         return educationService.findEducationsByUserId(userId);
     }
 

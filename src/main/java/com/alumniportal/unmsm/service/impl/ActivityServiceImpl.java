@@ -1,6 +1,9 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.dto.ActivityDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.ActivityResponseDTO;
+import com.alumniportal.unmsm.dto.RequestDTO.ActivityRequestDTO;
+import com.alumniportal.unmsm.exception.AppException;
+import com.alumniportal.unmsm.mapper.ActivityMapper;
 import com.alumniportal.unmsm.model.Activity;
 import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.model.User;
@@ -11,11 +14,11 @@ import com.alumniportal.unmsm.service.interfaces.IActivityService;
 import com.alumniportal.unmsm.util.EmailTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.SdkBytes;
+import software.amazon.awssdk.core.exception.SdkException;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.lambda.LambdaClient;
 import software.amazon.awssdk.services.lambda.model.InvokeRequest;
@@ -42,27 +45,28 @@ public class ActivityServiceImpl implements IActivityService {
 
     private final ICompanyDAO companyDAO;
 
-    private final ModelMapper modelMapper;
+    private final ActivityMapper activityMapper;
 
     private final S3Client s3Client;
 
     private final LambdaClient lambdaClient;
 
     @Override
-    public List<ActivityDTO> findAll() {
-        return activityDAO.findAll()
-                .stream()
-                .map((activity) -> modelMapper.map(activity, ActivityDTO.class))
-                .toList();
+    public List<ActivityResponseDTO> findAll() {
+        List<Activity> activities = activityDAO.findAll();
+        if (activities.isEmpty()) {
+            throw new AppException("No se encontraron actividades", "NOT_FOUND");
+        }
+        return activityMapper.entityListToDTOList(activities);
     }
 
     @Override
-    public ActivityDTO findById(Long id) {
+    public ActivityResponseDTO findById(Long id) {
         Activity activity = activityDAO.findById(id);
         if (activity == null) {
-            return null;
+            throw new AppException("Actividad con id " + id + " no encontrada", "NOT_FOUND");
         }
-        return modelMapper.map(activity, ActivityDTO.class);
+        return activityMapper.entityToDTO(activity);
     }
 
     @Override
@@ -74,7 +78,7 @@ public class ActivityServiceImpl implements IActivityService {
     public void deleteById(Long id) throws Exception {
         Activity activity = activityDAO.findById(id);
         if (activity == null) {
-            throw new Exception("Activity with id " + id + " not found");
+            throw new AppException("Actividad con id " + id + " no encontrada", "NOT_FOUND");
         }
         if (activity.getUrl() != null) {
             try {
@@ -87,28 +91,32 @@ public class ActivityServiceImpl implements IActivityService {
     }
 
     @Override
-    public List<ActivityDTO> findActivitiesByUserId(Long userId) {
-        return activityDAO.findActivitiesByUserId(userId)
-                .stream()
-                .map(activity -> modelMapper.map(activity, ActivityDTO.class))
-                .toList();
+    public List<ActivityResponseDTO> findActivitiesByUserId(Long userId) {
+        List<Activity> activities = activityDAO.findActivitiesByUserId(userId);
+        if (activities.isEmpty()) {
+            throw new AppException("No se encontraron actividades para el usuario con id: " + userId, "NOT_FOUND");
+        }
+        return activityMapper.entityListToDTOList(activities);
     }
 
     @Override
-    public List<ActivityDTO> findActivitiesByCompanyId(Long companyId) {
-        return activityDAO.findActivitiesByCompanyId(companyId)
-                .stream()
-                .map(activity -> modelMapper.map(activity, ActivityDTO.class))
-                .toList();
+    public List<ActivityResponseDTO> findActivitiesByCompanyId(Long companyId) {
+        List<Activity> activities = activityDAO.findActivitiesByCompanyId(companyId);
+        if (activities.isEmpty()) {
+            throw new AppException("No se encontraron actividades para la empresa con id: " + companyId, "NOT_FOUND");
+        }
+        return activityMapper.entityListToDTOList(activities);
     }
 
     @Override
-    public void saveActivityWithImageByUserId(Activity activity, Long userId, MultipartFile image) throws IOException {
+    public void saveActivityWithImageByUserId(ActivityRequestDTO activityRequestDTO, Long userId, MultipartFile image) throws IOException {
         // Buscar el usuario
         User user = userDAO.findById(userId);
         if (user == null) {
-            throw new IllegalArgumentException("Usuario no encontrado");
+            throw new AppException("Usuario con id " + userId + " no encontrado", "NOT_FOUND");
         }
+
+        Activity activity = activityMapper.requestDtoToEntity(activityRequestDTO);
 
         // Setear el usuario y la fecha de creación
         activity.setUser(user);
@@ -131,7 +139,7 @@ public class ActivityServiceImpl implements IActivityService {
     public void saveActivityWithImageByCompanyId(Activity activity, Long companyId, MultipartFile image) throws IOException {
         Company company = companyDAO.findById(companyId);
         if (company == null) {
-            throw new IllegalArgumentException("Empresa no encontrada");
+            throw new AppException("Empresa con id " + companyId + " no encontrada", "NOT_FOUND");
         }
 
         // Setea la compañía y la fecha de creación
@@ -151,12 +159,14 @@ public class ActivityServiceImpl implements IActivityService {
     }
 
     @Override
-    public void saveActivityByUserId(Activity activity, Long userId) {
+    public void saveActivityByUserId(ActivityRequestDTO activityRequestDTO, Long userId) {
         // Buscar el usuario
         User user = userDAO.findById(userId);
         if (user == null) {
-            throw new IllegalArgumentException("Usuario no encontrado");
+            throw new AppException("Usuario con id " + userId + " no encontrado", "NOT_FOUND");
         }
+
+        Activity activity = activityMapper.requestDtoToEntity(activityRequestDTO);
 
         // Setear el usuario y la fecha de creación
         activity.setUser(user);
@@ -170,13 +180,14 @@ public class ActivityServiceImpl implements IActivityService {
     }
 
     @Override
-    public void saveActivityByCompanyId(Activity activity, Long companyId) {
+    public void saveActivityByCompanyId(ActivityRequestDTO activityRequestDTO, Long companyId) {
 
         Company company = companyDAO.findById(companyId);
         if (company == null) {
-            throw new IllegalArgumentException("Empresa no encontrada");
+            throw new AppException("Empresa con id " + companyId + " no encontrada", "NOT_FOUND");
         }
 
+        Activity activity = activityMapper.requestDtoToEntity(activityRequestDTO);
         // Setea la compañía y la fecha de creación
         activity.setCompany(company);
         activity.setCreatedAt(LocalDate.now());
@@ -190,46 +201,55 @@ public class ActivityServiceImpl implements IActivityService {
     }
 
     @Override
-    public void uploadActivityImage(Long activityId, MultipartFile file) throws IOException {
+    public void uploadActivityImage(Long activityId, MultipartFile file) throws AppException {
+        // Validar el archivo recibido
         if (file == null || file.isEmpty()) {
-            throw new RuntimeException("File is empty");
+            throw new AppException("No se ha proporcionado un archivo válido", "BAD_REQUEST");
         }
 
+        // Recuperar la actividad de la base de datos
         Activity activity = activityDAO.findById(activityId);
         if (activity == null) {
-            throw new RuntimeException("Activity with id " + activityId + " not found");
+            throw new AppException("La actividad con id " + activityId + " no existe", "NOT_FOUND");
         }
+
+        String fileName = file.getOriginalFilename();
+        if (fileName == null || fileName.trim().isEmpty()) {
+            throw new AppException("El archivo no tiene un nombre válido", "BAD_REQUEST");
+        }
+
+        // Construir el key para el archivo en el bucket S3
+        String folder = "activityimages/";
+        String key = folder + activity.getId() + "_" + fileName;
+
         try {
-            String fileName = file.getOriginalFilename();
-
-            String carpeta = "activityimages/";
-            String key = carpeta + activity.getId() + "_" + fileName;
-
-            // Se verifica si la activity ya tiene imagen y eliminarla si es necesario
+            // Eliminar la imagen previa, si existe
             if (activity.getUrl() != null) {
                 s3Client.deleteObject(builder -> builder.bucket("alumniportals3").key(activity.getUrl()).build());
             }
 
+            // Subir la nueva imagen al bucket
             PutObjectRequest objectRequest = PutObjectRequest.builder()
                     .bucket("alumniportals3")
                     .key(key)
                     .build();
             s3Client.putObject(objectRequest, RequestBody.fromBytes(file.getBytes()));
 
+            // Actualizar la URL de la imagen en la actividad
             activity.setUrl(key);
             activityDAO.save(activity);
 
-
         } catch (IOException e) {
-            throw new IOException(e.getMessage());
+            throw new AppException("Error al subir la imagen de la actividad: " + e.getMessage(), "SERVICE_UNAVAILABLE");
         }
     }
+
 
     @Override
     public void updateActivity(Long id, Map<String, Object> fields) {
         Activity activity = activityDAO.findById(id);
         if (activity == null) {
-            throw new RuntimeException("Error: activity not found!");
+            throw new AppException("Actividad con id " + id + " no encontrada", "NOT_FOUND");
         }
 
         fields.forEach((k, v) -> {
@@ -252,38 +272,41 @@ public class ActivityServiceImpl implements IActivityService {
 
 
     @Override
-    public byte[] downloadActivityImage(Long activityId) throws Exception {
-        Activity activityDB = activityDAO.findById(activityId);
+    public byte[] downloadActivityImage(Long activityId) throws AppException {
+        // Recuperar la actividad de la base de datos
+        Activity activity = activityDAO.findById(activityId);
+        if (activity == null || activity.getUrl() == null) {
+            throw new AppException("La actividad con id " + activityId + " no tiene una imagen o no existe", "NOT_FOUND");
+        }
+
+        // Construir la solicitud para obtener el objeto de S3
+        String key = activity.getUrl();
+        GetObjectRequest objectRequest = GetObjectRequest.builder()
+                .bucket("alumniportals3")
+                .key(key)
+                .build();
+
         try {
-            String key = activityDB.getUrl();
-            if (key == null) {
-                throw new Exception("Activity does not have an image");
-            }
-
-            GetObjectRequest objectRequest = GetObjectRequest.builder()
-                    .bucket("alumniportals3")
-                    .key(key)
-                    .build();
-
             return s3Client.getObjectAsBytes(objectRequest).asByteArray();
-
         } catch (Exception e) {
-            throw new Exception(e.getMessage());
+            throw new AppException("Error al descargar la imagen de la actividad: " + e.getMessage(), "SERVICE_UNAVAILABLE");
         }
     }
+
 
     @Override
     public void deleteActivityImage(Long activityId) throws Exception {
         Activity activityDB = activityDAO.findById(activityId);
         if (activityDB == null) {
-            throw new Exception("Activity with id " + activityId + " not found");
+            throw new AppException("Actividad con id " + activityId + " no encontrada", "NOT_FOUND");
         }
-        try {
-            String key = activityDB.getUrl();
-            if (key == null) {
-                throw new RuntimeException("Activity does not have an image");
-            }
 
+        String key = activityDB.getUrl();
+        if (key == null) {
+            throw new AppException("La actividad con id " + activityId + " no tiene una imagen", "NOT_FOUND");
+        }
+
+        try {
             s3Client.deleteObject(builder -> builder.bucket("alumniportals3")
                     .key(key)
                     .build());
@@ -292,7 +315,7 @@ public class ActivityServiceImpl implements IActivityService {
             activityDAO.save(activityDB);
 
         } catch (Exception e) {
-            throw new Exception(e.getMessage());
+            throw new AppException("Error al eliminar la imagen de la actividad: " + e.getMessage(), "SERVICE_UNAVAILABLE");
         }
     }
 
@@ -330,7 +353,7 @@ public class ActivityServiceImpl implements IActivityService {
         Activity activityDB = activityDAO.findById(activityId);
         String key = activityDB.getUrl();
         if (key == null) {
-            throw new RuntimeException("Activity does not have an image");
+            throw new AppException("La actividad con id " + activityId + " no tiene una imagen", "NOT_FOUND");
         }
 
         // Retorna el nombre del archivo desde la clave (key)

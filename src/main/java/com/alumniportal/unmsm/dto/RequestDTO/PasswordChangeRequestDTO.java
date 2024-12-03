@@ -1,4 +1,4 @@
-package com.alumniportal.unmsm.dto;
+package com.alumniportal.unmsm.dto.RequestDTO;
 
 import lombok.*;
 
@@ -7,7 +7,10 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class LoginRequestDTO {
+public class PasswordChangeRequestDTO {
+
     private String email;
     private String password;
+    private String newPassword;
+
 }
