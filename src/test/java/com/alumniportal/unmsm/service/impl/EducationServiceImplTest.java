@@ -1,6 +1,6 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.dto.EducationDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.EducationResponseDTO;
 import com.alumniportal.unmsm.model.Education;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.interfaces.IEducationDAO;
@@ -49,7 +49,7 @@ class EducationServiceImplTest {
     void findAllReturnsListOfEducationDTOs() {
         Education education = new Education();
         when(educationDAO.findAll()).thenReturn(List.of(education));
-        List<EducationDTO> result = educationService.findAll();
+        List<EducationResponseDTO> result = educationService.findAll();
         assertEquals(1, result.size());
         verify(educationDAO, times(1)).findAll();
     }
@@ -57,7 +57,7 @@ class EducationServiceImplTest {
     @Test
     void findAllReturnsEmptyListWhenNoEducations() {
         when(educationDAO.findAll()).thenReturn(Collections.emptyList());
-        List<EducationDTO> result = educationService.findAll();
+        List<EducationResponseDTO> result = educationService.findAll();
         assertTrue(result.isEmpty());
         verify(educationDAO, times(1)).findAll();
     }
@@ -66,7 +66,7 @@ class EducationServiceImplTest {
     void findByIdReturnsEducationDTOWhenFound() {
         Education education = new Education();
         when(educationDAO.findById(1L)).thenReturn(education);
-        EducationDTO result = educationService.findById(1L);
+        EducationResponseDTO result = educationService.findById(1L);
         assertNotNull(result);
         verify(educationDAO, times(1)).findById(1L);
     }
@@ -74,7 +74,7 @@ class EducationServiceImplTest {
     @Test
     void findByIdReturnsNullWhenNotFound() {
         when(educationDAO.findById(1L)).thenReturn(null);
-        EducationDTO result = educationService.findById(1L);
+        EducationResponseDTO result = educationService.findById(1L);
         assertNull(result);
         verify(educationDAO, times(1)).findById(1L);
     }
@@ -96,7 +96,7 @@ class EducationServiceImplTest {
     void findEducationsByUserIdReturnsListOfEducationDTOs() {
         Education education = new Education();
         when(educationDAO.findEducationsByUserId(1L)).thenReturn(List.of(education));
-        List<EducationDTO> result = educationService.findEducationsByUserId(1L);
+        List<EducationResponseDTO> result = educationService.findEducationsByUserId(1L);
         assertEquals(1, result.size());
         verify(educationDAO, times(1)).findEducationsByUserId(1L);
     }
@@ -104,7 +104,7 @@ class EducationServiceImplTest {
     @Test
     void findEducationsByUserIdReturnsEmptyListWhenNoEducations() {
         when(educationDAO.findEducationsByUserId(1L)).thenReturn(Collections.emptyList());
-        List<EducationDTO> result = educationService.findEducationsByUserId(1L);
+        List<EducationResponseDTO> result = educationService.findEducationsByUserId(1L);
         assertTrue(result.isEmpty());
         verify(educationDAO, times(1)).findEducationsByUserId(1L);
     }

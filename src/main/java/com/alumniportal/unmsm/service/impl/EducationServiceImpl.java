@@ -1,6 +1,6 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.dto.EducationDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.EducationResponseDTO;
 import com.alumniportal.unmsm.model.Education;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.interfaces.IEducationDAO;
@@ -28,20 +28,20 @@ public class EducationServiceImpl implements IEducationService {
 
 
     @Override
-    public List<EducationDTO> findAll() {
+    public List<EducationResponseDTO> findAll() {
         return educationDAO.findAll()
                 .stream()
-                .map(education -> modelMapper.map(education, EducationDTO.class))
+                .map(education -> modelMapper.map(education, EducationResponseDTO.class))
                 .toList();
     }
 
     @Override
-    public EducationDTO findById(Long id) {
+    public EducationResponseDTO findById(Long id) {
         Education education = educationDAO.findById(id);
         if (education == null) {
             return null;
         }
-        return modelMapper.map(education, EducationDTO.class);
+        return modelMapper.map(education, EducationResponseDTO.class);
     }
 
     @Override
@@ -55,10 +55,10 @@ public class EducationServiceImpl implements IEducationService {
     }
 
     @Override
-    public List<EducationDTO> findEducationsByUserId(Long userId) {
+    public List<EducationResponseDTO> findEducationsByUserId(Long userId) {
         return educationDAO.findEducationsByUserId(userId)
                 .stream()
-                .map(education -> modelMapper.map(education, EducationDTO.class))
+                .map(education -> modelMapper.map(education, EducationResponseDTO.class))
                 .toList();
     }
 

@@ -1,25 +1,25 @@
 package com.alumniportal.unmsm.service.interfaces;
 
-import com.alumniportal.unmsm.dto.ApplicationDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.ApplicationResponseDTO;
 import com.alumniportal.unmsm.model.Application;
 
 import java.util.List;
 
 public interface IApplicationService {
 
-    List<ApplicationDTO> findAll();
+    List<ApplicationResponseDTO> findAll();
 
-    ApplicationDTO findById(Long id);
+    ApplicationResponseDTO findById(Long id);
 
     void save(Application application);
 
     void deleteById(Long id);
 
-    List<ApplicationDTO> findApplicationsByUserId(Long userId);
+    List<ApplicationResponseDTO> findApplicationsByUserId(Long userId);
 
-    List<ApplicationDTO> findApplicationsByJobOfferId(Long jobOfferId);
+    List<ApplicationResponseDTO> findApplicationsByJobOfferId(Long jobOfferId);
 
-    ApplicationDTO findApplicationByUserIdAndJobOfferId(Long userId, Long jobOfferId);
+    ApplicationResponseDTO findApplicationByUserIdAndJobOfferId(Long userId, Long jobOfferId);
 
     public void saveApplication(Application application);
 }

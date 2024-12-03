@@ -1,8 +1,8 @@
 package com.alumniportal.unmsm.service.interfaces;
 
-import com.alumniportal.unmsm.dto.PasswordChangeDTO;
-import com.alumniportal.unmsm.dto.UserCVDTO;
-import com.alumniportal.unmsm.dto.UserDTO;
+import com.alumniportal.unmsm.dto.RequestDTO.PasswordChangeRequestDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.UserCVResponseDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.UserResponseDTO;
 import com.alumniportal.unmsm.model.User;
 
 import java.util.List;
@@ -10,9 +10,9 @@ import java.util.Map;
 
 public interface IUserService {
 
-    List<UserDTO> findAll();
+    List<UserResponseDTO> findAll();
 
-    UserDTO findById(Long id);
+    UserResponseDTO findById(Long id);
 
     void save(User user);
 
@@ -20,16 +20,16 @@ public interface IUserService {
 
     boolean existsByEmail(String email);
 
-    UserDTO findByEmail(String email);
+    UserResponseDTO findByEmail(String email);
 
     void saveUser(User user);
 
     void updateUser(Long id, Map<String, Object> fields);
 
-    UserDTO validateLogin(String email, String password);
+    UserResponseDTO validateLogin(String email, String password);
 
-    UserCVDTO getUserCV(Long userId);
+    UserCVResponseDTO getUserCV(Long userId);
 
-    void updatePassword(Long id, PasswordChangeDTO passwordChangeDTO);
+    void updatePassword(Long id, PasswordChangeRequestDTO passwordChangeRequestDTO);
 
 }

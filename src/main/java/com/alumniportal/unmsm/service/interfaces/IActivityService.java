@@ -1,6 +1,7 @@
 package com.alumniportal.unmsm.service.interfaces;
 
-import com.alumniportal.unmsm.dto.ActivityDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.ActivityResponseDTO;
+import com.alumniportal.unmsm.dto.RequestDTO.ActivityRequestDTO;
 import com.alumniportal.unmsm.model.Activity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -9,19 +10,19 @@ import java.util.List;
 import java.util.Map;
 
 public interface IActivityService {
-    List<ActivityDTO> findAll();
+    List<ActivityResponseDTO> findAll();
 
-    ActivityDTO findById(Long id);
+    ActivityResponseDTO findById(Long id);
 
     void save(Activity activity);
 
     void deleteById(Long id) throws Exception;
 
-    List<ActivityDTO> findActivitiesByUserId(Long userId);
+    List<ActivityResponseDTO> findActivitiesByUserId(Long userId);
 
-    List<ActivityDTO> findActivitiesByCompanyId(Long companyId);
+    List<ActivityResponseDTO> findActivitiesByCompanyId(Long companyId);
 
-    void saveActivityWithImageByUserId(Activity activity, Long userId, MultipartFile image) throws IOException;
+    void saveActivityWithImageByUserId(ActivityRequestDTO activityRequestDTO, Long userId, MultipartFile image) throws IOException;
 
     void saveActivityWithImageByCompanyId(Activity activity, Long companyId, MultipartFile image) throws IOException;
 
@@ -39,7 +40,8 @@ public interface IActivityService {
 
     String getFileName(Long activityId);
 
-    void saveActivityByUserId(Activity activity, Long userId);
 
-    void saveActivityByCompanyId(Activity activity, Long companyId);
+    void saveActivityByUserId(ActivityRequestDTO activityRequestDTO, Long userId);
+
+    void saveActivityByCompanyId(ActivityRequestDTO activityRequestDTO, Long companyId);
 }

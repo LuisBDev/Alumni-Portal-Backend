@@ -1,6 +1,6 @@
 package com.alumniportal.unmsm.service.interfaces;
 
-import com.alumniportal.unmsm.dto.CertificationDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.CertificationResponseDTO;
 import com.alumniportal.unmsm.model.Certification;
 
 import java.util.List;
@@ -8,15 +8,15 @@ import java.util.Map;
 
 public interface ICertificationService {
 
-    List<CertificationDTO> findAll();
+    List<CertificationResponseDTO> findAll();
 
-    CertificationDTO findById(Long id);
+    CertificationResponseDTO findById(Long id);
 
     void save(Certification certification);
 
     void deleteById(Long id);
 
-    List<CertificationDTO> findCertificationsByUserId(Long userId);
+    List<CertificationResponseDTO> findCertificationsByUserId(Long userId);
 
     void saveCertification(Certification certification, Long userId);
 

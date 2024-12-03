@@ -109,7 +109,7 @@ public class User extends AbstractEntity implements UserDetails {
     private List<Activity> activityList;
 
     //    Relacion con Enrollment
-    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Enrollment> enrollmentList;
 

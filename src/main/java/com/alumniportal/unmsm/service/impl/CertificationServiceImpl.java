@@ -1,6 +1,6 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.dto.CertificationDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.CertificationResponseDTO;
 import com.alumniportal.unmsm.model.Certification;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.interfaces.ICertificationDAO;
@@ -28,20 +28,20 @@ public class CertificationServiceImpl implements ICertificationService {
 
 
     @Override
-    public List<CertificationDTO> findAll() {
+    public List<CertificationResponseDTO> findAll() {
         return certificationDAO.findAll()
                 .stream()
-                .map(certification -> modelMapper.map(certification, CertificationDTO.class))
+                .map(certification -> modelMapper.map(certification, CertificationResponseDTO.class))
                 .toList();
     }
 
     @Override
-    public CertificationDTO findById(Long id) {
+    public CertificationResponseDTO findById(Long id) {
         Certification certification = certificationDAO.findById(id);
         if (certification == null) {
             return null;
         }
-        return modelMapper.map(certification, CertificationDTO.class);
+        return modelMapper.map(certification, CertificationResponseDTO.class);
     }
 
     @Override
@@ -55,10 +55,10 @@ public class CertificationServiceImpl implements ICertificationService {
     }
 
     @Override
-    public List<CertificationDTO> findCertificationsByUserId(Long userId) {
+    public List<CertificationResponseDTO> findCertificationsByUserId(Long userId) {
         return certificationDAO.findCertificationsByUserId(userId)
                 .stream()
-                .map(certification -> modelMapper.map(certification, CertificationDTO.class))
+                .map(certification -> modelMapper.map(certification, CertificationResponseDTO.class))
                 .toList();
     }
 

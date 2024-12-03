@@ -1,6 +1,6 @@
 package com.alumniportal.unmsm.controller;
 
-import com.alumniportal.unmsm.dto.JobOfferDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.JobOfferResponseDTO;
 import com.alumniportal.unmsm.model.JobOffer;
 import com.alumniportal.unmsm.service.interfaces.IJobOfferService;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +19,12 @@ public class JobOfferController {
 
 
     @GetMapping("/all")
-    public List<JobOfferDTO> findAll() {
+    public List<JobOfferResponseDTO> findAll() {
         return jobOfferService.findAll();
     }
 
     @GetMapping("/{id}")
-    public JobOfferDTO findById(@PathVariable Long id) {
+    public JobOfferResponseDTO findById(@PathVariable Long id) {
         return jobOfferService.findById(id);
     }
 
@@ -51,8 +51,8 @@ public class JobOfferController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
-        JobOfferDTO jobOfferDTO = jobOfferService.findById(id);
-        if (jobOfferDTO == null) {
+        JobOfferResponseDTO jobOfferResponseDTO = jobOfferService.findById(id);
+        if (jobOfferResponseDTO == null) {
             return ResponseEntity.badRequest().body("Error: JobOffer not found!");
         }
         jobOfferService.deleteById(id);
@@ -60,7 +60,7 @@ public class JobOfferController {
     }
 
     @GetMapping("/company/{companyId}")
-    public List<JobOfferDTO> findJobOffersByCompanyId(@PathVariable Long companyId) {
+    public List<JobOfferResponseDTO> findJobOffersByCompanyId(@PathVariable Long companyId) {
         return jobOfferService.findJobOffersByCompanyId(companyId);
     }
 

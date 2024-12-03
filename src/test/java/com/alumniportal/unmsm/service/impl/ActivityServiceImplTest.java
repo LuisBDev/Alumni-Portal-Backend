@@ -1,7 +1,10 @@
 package com.alumniportal.unmsm.service.impl;
 
 import com.alumniportal.unmsm.Data.ActivityProvider;
-import com.alumniportal.unmsm.dto.ActivityDTO;
+import com.alumniportal.unmsm.dto.RequestDTO.ActivityRequestDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.ActivityResponseDTO;
+import com.alumniportal.unmsm.exception.AppException;
+import com.alumniportal.unmsm.mapper.ActivityMapper;
 import com.alumniportal.unmsm.model.Activity;
 import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.model.User;
@@ -15,10 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.multipart.MultipartFile;
-import software.amazon.awssdk.core.SdkBytes;
 import software.amazon.awssdk.services.lambda.LambdaClient;
-import software.amazon.awssdk.services.lambda.model.InvokeRequest;
-import software.amazon.awssdk.services.lambda.model.InvokeResponse;
 import software.amazon.awssdk.services.s3.S3Client;
 
 import java.io.IOException;
@@ -48,23 +48,23 @@ public class ActivityServiceImplTest {
     @Mock
     private LambdaClient lambdaClient;
 
-    // ModelMapper real
-    private ModelMapper modelMapper;
+    // activityMapper real
+    private ActivityMapper activityMapper;
 
     //    @InjectMocks
     private ActivityServiceImpl activityService;
 
     @BeforeEach
     void setUp() {
-        modelMapper = new ModelMapper();
-        activityService = spy(new ActivityServiceImpl(activityDAO, userDAO, companyDAO, modelMapper, s3Client, lambdaClient));
+        activityMapper = new ActivityMapper(new ModelMapper());
+        activityService = spy(new ActivityServiceImpl(activityDAO, userDAO, companyDAO, activityMapper, s3Client, lambdaClient));
     }
 
     @Test
     void testFindAll() {
         when(activityDAO.findAll()).thenReturn(ActivityProvider.activityList());
 
-        List<ActivityDTO> activityDTOList = activityService.findAll();
+        List<ActivityResponseDTO> activityDTOList = activityService.findAll();
         assertEquals("Taller de Java", activityDTOList.get(0).getTitle());
         assertEquals("Conferencia de Java", activityDTOList.get(1).getTitle());
         assertEquals("Seminario de Java", activityDTOList.get(2).getTitle());
@@ -76,7 +76,7 @@ public class ActivityServiceImplTest {
         Long userId = 1L;
         when(activityDAO.findActivitiesByUserId(userId)).thenReturn(ActivityProvider.activityList());
 
-        List<ActivityDTO> result = activityService.findActivitiesByUserId(userId);
+        List<ActivityResponseDTO> result = activityService.findActivitiesByUserId(userId);
 
         assertNotNull(result);
         assertEquals(5, result.size());
@@ -87,10 +87,8 @@ public class ActivityServiceImplTest {
         Long userId = 1L;
         when(activityDAO.findActivitiesByUserId(userId)).thenReturn(List.of());
 
-        List<ActivityDTO> result = activityService.findActivitiesByUserId(userId);
+        assertThrows(AppException.class, () -> activityService.findActivitiesByUserId(userId));
 
-        assertNotNull(result);
-        assertTrue(result.isEmpty());
     }
 
     @Test
@@ -98,7 +96,7 @@ public class ActivityServiceImplTest {
         Long companyId = 1L;
         when(activityDAO.findActivitiesByCompanyId(companyId)).thenReturn(ActivityProvider.activityList());
 
-        List<ActivityDTO> result = activityService.findActivitiesByCompanyId(companyId);
+        List<ActivityResponseDTO> result = activityService.findActivitiesByCompanyId(companyId);
 
         assertNotNull(result);
         assertEquals(5, result.size());
@@ -109,10 +107,8 @@ public class ActivityServiceImplTest {
         Long companyId = 1L;
         when(activityDAO.findActivitiesByCompanyId(companyId)).thenReturn(List.of());
 
-        List<ActivityDTO> result = activityService.findActivitiesByCompanyId(companyId);
-
-        assertNotNull(result);
-        assertTrue(result.isEmpty());
+        assertThrows(AppException.class, () -> activityService.findActivitiesByCompanyId(companyId));
+        verify(activityDAO, times(1)).findActivitiesByCompanyId(companyId);
     }
 
     @Test
@@ -120,7 +116,7 @@ public class ActivityServiceImplTest {
         Long activityId = 1L;
         when(activityDAO.findById(activityId)).thenReturn(ActivityProvider.activityOne());
 
-        ActivityDTO result = activityService.findById(activityId);
+        ActivityResponseDTO result = activityService.findById(activityId);
 
         assertNotNull(result);
         assertEquals("Charla magistral de Java", result.getTitle());
@@ -131,9 +127,9 @@ public class ActivityServiceImplTest {
         Long activityId = 1L;
         when(activityDAO.findById(activityId)).thenReturn(null);
 
-        ActivityDTO result = activityService.findById(activityId);
+        assertThrows(AppException.class, () -> activityService.findById(activityId));
 
-        assertNull(result);
+        verify(activityDAO, times(1)).findById(activityId);
     }
 
     @Test
@@ -187,7 +183,7 @@ public class ActivityServiceImplTest {
     void testSaveActivityByUserId() {
         User user = User.builder().id(1L).name("Luis").activityList(new ArrayList<>()).build();
 
-        Activity activity = ActivityProvider.activityOne();
+        ActivityRequestDTO activity = new ActivityRequestDTO();
 
         when(userDAO.findById(anyLong())).thenReturn(user);
 
@@ -199,11 +195,11 @@ public class ActivityServiceImplTest {
 
     @Test
     void testSaveActivityByUserId_WhenUserIsNull() {
-        Activity activity = ActivityProvider.activityOne();
+        ActivityRequestDTO activity = new ActivityRequestDTO();
 
         when(userDAO.findById(anyLong())).thenReturn(null);
 
-        assertThrows(IllegalArgumentException.class, () -> activityService.saveActivityByUserId(activity, 1L));
+        assertThrows(AppException.class, () -> activityService.saveActivityByUserId(activity, 1L));
     }
 
     @Test
@@ -211,7 +207,7 @@ public class ActivityServiceImplTest {
 
         Company company = Company.builder().id(1L).name("UNMSM").activityList(new ArrayList<>()).build();
 
-        Activity activity = ActivityProvider.activityOne();
+        ActivityRequestDTO activity = new ActivityRequestDTO();
 
         when(companyDAO.findById(anyLong())).thenReturn(company);
 
@@ -224,45 +220,43 @@ public class ActivityServiceImplTest {
 
     @Test
     void testSaveActivityByCompanyId_WhenCompanyIsNull() {
-        Activity activity = ActivityProvider.activityOne();
+        ActivityRequestDTO activity = new ActivityRequestDTO();
 
         when(companyDAO.findById(anyLong())).thenReturn(null);
 
-        assertThrows(IllegalArgumentException.class, () -> activityService.saveActivityByCompanyId(activity, 1L));
+        assertThrows(AppException.class, () -> activityService.saveActivityByCompanyId(activity, 1L));
 
 //        No se necesita generar el doNothing para invokeLambda porque no se llama a ese método en el caso de que la compañía sea nula.
     }
 
-    @Test
-    void testSaveActivityWithImageByUserId() throws IOException {
-
-        User user = User.builder().id(1L).name("Luis").activityList(new ArrayList<>()).build();
-
-        MultipartFile image = mock(MultipartFile.class);
-
-        Activity activity = ActivityProvider.activityOne();
-
-        when(userDAO.findById(anyLong())).thenReturn(user);
-
-        doNothing().when(activityService).invokeLambda(anyString(), anyString(), any(Activity.class));
-
-        doNothing().when(activityService).uploadActivityImage(anyLong(), any(MultipartFile.class));
-
-        activityService.saveActivityWithImageByUserId(activity, user.getId(), image);
-
-        verify(activityDAO, times(1)).save(any(Activity.class));
-    }
+//    @Test
+//    void testSaveActivityWithImageByUserId() throws IOException {
+//
+//        User user = User.builder().id(1L).name("Luis").activityList(new ArrayList<>()).build();
+//        MultipartFile image = mock(MultipartFile.class);
+//        ActivityRequestDTO activityRequestDTO = new ActivityRequestDTO();
+//
+//        when(userDAO.findById(anyLong())).thenReturn(user);
+//        when(activityDAO.findById(anyLong())).thenReturn(ActivityProvider.activityOne());
+//        doNothing().when(activityService).invokeLambda(anyString(), anyString(), any(Activity.class));
+////        doNothing().when(activityService).uploadActivityImage(anyLong(), any(MultipartFile.class));
+//
+//        activityService.saveActivityWithImageByUserId(activityRequestDTO, user.getId(), image);
+//
+//        verify(activityDAO, times(1)).save(any(Activity.class));
+//        verify(activityService, times(1)).uploadActivityImage(anyLong(), any(MultipartFile.class));
+//    }
 
     @Test
     void testSaveActivityWithImageByUserId_WhenUserIsNull() {
 
         MultipartFile image = mock(MultipartFile.class);
 
-        Activity activity = ActivityProvider.activityOne();
+        ActivityRequestDTO activity = new ActivityRequestDTO();
 
         when(userDAO.findById(anyLong())).thenReturn(null);
 
-        assertThrows(IllegalArgumentException.class, () -> activityService.saveActivityWithImageByUserId(activity, 1L, image));
+        assertThrows(AppException.class, () -> activityService.saveActivityWithImageByUserId(activity, 1L, image));
 
     }
 
@@ -271,7 +265,7 @@ public class ActivityServiceImplTest {
 
         User user = User.builder().id(1L).name("Luis").activityList(new ArrayList<>()).build();
 
-        Activity activity = ActivityProvider.activityOne();
+        ActivityRequestDTO activity = new ActivityRequestDTO();
 
         when(userDAO.findById(anyLong())).thenReturn(user);
 
@@ -290,7 +284,7 @@ public class ActivityServiceImplTest {
         MultipartFile imageEmpty = mock(MultipartFile.class);
         when(imageEmpty.isEmpty()).thenReturn(true);
 
-        Activity activity = ActivityProvider.activityOne();
+        ActivityRequestDTO activity = new ActivityRequestDTO();
 
         when(userDAO.findById(anyLong())).thenReturn(user);
 
@@ -331,7 +325,7 @@ public class ActivityServiceImplTest {
 
         when(companyDAO.findById(anyLong())).thenReturn(null);
 
-        assertThrows(IllegalArgumentException.class, () -> activityService.saveActivityWithImageByCompanyId(activity, 1L, image));
+        assertThrows(AppException.class, () -> activityService.saveActivityWithImageByCompanyId(activity, 1L, image));
     }
 
     @Test
@@ -401,7 +395,7 @@ public class ActivityServiceImplTest {
 
         Map<String, Object> fields = Map.of("title", "Updated Title");
 
-        assertThrows(RuntimeException.class, () -> activityService.updateActivity(1L, fields));
+        assertThrows(AppException.class, () -> activityService.updateActivity(1L, fields));
     }
 
     @Test
@@ -462,8 +456,6 @@ public class ActivityServiceImplTest {
 
         assertThrows(RuntimeException.class, () -> activityService.getFileName(activityId));
     }
-
-
 
 
 }

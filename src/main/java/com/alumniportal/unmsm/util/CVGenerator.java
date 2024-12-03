@@ -1,6 +1,6 @@
 package com.alumniportal.unmsm.util;
 
-import com.alumniportal.unmsm.dto.*;
+import com.alumniportal.unmsm.dto.ResponseDTO.*;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -17,7 +17,7 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 
 public class CVGenerator {
 
-    public static byte[] generateCV(UserCVDTO cv) throws IOException {
+    public static byte[] generateCV(UserCVResponseDTO cv) throws IOException {
         PDDocument document = new PDDocument();
         PDPage page = new PDPage();
         document.addPage(page);
@@ -84,7 +84,7 @@ public class CVGenerator {
         contentStream.showText("Work Experience");
         contentStream.newLine();
         contentStream.setFont(regularFont, 12);
-        for (WorkExperienceDTO work : cv.getWorkExperience()) {
+        for (WorkExperienceResponseDTO work : cv.getWorkExperience()) {
             String startDate = formatNullableLocalDate(work.getStartDate(), dateFormat);
             String endDate = (work.getEndDate() != null) ? formatNullableLocalDate(work.getEndDate(), dateFormat) : "Presente";
 
@@ -105,7 +105,7 @@ public class CVGenerator {
         contentStream.showText("Education");
         contentStream.newLine();
         contentStream.setFont(regularFont, 12);
-        for (EducationDTO edu : cv.getEducation()) {
+        for (EducationResponseDTO edu : cv.getEducation()) {
             String startDate = formatNullableLocalDate(edu.getStartDate(), dateFormat);
             String endDate = formatNullableLocalDate(edu.getEndDate(), dateFormat);
 
@@ -126,7 +126,7 @@ public class CVGenerator {
         contentStream.showText("Projects");
         contentStream.newLine();
         contentStream.setFont(regularFont, 12);
-        for (ProjectDTO proj : cv.getProjects()) {
+        for (ProjectResponseDTO proj : cv.getProjects()) {
             String projectDate = formatNullableLocalDate(proj.getDate(), dateFormat);
             contentStream.showText(proj.getName() + " - " + projectDate);
             contentStream.newLine();
@@ -145,7 +145,7 @@ public class CVGenerator {
         contentStream.showText("Certifications");
         contentStream.newLine();
         contentStream.setFont(regularFont, 12);
-        for (CertificationDTO cert : cv.getCertifications()) {
+        for (CertificationResponseDTO cert : cv.getCertifications()) {
             String issueDate = formatNullableLocalDate(cert.getIssueDate(), dateFormat);
             contentStream.showText(cert.getName() + " | " + cert.getIssuingOrganization() + " - " + issueDate);
             contentStream.newLine();
@@ -157,7 +157,7 @@ public class CVGenerator {
         contentStream.showText("Skills");
         contentStream.newLine();
         contentStream.setFont(regularFont, 12);
-        for (SkillDTO skill : cv.getSkills()) {
+        for (SkillResponseDTO skill : cv.getSkills()) {
             for (String line : splitTextIntoLines(skill.getName() + " | " + skill.getLevel(), maxWidth, regularFont, 12)) {
                 contentStream.showText(line);
                 contentStream.newLine();

@@ -1,6 +1,6 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.dto.WorkExperienceDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.WorkExperienceResponseDTO;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.model.WorkExperience;
 import com.alumniportal.unmsm.persistence.interfaces.IUserDAO;
@@ -28,21 +28,21 @@ public class WorkExperienceServiceImpl implements IWorkExperienceService {
 
 
     @Override
-    public List<WorkExperienceDTO> findAll() {
+    public List<WorkExperienceResponseDTO> findAll() {
         return workExperienceDAO.findAll()
                 .stream()
-                .map(workExperience -> modelMapper.map(workExperience, WorkExperienceDTO.class))
+                .map(workExperience -> modelMapper.map(workExperience, WorkExperienceResponseDTO.class))
                 .toList();
     }
 
 
     @Override
-    public WorkExperienceDTO findById(Long id) {
+    public WorkExperienceResponseDTO findById(Long id) {
         WorkExperience workExperience = workExperienceDAO.findById(id);
         if (workExperience == null) {
             return null;
         }
-        return modelMapper.map(workExperience, WorkExperienceDTO.class);
+        return modelMapper.map(workExperience, WorkExperienceResponseDTO.class);
     }
 
     @Override
@@ -56,10 +56,10 @@ public class WorkExperienceServiceImpl implements IWorkExperienceService {
     }
 
     @Override
-    public List<WorkExperienceDTO> findWorkExperiencesByUserId(Long userId) {
+    public List<WorkExperienceResponseDTO> findWorkExperiencesByUserId(Long userId) {
         return workExperienceDAO.findWorkExperiencesByUserId(userId)
                 .stream()
-                .map(workExperience -> modelMapper.map(workExperience, WorkExperienceDTO.class))
+                .map(workExperience -> modelMapper.map(workExperience, WorkExperienceResponseDTO.class))
                 .toList();
     }
 
