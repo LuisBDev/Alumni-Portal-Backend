@@ -60,12 +60,8 @@ public class ActivityController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id) throws Exception {
-        try {
-            activityService.deleteById(id);
-            return ResponseEntity.ok("Activity deleted successfully");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        activityService.deleteById(id);
+        return ResponseEntity.ok("Activity id: " + id + " deleted successfully");
     }
 
     @GetMapping("/user/{userId}")
@@ -82,13 +78,8 @@ public class ActivityController {
 
     @PostMapping("/activity-image/{activityId}")
     public ResponseEntity<?> uploadActivityImage(@PathVariable Long activityId, @RequestParam("image") MultipartFile file) throws IOException {
-
-        try {
-            activityService.uploadActivityImage(activityId, file);
-            return ResponseEntity.ok("File uploaded successfully");
-        } catch (IOException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        activityService.uploadActivityImage(activityId, file);
+        return ResponseEntity.ok("File uploaded successfully");
     }
 
     @GetMapping("/activity-image/{activityId}")
@@ -107,13 +98,9 @@ public class ActivityController {
     }
 
     @DeleteMapping("/activity-image/{activityId}")
-    public ResponseEntity<?> deleteActivityImage(@PathVariable Long activityId) {
-        try {
-            activityService.deleteActivityImage(activityId);
-            return ResponseEntity.ok("File deleted successfully");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<?> deleteActivityImage(@PathVariable Long activityId) throws Exception {
+        activityService.deleteActivityImage(activityId);
+        return ResponseEntity.ok("File deleted successfully");
     }
 
     //Subir actividad con MultiPartFile

@@ -1,34 +1,42 @@
 package com.alumniportal.unmsm.exception;
 
-import com.alumniportal.unmsm.exception.NotFoundException.ActivityNotFoundException;
-import com.alumniportal.unmsm.exception.NotFoundException.CompanyNotFoundException;
-import com.alumniportal.unmsm.exception.NotFoundException.ResourceNotFoundException;
-import com.alumniportal.unmsm.exception.NotFoundException.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException ex) {
+        HttpStatus status = getHttpStatusFromErrorCode("INVALID_CREDENTIALS");
+        ErrorResponse errorResponse = new ErrorResponse("Las credenciales proporcionadas son incorrectas.");
+        return ResponseEntity.status(status).body(errorResponse);
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    @ExceptionHandler(AppException.class)
+    public ResponseEntity<ErrorResponse> handleAppException(AppException ex) {
+        HttpStatus status = getHttpStatusFromErrorCode(ex.getErrorCode());
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .error(ex.getMessage())
+                .build();
+
+        return ResponseEntity.status(status).body(errorResponse);
     }
 
-    @ExceptionHandler(CompanyNotFoundException.class)
-    public ResponseEntity<String> handleCompanyNotFoundException(CompanyNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+
+    private HttpStatus getHttpStatusFromErrorCode(String errorCode) {
+        return switch (errorCode) {
+            case "CONFLICT" -> HttpStatus.CONFLICT;
+            case "FORBIDDEN" -> HttpStatus.FORBIDDEN;
+            case "TOKEN_EXPIRED" -> HttpStatus.GONE;
+            case "NOT_FOUND" -> HttpStatus.NOT_FOUND;
+            case "INVALID_CREDENTIALS", "UNAUTHORIZED" -> HttpStatus.UNAUTHORIZED;
+            case "SERVICE_UNAVAILABLE" -> HttpStatus.INTERNAL_SERVER_ERROR;
+            default -> HttpStatus.BAD_REQUEST;
+        };
     }
 
-    @ExceptionHandler(ActivityNotFoundException.class)
-    public ResponseEntity<String> handleActivityNotFoundException(ActivityNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-    }
 }
