@@ -65,9 +65,9 @@ public class JobOffer {
 
 
     //    Relation with Application
-    @OneToMany(mappedBy = "jobOffer", orphanRemoval = true)
+    @OneToMany(mappedBy = "jobOffer", orphanRemoval = true, cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Application> applicationList = new ArrayList<>();
+    private List<Application> applicationList;
 
 //    Relation with Skill
 

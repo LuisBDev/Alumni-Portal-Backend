@@ -1,10 +1,15 @@
 package com.alumniportal.unmsm.controller;
 
+import com.alumniportal.unmsm.dto.RequestDTO.ApplicationRequestDTO;
 import com.alumniportal.unmsm.dto.ResponseDTO.ApplicationResponseDTO;
 import com.alumniportal.unmsm.model.Application;
 import com.alumniportal.unmsm.service.interfaces.IApplicationService;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.server.authentication.RedirectServerAuthenticationEntryPoint;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,53 +23,46 @@ public class ApplicationController {
     private final IApplicationService applicationService;
 
     @GetMapping("/all")
-    public List<ApplicationResponseDTO> findAll() {
-        return applicationService.findAll();
+    public ResponseEntity<List<ApplicationResponseDTO>> findAll() {
+        List<ApplicationResponseDTO> applicationResponseDTOList = applicationService.findAll();
+        return ResponseEntity.ok(applicationResponseDTOList);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable Long id) {
+    public ResponseEntity<ApplicationResponseDTO> findById(@PathVariable Long id) {
         ApplicationResponseDTO applicationResponseDTO = applicationService.findById(id);
-        if (applicationResponseDTO == null) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok(applicationResponseDTO);
     }
 
     @PostMapping("/save")
-    public ResponseEntity<?> save(@RequestBody Application application) {
-        try {
-            applicationService.saveApplication(application);
-            return ResponseEntity.ok("Application saved successfully!");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("An error occurred while saving the application");
-        }
-
+//    @ApiResponse(responseCode = "201", description = "Application created")
+    public ResponseEntity<Void> save(@RequestBody ApplicationRequestDTO applicationRequestDTO) {
+        applicationService.saveApplication(applicationRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable Long id) {
         applicationService.deleteById(id);
     }
 
     @GetMapping("/user/{userId}")
-    public List<ApplicationResponseDTO> findApplicationsByUserId(@PathVariable Long userId) {
-        return applicationService.findApplicationsByUserId(userId);
+    public ResponseEntity<List<ApplicationResponseDTO>> findApplicationsByUserId(@PathVariable Long userId) {
+        List<ApplicationResponseDTO> applicationsByUserId = applicationService.findApplicationsByUserId(userId);
+        return ResponseEntity.ok(applicationsByUserId);
     }
 
     @GetMapping("/job-offer/{jobOfferId}")
-    public List<ApplicationResponseDTO> findApplicationsByJobOfferId(@PathVariable Long jobOfferId) {
-        return applicationService.findApplicationsByJobOfferId(jobOfferId);
+    public ResponseEntity<List<ApplicationResponseDTO>> findApplicationsByJobOfferId(@PathVariable Long jobOfferId) {
+        List<ApplicationResponseDTO> applicationsByJobOfferId = applicationService.findApplicationsByJobOfferId(jobOfferId);
+        return ResponseEntity.ok(applicationsByJobOfferId);
     }
 
     @GetMapping("/user/{userId}/job-offer/{jobOfferId}")
     public ResponseEntity<ApplicationResponseDTO> findApplicationByUserIdAndJobOfferId(@PathVariable Long userId, @PathVariable Long jobOfferId) {
         ApplicationResponseDTO applicationResponseDTO = applicationService.findApplicationByUserIdAndJobOfferId(userId, jobOfferId);
-        if (applicationResponseDTO == null) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok(applicationResponseDTO);
     }
 
