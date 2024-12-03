@@ -1,6 +1,7 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.dto.*;
+import com.alumniportal.unmsm.dto.RequestDTO.PasswordChangeRequestDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.*;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.interfaces.*;
 import com.alumniportal.unmsm.service.interfaces.IActivityService;
@@ -44,18 +45,18 @@ public class UserServiceImpl implements IUserService {
 
 
     @Override
-    public List<UserDTO> findAll() {
+    public List<UserResponseDTO> findAll() {
         List<User> users = userDAO.findAll();
         return users.stream()
-                .map(user -> modelMapper.map(user, UserDTO.class))
+                .map(user -> modelMapper.map(user, UserResponseDTO.class))
                 .toList();
     }
 
     @Override
-    public UserDTO findById(Long id) {
+    public UserResponseDTO findById(Long id) {
 
         User user = userDAO.findById(id);
-        return modelMapper.map(user, UserDTO.class);
+        return modelMapper.map(user, UserResponseDTO.class);
 
     }
 
@@ -94,9 +95,9 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public UserDTO findByEmail(String email) {
+    public UserResponseDTO findByEmail(String email) {
         User user = userDAO.findByEmail(email);
-        return modelMapper.map(user, UserDTO.class);
+        return modelMapper.map(user, UserResponseDTO.class);
     }
 
     @Override
@@ -127,7 +128,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public UserDTO validateLogin(String email, String password) {
+    public UserResponseDTO validateLogin(String email, String password) {
         User user = userDAO.findByEmail(email);
         if (user == null) {
             throw new RuntimeException("Error: User not found!");
@@ -135,17 +136,17 @@ public class UserServiceImpl implements IUserService {
         if (!user.getPassword().equals(password)) {
             throw new RuntimeException("Error: Invalid password!");
         }
-        return modelMapper.map(user, UserDTO.class);
+        return modelMapper.map(user, UserResponseDTO.class);
     }
 
     @Override
-    public UserCVDTO getUserCV(Long userId) {
+    public UserCVResponseDTO getUserCV(Long userId) {
         User user = userDAO.findById(userId);
         if (user == null) {
             throw new RuntimeException("User not found");
         }
 
-        UserCVDTO cv = new UserCVDTO();
+        UserCVResponseDTO cv = new UserCVResponseDTO();
         cv.setName(user.getName());
         cv.setPaternalSurname(user.getPaternalSurname());
         cv.setMaternalSurname(user.getMaternalSurname());
@@ -155,7 +156,7 @@ public class UserServiceImpl implements IUserService {
         cv.setAbout(user.getAbout());
 
         cv.setCertifications(certificationDAO.findCertificationsByUserId(userId).stream().map(cert -> {
-            CertificationDTO certDto = new CertificationDTO();
+            CertificationResponseDTO certDto = new CertificationResponseDTO();
             certDto.setName(cert.getName());
             certDto.setIssuingOrganization(cert.getIssuingOrganization());
             certDto.setCredentialUrl(cert.getCredentialUrl());
@@ -164,7 +165,7 @@ public class UserServiceImpl implements IUserService {
         }).collect(Collectors.toList()));
 
         cv.setEducation(educationDAO.findEducationsByUserId(userId).stream().map(edu -> {
-            EducationDTO eduDto = new EducationDTO();
+            EducationResponseDTO eduDto = new EducationResponseDTO();
             eduDto.setInstitution(edu.getInstitution());
             eduDto.setFieldOfStudy(edu.getFieldOfStudy());
             eduDto.setDegree(edu.getDegree());
@@ -174,7 +175,7 @@ public class UserServiceImpl implements IUserService {
         }).collect(Collectors.toList()));
 
         cv.setProjects(projectDAO.findProjectsByUserId(userId).stream().map(proj -> {
-            ProjectDTO projDto = new ProjectDTO();
+            ProjectResponseDTO projDto = new ProjectResponseDTO();
             projDto.setName(proj.getName());
             projDto.setDescription(proj.getDescription());
             projDto.setDate(proj.getDate());
@@ -182,14 +183,14 @@ public class UserServiceImpl implements IUserService {
         }).collect(Collectors.toList()));
 
         cv.setSkills(skillDAO.findSkillsByUserId(userId).stream().map(skill -> {
-            SkillDTO skillDto = new SkillDTO();
-            skillDto.setName(skill.getName());
-            skillDto.setLevel(skill.getLevel());
-            return skillDto;
+            SkillResponseDTO skillResponseDto = new SkillResponseDTO();
+            skillResponseDto.setName(skill.getName());
+            skillResponseDto.setLevel(skill.getLevel());
+            return skillResponseDto;
         }).collect(Collectors.toList()));
 
         cv.setWorkExperience(workExperienceDAO.findWorkExperiencesByUserId(userId).stream().map(work -> {
-            WorkExperienceDTO workDto = new WorkExperienceDTO();
+            WorkExperienceResponseDTO workDto = new WorkExperienceResponseDTO();
             workDto.setCompany(work.getCompany());
             workDto.setDescription(work.getDescription());
             workDto.setJobTitle(work.getJobTitle());
@@ -202,21 +203,21 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public void updatePassword(Long id, PasswordChangeDTO passwordChangeDTO) {
+    public void updatePassword(Long id, PasswordChangeRequestDTO passwordChangeRequestDTO) {
         User user = userDAO.findById(id);
         if (user == null) {
             throw new RuntimeException("Error: User not found!");
         }
-        if (!user.getEmail().equals(passwordChangeDTO.getEmail())) {
+        if (!user.getEmail().equals(passwordChangeRequestDTO.getEmail())) {
             throw new RuntimeException("Error: Invalid email!");
         }
 
-        if (!passwordEncoder.matches(passwordChangeDTO.getPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(passwordChangeRequestDTO.getPassword(), user.getPassword())) {
             throw new RuntimeException("Error: Old password does not match!");
         }
 
 
-        user.setPassword(passwordEncoder.encode(passwordChangeDTO.getNewPassword()));
+        user.setPassword(passwordEncoder.encode(passwordChangeRequestDTO.getNewPassword()));
         user.setUpdatedAt(LocalDate.now());
         userDAO.save(user);
     }

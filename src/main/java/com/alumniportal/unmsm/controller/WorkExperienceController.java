@@ -1,6 +1,6 @@
 package com.alumniportal.unmsm.controller;
 
-import com.alumniportal.unmsm.dto.WorkExperienceDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.WorkExperienceResponseDTO;
 import com.alumniportal.unmsm.model.WorkExperience;
 import com.alumniportal.unmsm.service.interfaces.IWorkExperienceService;
 import lombok.RequiredArgsConstructor;
@@ -19,17 +19,17 @@ public class WorkExperienceController {
 
 
     @GetMapping("/all")
-    public List<WorkExperienceDTO> findAll() {
+    public List<WorkExperienceResponseDTO> findAll() {
         return workExperienceService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
-        WorkExperienceDTO workExperienceDTO = workExperienceService.findById(id);
-        if (workExperienceDTO == null) {
+        WorkExperienceResponseDTO workExperienceResponseDTO = workExperienceService.findById(id);
+        if (workExperienceResponseDTO == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(workExperienceDTO);
+        return ResponseEntity.ok(workExperienceResponseDTO);
     }
 
     @PostMapping("/save/{userId}")
@@ -61,7 +61,7 @@ public class WorkExperienceController {
     }
 
     @GetMapping("/user/{userId}")
-    public List<WorkExperienceDTO> findWorkExperiencesByUserId(@PathVariable Long userId) {
+    public List<WorkExperienceResponseDTO> findWorkExperiencesByUserId(@PathVariable Long userId) {
         return workExperienceService.findWorkExperiencesByUserId(userId);
     }
 

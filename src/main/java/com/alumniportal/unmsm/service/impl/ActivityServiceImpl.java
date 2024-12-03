@@ -1,6 +1,12 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.dto.ActivityDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.ActivityResponseDTO;
+import com.alumniportal.unmsm.dto.RequestDTO.ActivityRequestDTO;
+import com.alumniportal.unmsm.exception.NotFoundException.ActivityNotFoundException;
+import com.alumniportal.unmsm.exception.NotFoundException.CompanyNotFoundException;
+import com.alumniportal.unmsm.exception.NotFoundException.ResourceNotFoundException;
+import com.alumniportal.unmsm.exception.NotFoundException.UserNotFoundException;
+import com.alumniportal.unmsm.mapper.ActivityMapper;
 import com.alumniportal.unmsm.model.Activity;
 import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.model.User;
@@ -11,7 +17,6 @@ import com.alumniportal.unmsm.service.interfaces.IActivityService;
 import com.alumniportal.unmsm.util.EmailTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,27 +47,28 @@ public class ActivityServiceImpl implements IActivityService {
 
     private final ICompanyDAO companyDAO;
 
-    private final ModelMapper modelMapper;
+    private final ActivityMapper activityMapper;
 
     private final S3Client s3Client;
 
     private final LambdaClient lambdaClient;
 
     @Override
-    public List<ActivityDTO> findAll() {
-        return activityDAO.findAll()
-                .stream()
-                .map((activity) -> modelMapper.map(activity, ActivityDTO.class))
-                .toList();
+    public List<ActivityResponseDTO> findAll() {
+        List<Activity> activities = activityDAO.findAll();
+        if (activities.isEmpty()) {
+            throw new ResourceNotFoundException("No se encontraron actividades");
+        }
+        return activityMapper.entityListToDTOList(activities);
     }
 
     @Override
-    public ActivityDTO findById(Long id) {
+    public ActivityResponseDTO findById(Long id) {
         Activity activity = activityDAO.findById(id);
         if (activity == null) {
-            return null;
+            throw new ResourceNotFoundException("No se encontró la actividad con id: " + id);
         }
-        return modelMapper.map(activity, ActivityDTO.class);
+        return activityMapper.entityToDTO(activity);
     }
 
     @Override
@@ -74,7 +80,7 @@ public class ActivityServiceImpl implements IActivityService {
     public void deleteById(Long id) throws Exception {
         Activity activity = activityDAO.findById(id);
         if (activity == null) {
-            throw new Exception("Activity with id " + id + " not found");
+            throw new ResourceNotFoundException("Activity with id " + id + " not found");
         }
         if (activity.getUrl() != null) {
             try {
@@ -87,28 +93,34 @@ public class ActivityServiceImpl implements IActivityService {
     }
 
     @Override
-    public List<ActivityDTO> findActivitiesByUserId(Long userId) {
-        return activityDAO.findActivitiesByUserId(userId)
-                .stream()
-                .map(activity -> modelMapper.map(activity, ActivityDTO.class))
-                .toList();
+    public List<ActivityResponseDTO> findActivitiesByUserId(Long userId) {
+         List<Activity> activities = activityDAO.findActivitiesByUserId(userId);
+         if(activities.isEmpty())
+         {
+             throw new ResourceNotFoundException("No se encontraron actividades para el usuario con id: " + userId);
+         }
+         return activityMapper.entityListToDTOList(activities);
     }
 
     @Override
-    public List<ActivityDTO> findActivitiesByCompanyId(Long companyId) {
-        return activityDAO.findActivitiesByCompanyId(companyId)
-                .stream()
-                .map(activity -> modelMapper.map(activity, ActivityDTO.class))
-                .toList();
+    public List<ActivityResponseDTO> findActivitiesByCompanyId(Long companyId) {
+        List<Activity> activities = activityDAO.findActivitiesByCompanyId(companyId);
+        if(activities.isEmpty())
+        {
+            throw new ResourceNotFoundException("No se encontraron actividades para la empresa con id: " + companyId);
+        }
+        return activityMapper.entityListToDTOList(activities);
     }
 
     @Override
-    public void saveActivityWithImageByUserId(Activity activity, Long userId, MultipartFile image) throws IOException {
+    public void saveActivityWithImageByUserId(ActivityRequestDTO activityRequestDTO, Long userId, MultipartFile image) throws IOException {
         // Buscar el usuario
         User user = userDAO.findById(userId);
         if (user == null) {
-            throw new IllegalArgumentException("Usuario no encontrado");
+            throw new ResourceNotFoundException("Usuario no encontrado");
         }
+
+        Activity activity = activityMapper.requestDtoToEntity(activityRequestDTO);
 
         // Setear el usuario y la fecha de creación
         activity.setUser(user);
@@ -151,12 +163,14 @@ public class ActivityServiceImpl implements IActivityService {
     }
 
     @Override
-    public void saveActivityByUserId(Activity activity, Long userId) {
+    public void saveActivityByUserId(ActivityRequestDTO activityRequestDTO, Long userId) {
         // Buscar el usuario
         User user = userDAO.findById(userId);
         if (user == null) {
-            throw new IllegalArgumentException("Usuario no encontrado");
+            throw new UserNotFoundException("Usuario con id " + userId + " no encontrado");
         }
+
+        Activity activity = activityMapper.requestDtoToEntity(activityRequestDTO);
 
         // Setear el usuario y la fecha de creación
         activity.setUser(user);
@@ -170,13 +184,14 @@ public class ActivityServiceImpl implements IActivityService {
     }
 
     @Override
-    public void saveActivityByCompanyId(Activity activity, Long companyId) {
+    public void saveActivityByCompanyId(ActivityRequestDTO activityRequestDTO, Long companyId) {
 
         Company company = companyDAO.findById(companyId);
         if (company == null) {
-            throw new IllegalArgumentException("Empresa no encontrada");
+            throw new CompanyNotFoundException("Empresa con id " + companyId + " no encontrada");
         }
 
+        Activity activity = activityMapper.requestDtoToEntity(activityRequestDTO);
         // Setea la compañía y la fecha de creación
         activity.setCompany(company);
         activity.setCreatedAt(LocalDate.now());
@@ -229,7 +244,7 @@ public class ActivityServiceImpl implements IActivityService {
     public void updateActivity(Long id, Map<String, Object> fields) {
         Activity activity = activityDAO.findById(id);
         if (activity == null) {
-            throw new RuntimeException("Error: activity not found!");
+            throw new ActivityNotFoundException("Activity with id " + id + " not found");
         }
 
         fields.forEach((k, v) -> {

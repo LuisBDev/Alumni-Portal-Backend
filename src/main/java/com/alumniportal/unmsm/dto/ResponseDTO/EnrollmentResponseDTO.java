@@ -1,4 +1,4 @@
-package com.alumniportal.unmsm.dto;
+package com.alumniportal.unmsm.dto.ResponseDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,10 +11,9 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ApplicationDTO {
+public class EnrollmentResponseDTO {
 
     private Long id;
-
     private Long userId;
     private String userStudentCode;
     private String userName;
@@ -23,11 +22,8 @@ public class ApplicationDTO {
     private String userEmail;
     private String userFaculty;
     private String userCareer;
-
-    private LocalDate applicationDate;
+    private LocalDate enrollmentDate;
     private String status;
 
-    private Long jobOfferId;
-    private String jobOfferTitle;
-
+    private Long activityId;
 }

@@ -1,6 +1,6 @@
 package com.alumniportal.unmsm.controller;
 
-import com.alumniportal.unmsm.dto.SkillDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.SkillResponseDTO;
 import com.alumniportal.unmsm.model.Skill;
 import com.alumniportal.unmsm.service.interfaces.ISkillService;
 import lombok.RequiredArgsConstructor;
@@ -18,17 +18,17 @@ public class SkillController {
     private final ISkillService skillService;
 
     @GetMapping("/all")
-    public List<SkillDTO> findAll() {
+    public List<SkillResponseDTO> findAll() {
         return skillService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
-        SkillDTO skillDTO = skillService.findById(id);
-        if (skillDTO == null) {
+        SkillResponseDTO skillResponseDTO = skillService.findById(id);
+        if (skillResponseDTO == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(skillDTO);
+        return ResponseEntity.ok(skillResponseDTO);
     }
 
     @PostMapping("/save/{userId}")
@@ -59,7 +59,7 @@ public class SkillController {
     }
 
     @GetMapping("/user/{userId}")
-    public List<SkillDTO> findSkillsByUserId(@PathVariable Long userId) {
+    public List<SkillResponseDTO> findSkillsByUserId(@PathVariable Long userId) {
         return skillService.findSkillsByUserId(userId);
     }
 

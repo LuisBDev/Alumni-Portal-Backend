@@ -1,6 +1,6 @@
 package com.alumniportal.unmsm.controller;
 
-import com.alumniportal.unmsm.dto.ProjectDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.ProjectResponseDTO;
 import com.alumniportal.unmsm.model.Project;
 import com.alumniportal.unmsm.service.interfaces.IProjectService;
 import lombok.RequiredArgsConstructor;
@@ -18,17 +18,17 @@ public class ProjectController {
     private final IProjectService projectService;
 
     @GetMapping("/all")
-    public List<ProjectDTO> findAll() {
+    public List<ProjectResponseDTO> findAll() {
         return projectService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
-        ProjectDTO projectDTO = projectService.findById(id);
-        if (projectDTO == null) {
+        ProjectResponseDTO projectResponseDTO = projectService.findById(id);
+        if (projectResponseDTO == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(projectDTO);
+        return ResponseEntity.ok(projectResponseDTO);
     }
 
     @PostMapping("/save/{userId}")
@@ -59,7 +59,7 @@ public class ProjectController {
     }
 
     @GetMapping("/user/{userId}")
-    public List<ProjectDTO> findProjectsByUserId(@PathVariable Long userId) {
+    public List<ProjectResponseDTO> findProjectsByUserId(@PathVariable Long userId) {
         return projectService.findProjectsByUserId(userId);
     }
 

@@ -1,8 +1,8 @@
 package com.alumniportal.unmsm.controller;
 
-import com.alumniportal.unmsm.dto.PasswordChangeDTO;
-import com.alumniportal.unmsm.dto.UserCVDTO;
-import com.alumniportal.unmsm.dto.UserDTO;
+import com.alumniportal.unmsm.dto.RequestDTO.PasswordChangeRequestDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.UserCVResponseDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.UserResponseDTO;
 import com.alumniportal.unmsm.service.interfaces.IUserService;
 import com.alumniportal.unmsm.util.CVGenerator;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class UserController {
 
 //    @PostMapping("/loginAcademic")
 //    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDTO) {
-//        UserDTO userDTO = userService.validateLogin(loginRequestDTO.getEmail(), loginRequestDTO.getPassword());
+//        UserResponseDTO userDTO = userService.validateLogin(loginRequestDTO.getEmail(), loginRequestDTO.getPassword());
 //        if (userDTO == null) {
 //            return ResponseEntity.status(401).body("Invalid email or password");
 //        }
@@ -47,25 +47,25 @@ public class UserController {
 
 
     @GetMapping("/all")
-    public List<UserDTO> findAll() {
+    public List<UserResponseDTO> findAll() {
         return userService.findAll();
     }
 
     @GetMapping("/{id}")
     @ResponseBody
     public ResponseEntity<?> findById(@PathVariable Long id) {
-        UserDTO userDTO = userService.findById(id);
-        if (userDTO == null) {
+        UserResponseDTO userResponseDTO = userService.findById(id);
+        if (userResponseDTO == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(userDTO);
+        return ResponseEntity.ok(userResponseDTO);
     }
 
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
-        UserDTO userDTO = userService.findById(id);
-        if (userDTO == null) {
+        UserResponseDTO userResponseDTO = userService.findById(id);
+        if (userResponseDTO == null) {
             return ResponseEntity.status(404).body("Error: User not found!");
         }
         userService.deleteById(id);
@@ -87,7 +87,7 @@ public class UserController {
     @GetMapping("/cv/download/{userId}")
     public ResponseEntity<?> downloadUserCV(@PathVariable Long userId) throws IOException {
 
-        UserCVDTO cv = userService.getUserCV(userId);
+        UserCVResponseDTO cv = userService.getUserCV(userId);
 
         byte[] pdfContent = CVGenerator.generateCV(cv);
 
@@ -102,9 +102,9 @@ public class UserController {
     }
 
     @PostMapping("/updatePassword/{id}")
-    public ResponseEntity<?> updatePassword(@PathVariable Long id, @RequestBody PasswordChangeDTO passwordChangeDTO) {
+    public ResponseEntity<?> updatePassword(@PathVariable Long id, @RequestBody PasswordChangeRequestDTO passwordChangeRequestDTO) {
         try {
-            userService.updatePassword(id, passwordChangeDTO);
+            userService.updatePassword(id, passwordChangeRequestDTO);
             return ResponseEntity.ok("Password updated successfully!");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

@@ -1,6 +1,6 @@
 package com.alumniportal.unmsm.controller;
 
-import com.alumniportal.unmsm.dto.ApplicationDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.ApplicationResponseDTO;
 import com.alumniportal.unmsm.model.Application;
 import com.alumniportal.unmsm.service.interfaces.IApplicationService;
 import lombok.RequiredArgsConstructor;
@@ -18,17 +18,17 @@ public class ApplicationController {
     private final IApplicationService applicationService;
 
     @GetMapping("/all")
-    public List<ApplicationDTO> findAll() {
+    public List<ApplicationResponseDTO> findAll() {
         return applicationService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
-        ApplicationDTO applicationDTO = applicationService.findById(id);
-        if (applicationDTO == null) {
+        ApplicationResponseDTO applicationResponseDTO = applicationService.findById(id);
+        if (applicationResponseDTO == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(applicationDTO);
+        return ResponseEntity.ok(applicationResponseDTO);
     }
 
     @PostMapping("/save")
@@ -50,22 +50,22 @@ public class ApplicationController {
     }
 
     @GetMapping("/user/{userId}")
-    public List<ApplicationDTO> findApplicationsByUserId(@PathVariable Long userId) {
+    public List<ApplicationResponseDTO> findApplicationsByUserId(@PathVariable Long userId) {
         return applicationService.findApplicationsByUserId(userId);
     }
 
     @GetMapping("/job-offer/{jobOfferId}")
-    public List<ApplicationDTO> findApplicationsByJobOfferId(@PathVariable Long jobOfferId) {
+    public List<ApplicationResponseDTO> findApplicationsByJobOfferId(@PathVariable Long jobOfferId) {
         return applicationService.findApplicationsByJobOfferId(jobOfferId);
     }
 
     @GetMapping("/user/{userId}/job-offer/{jobOfferId}")
-    public ResponseEntity<ApplicationDTO> findApplicationByUserIdAndJobOfferId(@PathVariable Long userId, @PathVariable Long jobOfferId) {
-        ApplicationDTO applicationDTO = applicationService.findApplicationByUserIdAndJobOfferId(userId, jobOfferId);
-        if (applicationDTO == null) {
+    public ResponseEntity<ApplicationResponseDTO> findApplicationByUserIdAndJobOfferId(@PathVariable Long userId, @PathVariable Long jobOfferId) {
+        ApplicationResponseDTO applicationResponseDTO = applicationService.findApplicationByUserIdAndJobOfferId(userId, jobOfferId);
+        if (applicationResponseDTO == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(applicationDTO);
+        return ResponseEntity.ok(applicationResponseDTO);
     }
 
 

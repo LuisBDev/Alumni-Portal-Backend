@@ -1,4 +1,4 @@
-package com.alumniportal.unmsm.dto;
+package com.alumniportal.unmsm.dto.ResponseDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthResponseDTO {
+public class AuthTokenResponseDTO {
 
     private String token;
 

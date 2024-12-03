@@ -2,7 +2,7 @@ package com.alumniportal.unmsm.service.impl;
 
 import com.alumniportal.unmsm.Data.CertificationProvider;
 import com.alumniportal.unmsm.Data.UserProvider;
-import com.alumniportal.unmsm.dto.CertificationDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.CertificationResponseDTO;
 import com.alumniportal.unmsm.model.Certification;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.interfaces.ICertificationDAO;
@@ -50,7 +50,7 @@ class CertificationServiceImplTest {
 
         when(certificationDAO.findAll()).thenReturn(CertificationProvider.certificationList());
 
-        List<CertificationDTO> result = certificationService.findAll();
+        List<CertificationResponseDTO> result = certificationService.findAll();
 
         assertEquals(3, result.size());
         verify(certificationDAO, times(1)).findAll();
@@ -60,7 +60,7 @@ class CertificationServiceImplTest {
     void testFindAll_ReturnsEmptyList_WhenNoCertificationsExist() {
         when(certificationDAO.findAll()).thenReturn(List.of());
 
-        List<CertificationDTO> result = certificationService.findAll();
+        List<CertificationResponseDTO> result = certificationService.findAll();
 
         assertTrue(result.isEmpty());
         verify(certificationDAO, times(1)).findAll();
@@ -73,7 +73,7 @@ class CertificationServiceImplTest {
 
         when(certificationDAO.findById(anyLong())).thenReturn(certification);
 
-        CertificationDTO result = certificationService.findById(1L);
+        CertificationResponseDTO result = certificationService.findById(1L);
 
         assertNotNull(result);
         assertEquals("Python", result.getName());
@@ -84,7 +84,7 @@ class CertificationServiceImplTest {
     void testFindById_ReturnsNull_WhenCertificationDoesNotExist() {
         when(certificationDAO.findById(anyLong())).thenReturn(null);
 
-        CertificationDTO result = certificationService.findById(1L);
+        CertificationResponseDTO result = certificationService.findById(1L);
 
         assertNull(result);
         verify(certificationDAO, times(1)).findById(anyLong());
@@ -119,7 +119,7 @@ class CertificationServiceImplTest {
 
         when(certificationDAO.findCertificationsByUserId(anyLong())).thenReturn(CertificationProvider.certificationList());
 
-        List<CertificationDTO> result = certificationService.findCertificationsByUserId(1L);
+        List<CertificationResponseDTO> result = certificationService.findCertificationsByUserId(1L);
 
         assertEquals(3, result.size());
         verify(certificationDAO, times(1)).findCertificationsByUserId(1L);
@@ -129,7 +129,7 @@ class CertificationServiceImplTest {
     void findCertificationsByUserId_ReturnsEmptyList_WhenNoCertificationsExist() {
         when(certificationDAO.findCertificationsByUserId(anyLong())).thenReturn(List.of());
 
-        List<CertificationDTO> result = certificationService.findCertificationsByUserId(1L);
+        List<CertificationResponseDTO> result = certificationService.findCertificationsByUserId(1L);
 
         assertTrue(result.isEmpty());
         verify(certificationDAO, times(1)).findCertificationsByUserId(1L);

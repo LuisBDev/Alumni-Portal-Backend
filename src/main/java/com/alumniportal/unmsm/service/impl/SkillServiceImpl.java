@@ -1,6 +1,6 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.dto.SkillDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.SkillResponseDTO;
 import com.alumniportal.unmsm.model.Skill;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.interfaces.ISkillDAO;
@@ -27,20 +27,20 @@ public class SkillServiceImpl implements ISkillService {
 
 
     @Override
-    public List<SkillDTO> findAll() {
+    public List<SkillResponseDTO> findAll() {
         return skillDAO.findAll()
                 .stream()
-                .map(skill -> modelMapper.map(skill, SkillDTO.class))
+                .map(skill -> modelMapper.map(skill, SkillResponseDTO.class))
                 .toList();
     }
 
     @Override
-    public SkillDTO findById(Long id) {
+    public SkillResponseDTO findById(Long id) {
         Skill skill = skillDAO.findById(id);
         if (skill == null) {
             return null;
         }
-        return modelMapper.map(skill, SkillDTO.class);
+        return modelMapper.map(skill, SkillResponseDTO.class);
     }
 
     @Override
@@ -54,10 +54,10 @@ public class SkillServiceImpl implements ISkillService {
     }
 
     @Override
-    public List<SkillDTO> findSkillsByUserId(Long userId) {
+    public List<SkillResponseDTO> findSkillsByUserId(Long userId) {
         return skillDAO.findSkillsByUserId(userId)
                 .stream()
-                .map(skill -> modelMapper.map(skill, SkillDTO.class))
+                .map(skill -> modelMapper.map(skill, SkillResponseDTO.class))
                 .toList();
     }
 

@@ -1,19 +1,19 @@
 package com.alumniportal.unmsm.service.interfaces;
 
-import com.alumniportal.unmsm.dto.AuthCompanyResponse;
-import com.alumniportal.unmsm.dto.AuthUserResponse;
-import com.alumniportal.unmsm.dto.LoginRequestDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.AuthCompanyResponseDTO;
+import com.alumniportal.unmsm.dto.ResponseDTO.AuthUserResponseDTO;
+import com.alumniportal.unmsm.dto.RequestDTO.LoginRequestDTO;
 import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.model.User;
 
 public interface IAuthService {
 
 
-    AuthUserResponse loginAcademic(LoginRequestDTO loginRequestDTO);
+    AuthUserResponseDTO loginAcademic(LoginRequestDTO loginRequestDTO);
 
-    AuthCompanyResponse loginCompany(LoginRequestDTO loginRequestDTO);
+    AuthCompanyResponseDTO loginCompany(LoginRequestDTO loginRequestDTO);
 
-    AuthUserResponse registerAcademic(User user);
+    AuthUserResponseDTO registerAcademic(User user);
 
-    AuthCompanyResponse registerCompany(Company company);
+    AuthCompanyResponseDTO registerCompany(Company company);
 }

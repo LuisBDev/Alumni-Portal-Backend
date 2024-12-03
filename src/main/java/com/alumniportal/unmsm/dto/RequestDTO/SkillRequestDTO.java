@@ -1,4 +1,4 @@
-package com.alumniportal.unmsm.dto;
+package com.alumniportal.unmsm.dto.RequestDTO;
 
 import lombok.*;
 
@@ -7,11 +7,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SkillDTO {
+public class SkillRequestDTO {
 
-    private Long id;
     private String name;
     private String level;
-
-    private Long userId;
 }
