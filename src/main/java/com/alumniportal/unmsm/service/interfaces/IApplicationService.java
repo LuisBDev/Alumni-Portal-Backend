@@ -1,5 +1,6 @@
 package com.alumniportal.unmsm.service.interfaces;
 
+import com.alumniportal.unmsm.dto.RequestDTO.ApplicationRequestDTO;
 import com.alumniportal.unmsm.dto.ResponseDTO.ApplicationResponseDTO;
 import com.alumniportal.unmsm.model.Application;
 
@@ -21,5 +22,5 @@ public interface IApplicationService {
 
     ApplicationResponseDTO findApplicationByUserIdAndJobOfferId(Long userId, Long jobOfferId);
 
-    public void saveApplication(Application application);
+    public void saveApplication(ApplicationRequestDTO applicationRequestDTO);
 }
