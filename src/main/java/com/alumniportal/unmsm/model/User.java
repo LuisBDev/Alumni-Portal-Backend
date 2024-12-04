@@ -114,7 +114,7 @@ public class User extends AbstractEntity implements UserDetails {
     private List<Enrollment> enrollmentList;
 
     //    Relacion con Application
-    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Application> applicationList;
 

@@ -1,6 +1,9 @@
 package com.alumniportal.unmsm.service.impl;
 
+import com.alumniportal.unmsm.dto.RequestDTO.ApplicationRequestDTO;
 import com.alumniportal.unmsm.dto.ResponseDTO.ApplicationResponseDTO;
+import com.alumniportal.unmsm.exception.AppException;
+import com.alumniportal.unmsm.mapper.ApplicationMapper;
 import com.alumniportal.unmsm.model.Application;
 import com.alumniportal.unmsm.persistence.interfaces.IApplicationDAO;
 import com.alumniportal.unmsm.persistence.interfaces.IJobOfferDAO;
@@ -35,25 +38,27 @@ public class ApplicationServiceImpl implements IApplicationService {
 
     private final IJobOfferDAO jobOfferDAO;
 
-    private final ModelMapper modelMapper;
+    private final ApplicationMapper applicationMapper;
 
     private final LambdaClient lambdaClient;
 
     @Override
     public List<ApplicationResponseDTO> findAll() {
-        return applicationDAO.findAll()
-                .stream()
-                .map(application -> modelMapper.map(application, ApplicationResponseDTO.class))
-                .toList();
+        List<Application> applications = applicationDAO.findAll();
+        if (applications.isEmpty()) {
+            throw new AppException("Error: There are no applications", "NOT_FOUND");
+        }
+        return applicationMapper.entityListToDTOList(applications);
+
     }
 
     @Override
     public ApplicationResponseDTO findById(Long id) {
         Application application = applicationDAO.findById(id);
         if (application == null) {
-            return null;
+            throw new AppException("Error: Application with id " + id + " not found", "NOT_FOUND");
         }
-        return modelMapper.map(application, ApplicationResponseDTO.class);
+        return applicationMapper.entityToDTO(application);
     }
 
     @Override
@@ -63,49 +68,57 @@ public class ApplicationServiceImpl implements IApplicationService {
 
     @Override
     public void deleteById(Long id) {
+        Application application = applicationDAO.findById(id);
+        if (application == null) {
+            throw new AppException("Error: Application with id " + id + " not found", "NOT_FOUND");
+        }
         applicationDAO.deleteById(id);
     }
 
     @Override
     public List<ApplicationResponseDTO> findApplicationsByUserId(Long userId) {
-        return applicationDAO.findApplicationsByUserId(userId)
-                .stream()
-                .map(application -> modelMapper.map(application, ApplicationResponseDTO.class))
-                .toList();
+        List<Application> applicationsByUserId = applicationDAO.findApplicationsByUserId(userId);
+        if (applicationsByUserId.isEmpty()) {
+            throw new AppException("Error: There are no applications for user with id " + userId, "NOT_FOUND");
+        }
+        return applicationMapper.entityListToDTOList(applicationsByUserId);
     }
 
     @Override
     public List<ApplicationResponseDTO> findApplicationsByJobOfferId(Long jobOfferId) {
-        return applicationDAO.findApplicationsByJobOfferId(jobOfferId)
-                .stream()
-                .map(application -> modelMapper.map(application, ApplicationResponseDTO.class))
-                .toList();
+        List<Application> applicationsByJobOfferId = applicationDAO.findApplicationsByJobOfferId(jobOfferId);
+        if (applicationsByJobOfferId.isEmpty()) {
+            throw new AppException("Error: There are no applications for job offer with id " + jobOfferId, "NOT_FOUND");
+        }
+        return applicationMapper.entityListToDTOList(applicationsByJobOfferId);
     }
 
     @Override
     public ApplicationResponseDTO findApplicationByUserIdAndJobOfferId(Long userId, Long jobOfferId) {
         Application application = applicationDAO.findApplicationByUserIdAndJobOfferId(userId, jobOfferId);
         if (application == null) {
-            return null;
+            throw new AppException("Error: Application not found for user with id " + userId + " and job offer with id " + jobOfferId, "NOT_FOUND");
         }
-        return modelMapper.map(application, ApplicationResponseDTO.class);
+        return applicationMapper.entityToDTO(application);
     }
 
 
-    public void saveApplication(Application application) {
-        User user = userDAO.findById(application.getUser().getId());
+    public void saveApplication(ApplicationRequestDTO applicationRequestDTO) {
+        User user = userDAO.findById(applicationRequestDTO.getUser().getId());
         if (user == null) {
-            throw new IllegalArgumentException("Error: User not found!");
+            throw new AppException("Error: User with id " + applicationRequestDTO.getUser().getId() + " not found", "NOT_FOUND");
         }
 
-        JobOffer jobOffer = jobOfferDAO.findById(application.getJobOffer().getId());
+        JobOffer jobOffer = jobOfferDAO.findById(applicationRequestDTO.getJobOffer().getId());
         if (jobOffer == null) {
-            throw new IllegalArgumentException("Error: JobOffer not found!");
+            throw new AppException("Error: JobOffer with id " + applicationRequestDTO.getJobOffer().getId() + " not found", "NOT_FOUND");
         }
 
         if (applicationDAO.findApplicationByUserIdAndJobOfferId(user.getId(), jobOffer.getId()) != null) {
-            throw new IllegalArgumentException("Error: User already applied to this JobOffer!");
+            throw new AppException("Error: User with id " + user.getId() + " has already applied to JobOffer with id " + jobOffer.getId(), "BAD_REQUEST");
         }
+
+        Application application = applicationMapper.requestDtoToEntity(applicationRequestDTO);
 
 
         // Establecemos las relaciones
@@ -116,15 +129,6 @@ public class ApplicationServiceImpl implements IApplicationService {
 
         // Persistimos la aplicación
         applicationDAO.save(application);
-
-        // Actualizamos el user con la nueva aplicación
-        user.getApplicationList().add(application);
-        userDAO.save(user);
-
-        // Actualizamos la lista de aplicaciones en el JobOffer
-        jobOffer.getApplicationList().add(application);
-        jobOfferDAO.save(jobOffer);
-
 
         invokeLambdaWhenApplicationIsCreated("AlumniPortal | Successful Application " + application.getId(), application);
 
