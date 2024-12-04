@@ -25,51 +25,25 @@ public class UserController {
     //    Inyeccion por constructor mediante la anotacion @RequiredArgsConstructor
     private final IUserService userService;
 
-//    @PostMapping("/loginAcademic")
-//    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDTO) {
-//        UserResponseDTO userDTO = userService.validateLogin(loginRequestDTO.getEmail(), loginRequestDTO.getPassword());
-//        if (userDTO == null) {
-//            return ResponseEntity.status(401).body("Invalid email or password");
-//        }
-//        return ResponseEntity.ok(userDTO);
-//
-//    }
-//
-//    @PostMapping("/registerAcademic")
-//    public ResponseEntity<?> save(@RequestBody User user) {
-//        try {
-//            userService.saveUser(user);
-//            return ResponseEntity.ok("User registered successfully!");
-//        } catch (Exception e) {
-//            return ResponseEntity.badRequest().body(e.getMessage());
-//        }
-//    }
-
 
     @GetMapping("/all")
-    public List<UserResponseDTO> findAll() {
-        return userService.findAll();
+    public ResponseEntity<List<UserResponseDTO>> findAll() {
+        List<UserResponseDTO> userResponseDTOList = userService.findAll();
+        return ResponseEntity.ok(userResponseDTOList);
     }
 
     @GetMapping("/{id}")
     @ResponseBody
-    public ResponseEntity<?> findById(@PathVariable Long id) {
+    public ResponseEntity<UserResponseDTO> findById(@PathVariable Long id) {
         UserResponseDTO userResponseDTO = userService.findById(id);
-        if (userResponseDTO == null) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok(userResponseDTO);
     }
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteById(@PathVariable Long id) {
-        UserResponseDTO userResponseDTO = userService.findById(id);
-        if (userResponseDTO == null) {
-            return ResponseEntity.status(404).body("Error: User not found!");
-        }
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         userService.deleteById(id);
-        return ResponseEntity.ok("User deleted successfully!");
+        return ResponseEntity.noContent().build();
     }
 
 
@@ -102,13 +76,9 @@ public class UserController {
     }
 
     @PostMapping("/updatePassword/{id}")
-    public ResponseEntity<?> updatePassword(@PathVariable Long id, @RequestBody PasswordChangeRequestDTO passwordChangeRequestDTO) {
-        try {
-            userService.updatePassword(id, passwordChangeRequestDTO);
-            return ResponseEntity.ok("Password updated successfully!");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<Void> updatePassword(@PathVariable Long id, @RequestBody PasswordChangeRequestDTO passwordChangeRequestDTO) {
+        userService.updatePassword(id, passwordChangeRequestDTO);
+        return ResponseEntity.noContent().build();
     }
 
 

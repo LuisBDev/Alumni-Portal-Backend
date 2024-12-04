@@ -2,6 +2,8 @@ package com.alumniportal.unmsm.service.impl;
 
 import com.alumniportal.unmsm.dto.RequestDTO.PasswordChangeRequestDTO;
 import com.alumniportal.unmsm.dto.ResponseDTO.*;
+import com.alumniportal.unmsm.exception.AppException;
+import com.alumniportal.unmsm.mapper.UserMapper;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.interfaces.*;
 import com.alumniportal.unmsm.service.interfaces.IActivityService;
@@ -35,7 +37,7 @@ public class UserServiceImpl implements IUserService {
 
     private final ISkillDAO skillDAO;
 
-    private final ModelMapper modelMapper;
+    private final UserMapper userMapper;
 
     private final ImageManagement imageManagement;
 
@@ -47,16 +49,20 @@ public class UserServiceImpl implements IUserService {
     @Override
     public List<UserResponseDTO> findAll() {
         List<User> users = userDAO.findAll();
-        return users.stream()
-                .map(user -> modelMapper.map(user, UserResponseDTO.class))
-                .toList();
+        if (users.isEmpty()) {
+            throw new AppException("No users found!", "NOT_FOUND");
+        }
+        return userMapper.entityListToDTOList(users);
     }
 
     @Override
     public UserResponseDTO findById(Long id) {
 
         User user = userDAO.findById(id);
-        return modelMapper.map(user, UserResponseDTO.class);
+        if (user == null) {
+            throw new AppException("User not found!", "NOT_FOUND");
+        }
+        return userMapper.entityToDTO(user);
 
     }
 
@@ -69,7 +75,7 @@ public class UserServiceImpl implements IUserService {
     public void deleteById(Long id) {
         User user = userDAO.findById(id);
         if (user == null) {
-            throw new RuntimeException("Error: User not found!");
+            throw new AppException("User not found!", "NOT_FOUND");
         }
         if (user.getPhotoUrl() != null) {
             imageManagement.deleteImageByUrl(user.getPhotoUrl());
@@ -82,7 +88,7 @@ public class UserServiceImpl implements IUserService {
                         try {
                             activityService.deleteActivityImage(activity.getId());
                         } catch (Exception e) {
-                            throw new RuntimeException(e);
+                            throw new AppException("Error deleting activity image", "INTERNAL_SERVER_ERROR");
                         }
                     });
         }
@@ -97,14 +103,17 @@ public class UserServiceImpl implements IUserService {
     @Override
     public UserResponseDTO findByEmail(String email) {
         User user = userDAO.findByEmail(email);
-        return modelMapper.map(user, UserResponseDTO.class);
+        if (user == null) {
+            throw new AppException("User not found!", "NOT_FOUND");
+        }
+        return userMapper.entityToDTO(user);
     }
 
     @Override
     public void saveUser(User user) {
         boolean emailExists = userDAO.existsByEmail(user.getEmail());
         if (emailExists) {
-            throw new RuntimeException("Error: Email already exists!");
+            throw new AppException("Error: Email is already in use!", "CONFLICT");
         } else {
             user.setCreatedAt(LocalDate.now());
             userDAO.save(user);
@@ -115,7 +124,7 @@ public class UserServiceImpl implements IUserService {
     public void updateUser(Long id, Map<String, Object> fields) {
         User user = userDAO.findById(id);
         if (user == null) {
-            throw new RuntimeException("Error: User not found!");
+            throw new AppException("User not found!", "NOT_FOUND");
         }
         fields.forEach((k, v) -> {
             Field field = ReflectionUtils.findField(User.class, k);
@@ -131,19 +140,19 @@ public class UserServiceImpl implements IUserService {
     public UserResponseDTO validateLogin(String email, String password) {
         User user = userDAO.findByEmail(email);
         if (user == null) {
-            throw new RuntimeException("Error: User not found!");
+            throw new AppException("Error: User not found!", "NOT_FOUND");
         }
         if (!user.getPassword().equals(password)) {
             throw new RuntimeException("Error: Invalid password!");
         }
-        return modelMapper.map(user, UserResponseDTO.class);
+        return userMapper.entityToDTO(user);
     }
 
     @Override
     public UserCVResponseDTO getUserCV(Long userId) {
         User user = userDAO.findById(userId);
         if (user == null) {
-            throw new RuntimeException("User not found");
+            throw new AppException("Error: User not found!", "NOT_FOUND");
         }
 
         UserCVResponseDTO cv = new UserCVResponseDTO();
@@ -206,14 +215,14 @@ public class UserServiceImpl implements IUserService {
     public void updatePassword(Long id, PasswordChangeRequestDTO passwordChangeRequestDTO) {
         User user = userDAO.findById(id);
         if (user == null) {
-            throw new RuntimeException("Error: User not found!");
+            throw new AppException("Error: User not found!", "NOT_FOUND");
         }
         if (!user.getEmail().equals(passwordChangeRequestDTO.getEmail())) {
-            throw new RuntimeException("Error: Invalid email!");
+            throw new AppException("Error: Email does not match!", "BAD_REQUEST");
         }
 
         if (!passwordEncoder.matches(passwordChangeRequestDTO.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Error: Old password does not match!");
+            throw new AppException("Error: Invalid password!", "BAD_REQUEST");
         }
 
 

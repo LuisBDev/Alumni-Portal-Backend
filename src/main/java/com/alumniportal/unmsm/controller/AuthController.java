@@ -10,6 +10,7 @@ import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.service.interfaces.IAuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +29,8 @@ public class AuthController {
 
     @PostMapping("/user/registerAcademic")
     public ResponseEntity<AuthUserResponseDTO> registerAcademic(@RequestBody UserRequestDTO userRequestDTO) {
-        return ResponseEntity.ok(authService.registerAcademic(userRequestDTO));
+        AuthUserResponseDTO authUserResponseDTO = authService.registerAcademic(userRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(authUserResponseDTO);
     }
 
     @PostMapping("/company/loginCompany")
@@ -38,7 +40,8 @@ public class AuthController {
 
     @PostMapping("/company/registerCompany")
     public ResponseEntity<AuthCompanyResponseDTO> registerCompany(@RequestBody CompanyRequestDTO companyRequestDTO) {
-        return ResponseEntity.ok(authService.registerCompany(companyRequestDTO));
+        AuthCompanyResponseDTO authCompanyResponseDTO = authService.registerCompany(companyRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(authCompanyResponseDTO);
     }
 
 
