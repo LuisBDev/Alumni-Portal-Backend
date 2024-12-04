@@ -1,6 +1,9 @@
 package com.alumniportal.unmsm.service.impl;
 
+import com.alumniportal.unmsm.dto.RequestDTO.CertificationRequestDTO;
 import com.alumniportal.unmsm.dto.ResponseDTO.CertificationResponseDTO;
+import com.alumniportal.unmsm.exception.AppException;
+import com.alumniportal.unmsm.mapper.CertificationMapper;
 import com.alumniportal.unmsm.model.Certification;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.interfaces.ICertificationDAO;
@@ -24,24 +27,26 @@ public class CertificationServiceImpl implements ICertificationService {
 
     private final IUserDAO userDAO;
 
-    private final ModelMapper modelMapper;
+    private final CertificationMapper certificationMapper;
 
 
     @Override
     public List<CertificationResponseDTO> findAll() {
-        return certificationDAO.findAll()
-                .stream()
-                .map(certification -> modelMapper.map(certification, CertificationResponseDTO.class))
-                .toList();
+        List<Certification> certificationList = certificationDAO.findAll();
+        if (certificationList.isEmpty()) {
+            throw new AppException("No certifications found!", "NOT_FOUND");
+        }
+        return certificationMapper.entityListToDTOList(certificationList);
     }
 
     @Override
     public CertificationResponseDTO findById(Long id) {
         Certification certification = certificationDAO.findById(id);
         if (certification == null) {
-            return null;
+            throw new AppException("Certification with id " + id + " not found!", "NOT_FOUND");
         }
-        return modelMapper.map(certification, CertificationResponseDTO.class);
+
+        return certificationMapper.entityToDTO(certification);
     }
 
     @Override
@@ -51,23 +56,31 @@ public class CertificationServiceImpl implements ICertificationService {
 
     @Override
     public void deleteById(Long id) {
+        Certification certification = certificationDAO.findById(id);
+        if (certification == null) {
+            throw new AppException("Certification with id " + id + " not found!", "NOT_FOUND");
+        }
         certificationDAO.deleteById(id);
     }
 
     @Override
     public List<CertificationResponseDTO> findCertificationsByUserId(Long userId) {
-        return certificationDAO.findCertificationsByUserId(userId)
-                .stream()
-                .map(certification -> modelMapper.map(certification, CertificationResponseDTO.class))
-                .toList();
+        List<Certification> certificationsByUserId = certificationDAO.findCertificationsByUserId(userId);
+        if (certificationsByUserId.isEmpty()) {
+            throw new AppException("User with id " + userId + " has no certifications!", "NOT_FOUND");
+        }
+        return certificationMapper.entityListToDTOList(certificationsByUserId);
     }
 
     @Override
-    public void saveCertification(Certification certification, Long userId) {
+    public void saveCertification(CertificationRequestDTO certificationRequestDTO, Long userId) {
         User user = userDAO.findById(userId);
         if (user == null) {
-            throw new RuntimeException("User not found");
+            throw new AppException("User with id " + userId + " not found!", "NOT_FOUND");
         }
+
+        Certification certification = certificationMapper.requestDtoToEntity(certificationRequestDTO);
+
 //    Asignar el usuario al certificado y persistirlo
         certification.setUser(user);
         certificationDAO.save(certification);
@@ -78,7 +91,7 @@ public class CertificationServiceImpl implements ICertificationService {
     public void updateCertification(Long id, Map<String, Object> fields) {
         Certification certification = certificationDAO.findById(id);
         if (certification == null) {
-            throw new RuntimeException("Error: certification not found!");
+            throw new AppException("Certification with id " + id + " not found!", "NOT_FOUND");
         }
 
         fields.forEach((k, v) -> {

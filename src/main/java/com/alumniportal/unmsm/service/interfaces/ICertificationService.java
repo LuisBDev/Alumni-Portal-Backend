@@ -1,5 +1,6 @@
 package com.alumniportal.unmsm.service.interfaces;
 
+import com.alumniportal.unmsm.dto.RequestDTO.CertificationRequestDTO;
 import com.alumniportal.unmsm.dto.ResponseDTO.CertificationResponseDTO;
 import com.alumniportal.unmsm.model.Certification;
 
@@ -18,7 +19,7 @@ public interface ICertificationService {
 
     List<CertificationResponseDTO> findCertificationsByUserId(Long userId);
 
-    void saveCertification(Certification certification, Long userId);
+    void saveCertification(CertificationRequestDTO certificationRequestDTO, Long userId);
 
     void updateCertification(Long id, Map<String, Object> fields);
 
