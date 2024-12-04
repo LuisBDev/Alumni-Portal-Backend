@@ -2,7 +2,10 @@ package com.alumniportal.unmsm.service.impl;
 
 import com.alumniportal.unmsm.Data.CertificationProvider;
 import com.alumniportal.unmsm.Data.UserProvider;
+import com.alumniportal.unmsm.dto.RequestDTO.CertificationRequestDTO;
 import com.alumniportal.unmsm.dto.ResponseDTO.CertificationResponseDTO;
+import com.alumniportal.unmsm.exception.AppException;
+import com.alumniportal.unmsm.mapper.CertificationMapper;
 import com.alumniportal.unmsm.model.Certification;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.interfaces.ICertificationDAO;
@@ -32,7 +35,7 @@ class CertificationServiceImplTest {
     private IUserDAO userDAO;
 
     //    Real model mapper
-    private ModelMapper modelMapper;
+    private CertificationMapper certificationMapper;
 
     @InjectMocks
     private CertificationServiceImpl certificationService;
@@ -41,8 +44,8 @@ class CertificationServiceImplTest {
     @BeforeEach
     void setUp() {
 
-        modelMapper = new ModelMapper();
-        certificationService = new CertificationServiceImpl(certificationDAO, userDAO, modelMapper);
+        certificationMapper = new CertificationMapper(new ModelMapper());
+        certificationService = new CertificationServiceImpl(certificationDAO, userDAO, certificationMapper);
     }
 
     @Test
@@ -60,9 +63,8 @@ class CertificationServiceImplTest {
     void testFindAll_ReturnsEmptyList_WhenNoCertificationsExist() {
         when(certificationDAO.findAll()).thenReturn(List.of());
 
-        List<CertificationResponseDTO> result = certificationService.findAll();
+        assertThrows(AppException.class, () -> certificationService.findAll());
 
-        assertTrue(result.isEmpty());
         verify(certificationDAO, times(1)).findAll();
     }
 
@@ -84,9 +86,8 @@ class CertificationServiceImplTest {
     void testFindById_ReturnsNull_WhenCertificationDoesNotExist() {
         when(certificationDAO.findById(anyLong())).thenReturn(null);
 
-        CertificationResponseDTO result = certificationService.findById(1L);
+        assertThrows(AppException.class, () -> certificationService.findById(1L));
 
-        assertNull(result);
         verify(certificationDAO, times(1)).findById(anyLong());
     }
 
@@ -106,11 +107,23 @@ class CertificationServiceImplTest {
         Long certificationId = 1L;
 
         doNothing().when(certificationDAO).deleteById(anyLong());
+        when(certificationDAO.findById(certificationId)).thenReturn(CertificationProvider.certificationOne());
 
         certificationService.deleteById(certificationId);
 
         verify(certificationDAO).deleteById(certificationId);
 
+    }
+
+    @Test
+    void testDeleteById_WhenCertificationDoesNotExist() {
+        Long certificationId = 1L;
+
+        when(certificationDAO.findById(certificationId)).thenReturn(null);
+
+        assertThrows(AppException.class, () -> certificationService.deleteById(certificationId));
+
+        verify(certificationDAO, never()).deleteById(certificationId);
     }
 
 
@@ -129,37 +142,36 @@ class CertificationServiceImplTest {
     void findCertificationsByUserId_ReturnsEmptyList_WhenNoCertificationsExist() {
         when(certificationDAO.findCertificationsByUserId(anyLong())).thenReturn(List.of());
 
-        List<CertificationResponseDTO> result = certificationService.findCertificationsByUserId(1L);
+        assertThrows(AppException.class, () -> certificationService.findCertificationsByUserId(1L));
 
-        assertTrue(result.isEmpty());
         verify(certificationDAO, times(1)).findCertificationsByUserId(1L);
     }
 
     @Test
     void testSaveCertification_WhenUserExists() {
         User user = UserProvider.userOne();
-        Certification certification = CertificationProvider.certificationOne();
+        CertificationRequestDTO certification = new CertificationRequestDTO();
 
         when(userDAO.findById(anyLong())).thenReturn(user);
 
-        doNothing().when(certificationDAO).save(certification);
+        doNothing().when(certificationDAO).save(any(Certification.class));
 
         certificationService.saveCertification(certification, user.getId());
 
         verify(userDAO, times(1)).findById(anyLong());
-        verify(certificationDAO, times(1)).save(certification);
+        verify(certificationDAO, times(1)).save(any(Certification.class));
     }
 
     @Test
     void testSaveCertification_WhenUserDoesNotExist() {
-        Certification certification = CertificationProvider.certificationOne();
+        CertificationRequestDTO certification = new CertificationRequestDTO();
 
         when(userDAO.findById(anyLong())).thenReturn(null);
 
         assertThrows(RuntimeException.class, () -> certificationService.saveCertification(certification, 1L));
 
         verify(userDAO, times(1)).findById(anyLong());
-        verify(certificationDAO, never()).save(certification);
+        verify(certificationDAO, never()).save(any(Certification.class));
     }
 
     @Test
