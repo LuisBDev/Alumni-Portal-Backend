@@ -1,5 +1,7 @@
 package com.alumniportal.unmsm.controller;
 
+import com.alumniportal.unmsm.dto.RequestDTO.CompanyRequestDTO;
+import com.alumniportal.unmsm.dto.RequestDTO.UserRequestDTO;
 import com.alumniportal.unmsm.dto.ResponseDTO.AuthCompanyResponseDTO;
 import com.alumniportal.unmsm.dto.ResponseDTO.AuthUserResponseDTO;
 import com.alumniportal.unmsm.dto.RequestDTO.LoginRequestDTO;
@@ -17,8 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
 
-    @Autowired
-    private IAuthService authService;
+    private final IAuthService authService;
 
     @PostMapping("/user/loginAcademic")
     public ResponseEntity<AuthUserResponseDTO> loginAcademic(@RequestBody LoginRequestDTO loginRequestDTO) {
@@ -26,8 +27,8 @@ public class AuthController {
     }
 
     @PostMapping("/user/registerAcademic")
-    public ResponseEntity<AuthUserResponseDTO> registerAcademic(@RequestBody User user) {
-        return ResponseEntity.ok(authService.registerAcademic(user));
+    public ResponseEntity<AuthUserResponseDTO> registerAcademic(@RequestBody UserRequestDTO userRequestDTO) {
+        return ResponseEntity.ok(authService.registerAcademic(userRequestDTO));
     }
 
     @PostMapping("/company/loginCompany")
@@ -36,8 +37,8 @@ public class AuthController {
     }
 
     @PostMapping("/company/registerCompany")
-    public ResponseEntity<AuthCompanyResponseDTO> registerCompany(@RequestBody Company company) {
-        return ResponseEntity.ok(authService.registerCompany(company));
+    public ResponseEntity<AuthCompanyResponseDTO> registerCompany(@RequestBody CompanyRequestDTO companyRequestDTO) {
+        return ResponseEntity.ok(authService.registerCompany(companyRequestDTO));
     }
 
 

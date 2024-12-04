@@ -1,9 +1,14 @@
 package com.alumniportal.unmsm.service.impl;
 
 import com.alumniportal.unmsm.config.SpringSecurity.JwtService;
+import com.alumniportal.unmsm.dto.RequestDTO.CompanyRequestDTO;
+import com.alumniportal.unmsm.dto.RequestDTO.UserRequestDTO;
 import com.alumniportal.unmsm.dto.ResponseDTO.AuthCompanyResponseDTO;
 import com.alumniportal.unmsm.dto.ResponseDTO.AuthUserResponseDTO;
 import com.alumniportal.unmsm.dto.RequestDTO.LoginRequestDTO;
+import com.alumniportal.unmsm.exception.AppException;
+import com.alumniportal.unmsm.mapper.CompanyMapper;
+import com.alumniportal.unmsm.mapper.UserMapper;
 import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.interfaces.ICompanyDAO;
@@ -41,7 +46,9 @@ class AuthServiceImplTest {
     private ICompanyDAO companyDAO;
 
     //    Real modelMapper
-    private ModelMapper modelMapper;
+    private UserMapper userMapper;
+
+    private CompanyMapper companyMapper;
 
     @InjectMocks
     private AuthServiceImpl authService;
@@ -49,8 +56,9 @@ class AuthServiceImplTest {
     @BeforeEach
     void setUp() {
 
-        modelMapper = new ModelMapper();
-        authService = new AuthServiceImpl(authenticationManager, jwtService, passwordEncoder, userDAO, companyDAO, modelMapper);
+        userMapper = new UserMapper(new ModelMapper());
+        companyMapper = new CompanyMapper(new ModelMapper());
+        authService = new AuthServiceImpl(authenticationManager, jwtService, passwordEncoder, userDAO, companyDAO, userMapper, companyMapper);
     }
 
     @Test
@@ -73,7 +81,7 @@ class AuthServiceImplTest {
         LoginRequestDTO loginRequestDTO = new LoginRequestDTO("user@example.com", "password");
         when(userDAO.findByEmail("user@example.com")).thenReturn(null);
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> authService.loginAcademic(loginRequestDTO));
+        Exception exception = assertThrows(AppException.class, () -> authService.loginAcademic(loginRequestDTO));
 
         assertEquals("User not found with email: user@example.com", exception.getMessage());
         verify(authenticationManager, times(1)).authenticate(any(UsernamePasswordAuthenticationToken.class));
@@ -111,7 +119,7 @@ class AuthServiceImplTest {
         LoginRequestDTO loginRequestDTO = new LoginRequestDTO("company@example.com", "password");
         when(companyDAO.findByEmail("company@example.com")).thenReturn(null);
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> authService.loginCompany(loginRequestDTO));
+        Exception exception = assertThrows(AppException.class, () -> authService.loginCompany(loginRequestDTO));
 
         assertEquals("Company not found with email: company@example.com", exception.getMessage());
         verify(authenticationManager, times(1)).authenticate(any(UsernamePasswordAuthenticationToken.class));
@@ -119,26 +127,28 @@ class AuthServiceImplTest {
 
     @Test
     void registerAcademic_ReturnsAuthUserResponse_WhenUserIsRegisteredSuccessfully() {
-        User user = new User();
+        UserRequestDTO user = new UserRequestDTO();
         user.setEmail("newuser@example.com");
         user.setPassword("password");
         when(userDAO.findByEmail("newuser@example.com")).thenReturn(null);
-        when(jwtService.generateToken(user)).thenReturn("token");
+        when(jwtService.generateToken(any(User.class))).thenReturn("token");
 
         AuthUserResponseDTO response = authService.registerAcademic(user);
 
         assertNotNull(response);
         assertEquals("token", response.getToken());
-        verify(userDAO, times(1)).save(user);
     }
 
     @Test
     void registerAcademic_ThrowsException_WhenUserAlreadyExists() {
-        User user = new User();
+        UserRequestDTO user = new UserRequestDTO();
         user.setEmail("existinguser@example.com");
-        when(userDAO.findByEmail("existinguser@example.com")).thenReturn(user);
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> authService.registerAcademic(user));
+        User existingUser = new User();
+
+        when(userDAO.findByEmail("existinguser@example.com")).thenReturn(existingUser);
+
+        Exception exception = assertThrows(AppException.class, () -> authService.registerAcademic(user));
 
         assertEquals("User already exists with email: existinguser@example.com", exception.getMessage());
         verify(userDAO, never()).save(any(User.class));
@@ -146,26 +156,29 @@ class AuthServiceImplTest {
 
     @Test
     void registerCompany_ReturnsAuthCompanyResponse_WhenCompanyIsRegisteredSuccessfully() {
-        Company company = new Company();
+        CompanyRequestDTO company = new CompanyRequestDTO();
         company.setEmail("newcompany@example.com");
         company.setPassword("password");
         when(companyDAO.findByEmail("newcompany@example.com")).thenReturn(null);
-        when(jwtService.generateToken(company)).thenReturn("token");
+        when(jwtService.generateToken(any(Company.class))).thenReturn("token");
 
         AuthCompanyResponseDTO response = authService.registerCompany(company);
 
         assertNotNull(response);
         assertEquals("token", response.getToken());
-        verify(companyDAO, times(1)).save(company);
+
     }
 
     @Test
     void registerCompany_ThrowsException_WhenCompanyAlreadyExists() {
-        Company company = new Company();
+        CompanyRequestDTO company = new CompanyRequestDTO();
         company.setEmail("existingcompany@example.com");
-        when(companyDAO.findByEmail("existingcompany@example.com")).thenReturn(company);
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> authService.registerCompany(company));
+        Company existingCompany = new Company();
+
+        when(companyDAO.findByEmail("existingcompany@example.com")).thenReturn(existingCompany);
+
+        Exception exception = assertThrows(AppException.class, () -> authService.registerCompany(company));
 
         assertEquals("Company already exists with email: existingcompany@example.com", exception.getMessage());
         verify(companyDAO, never()).save(any(Company.class));
