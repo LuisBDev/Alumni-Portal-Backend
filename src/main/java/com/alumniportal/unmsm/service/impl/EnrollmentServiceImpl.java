@@ -2,6 +2,8 @@ package com.alumniportal.unmsm.service.impl;
 
 import com.alumniportal.unmsm.dto.RequestDTO.EnrollmentRequestDTO;
 import com.alumniportal.unmsm.dto.ResponseDTO.EnrollmentResponseDTO;
+import com.alumniportal.unmsm.exception.AppException;
+import com.alumniportal.unmsm.mapper.EnrollmentMapper;
 import com.alumniportal.unmsm.model.Activity;
 import com.alumniportal.unmsm.model.Enrollment;
 import com.alumniportal.unmsm.model.User;
@@ -35,25 +37,26 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
 
     private final IActivityDAO activityDAO;
 
-    private final ModelMapper modelMapper;
+    private final EnrollmentMapper enrollmentMapper;
 
     private final LambdaClient lambdaClient;
 
     @Override
     public List<EnrollmentResponseDTO> findAll() {
-        return enrollmentDAO.findAll()
-                .stream()
-                .map(enrollment -> modelMapper.map(enrollment, EnrollmentResponseDTO.class))
-                .toList();
+        List<Enrollment> enrollmentList = enrollmentDAO.findAll();
+        if (enrollmentList.isEmpty()) {
+            throw new AppException("No enrollments found", "NOT_FOUND");
+        }
+        return enrollmentMapper.entityListToDTOList(enrollmentList);
     }
 
     @Override
     public EnrollmentResponseDTO findById(Long id) {
         Enrollment enrollment = enrollmentDAO.findById(id);
         if (enrollment == null) {
-            return null;
+            throw new AppException("Enrollment not found", "NOT_FOUND");
         }
-        return modelMapper.map(enrollment, EnrollmentResponseDTO.class);
+        return enrollmentMapper.entityToDTO(enrollment);
     }
 
     @Override
@@ -63,61 +66,65 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
 
     @Override
     public void deleteById(Long id) {
+        Enrollment enrollment = enrollmentDAO.findById(id);
+        if (enrollment == null) {
+            throw new AppException("Enrollment not found", "NOT_FOUND");
+        }
         enrollmentDAO.deleteById(id);
     }
 
     @Override
     public List<EnrollmentResponseDTO> findEnrollmentsByUserId(Long userId) {
-        return enrollmentDAO.findEnrollmentsByUserId(userId)
-                .stream()
-                .map(enrollment -> modelMapper.map(enrollment, EnrollmentResponseDTO.class))
-                .toList();
+        List<Enrollment> enrollmentsByUserId = enrollmentDAO.findEnrollmentsByUserId(userId);
+        if (enrollmentsByUserId.isEmpty()) {
+            throw new AppException("There are no enrollments for userId: " + userId, "NOT_FOUND");
+        }
+        return enrollmentMapper.entityListToDTOList(enrollmentsByUserId);
     }
 
     @Override
     public List<EnrollmentResponseDTO> findEnrollmentsByActivityId(Long activityId) {
-        return enrollmentDAO.findEnrollmentsByActivityId(activityId)
-                .stream()
-                .map(enrollment -> modelMapper.map(enrollment, EnrollmentResponseDTO.class))
-                .toList();
+        List<Enrollment> enrollmentsByActivityId = enrollmentDAO.findEnrollmentsByActivityId(activityId);
+        if (enrollmentsByActivityId.isEmpty()) {
+            throw new AppException("There are no enrollments for this activityId: " + activityId, "NOT_FOUND");
+        }
+        return enrollmentMapper.entityListToDTOList(enrollmentsByActivityId);
     }
 
     @Override
     public EnrollmentResponseDTO findEnrollmentByUserIdAndActivityId(Long userId, Long activityId) {
         Enrollment enrollment = enrollmentDAO.findEnrollmentByUserIdAndActivityId(userId, activityId);
         if (enrollment == null) {
-            return null;
+            throw new AppException("No enrollment exists by userId: " + userId + " and activityId: " + activityId, "NOT_FOUND");
         }
-        return modelMapper.map(enrollment, EnrollmentResponseDTO.class);
+        return enrollmentMapper.entityToDTO(enrollment);
     }
 
 
     public void saveEnrollment(EnrollmentRequestDTO enrollmentRequestDTO) {
         User user = userDAO.findById(enrollmentRequestDTO.getUser().getId());
         if (user == null) {
-            throw new IllegalArgumentException("Error: User not found!");
+            throw new AppException("Error: User not found!", "NOT_FOUND");
         }
         Activity activity = activityDAO.findById(enrollmentRequestDTO.getActivity().getId());
         if (activity == null) {
-            throw new IllegalArgumentException("Error: Activity not found!");
+            throw new AppException("Error: Activity not found!", "NOT_FOUND");
         }
 
         if (!activity.isEnrollable()) {
-            throw new IllegalArgumentException("Error: Activity is not enrollable!");
+            throw new AppException("Error: Activity is not enrollable!", "BAD_REQUEST");
         }
 
         if (enrollmentDAO.findEnrollmentByUserIdAndActivityId(user.getId(), activity.getId()) != null) {
-            throw new IllegalArgumentException("Error: User is already enrolled in this activity!");
+            throw new AppException("Error: User is already enrolled in this activity!", "BAD_REQUEST");
         }
 
-//        Enrollment enrollment = modelMapper.map(enrollmentRequestDTO, Enrollment.class);
+        Enrollment enrollment = enrollmentMapper.requestDtoToEntity(enrollmentRequestDTO);
 
-        Enrollment enrollment = Enrollment.builder()
-                .user(user)
-                .activity(activity)
-                .enrollmentDate(LocalDate.now())
-                .status("ACTIVE")
-                .build();
+        enrollment.setUser(user);
+        enrollment.setActivity(activity);
+        enrollment.setEnrollmentDate(LocalDate.now());
+        enrollment.setStatus("ACTIVE");
 
         enrollmentDAO.save(enrollment);
 

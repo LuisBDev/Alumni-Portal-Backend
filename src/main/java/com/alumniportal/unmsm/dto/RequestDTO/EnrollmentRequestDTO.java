@@ -12,26 +12,10 @@ import lombok.*;
 public class EnrollmentRequestDTO {
 
     @NotNull
-    private UserEnrollment user;
+    private UserRequestDTO user;
 
     @NotNull
-    private ActivityEnrollment activity;
+    private ActivityRequestDTO activity;
 
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class UserEnrollment {
-        @NotNull
-        private Long id;
-    }
 
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class ActivityEnrollment {
-        @NotNull
-        private Long id;
-    }
 }
