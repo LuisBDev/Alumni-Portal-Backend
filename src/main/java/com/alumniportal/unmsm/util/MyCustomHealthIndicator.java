@@ -9,7 +9,7 @@ public class MyCustomHealthIndicator implements HealthIndicator {
 
     @Override
     public Health health() {
-        // Aquí puedes verificar alguna condición personalizada
+
         boolean isAppHealthy = checkSomeCondition();
 
         if (isAppHealthy) {

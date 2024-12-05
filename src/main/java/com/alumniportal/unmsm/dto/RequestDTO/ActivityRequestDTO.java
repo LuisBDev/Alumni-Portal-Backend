@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @Builder
 public class ActivityRequestDTO {
 
+    private Long id;
     private String title;
     private String description;
     private String eventType;

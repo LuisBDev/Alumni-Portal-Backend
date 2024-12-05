@@ -9,6 +9,7 @@ import lombok.*;
 @Builder
 public class UserRequestDTO {
 
+    private Long id;
     private String email;
     private String password;
     private String paternalSurname;
