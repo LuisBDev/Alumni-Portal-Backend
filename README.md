@@ -577,46 +577,83 @@ notificaciones.
 
 ## 🛠️ Stages del Pipeline
 
+## Ejecución de Etapas
+
+![image](https://github.com/user-attachments/assets/573f5bd2-59bc-4488-b138-338fbeef1f85)
+
 ### 1. **Git Checkout**
 
 Clona el repositorio desde GitHub en la rama `master`.
+
+![image](https://github.com/user-attachments/assets/795635f1-6667-4a11-a749-77219fa422e8)
+
 
 ### 2. **Build with Maven**
 
 Compila el proyecto utilizando Maven.
 
+![image](https://github.com/user-attachments/assets/74b2d4ec-bb5f-4142-bc2b-24f2a929330b)
+
+
 ### 3. **Run Tests**
 
 Ejecuta las pruebas unitarias definidas con **JUnit** y utiliza **Mockito** para los mocks.
+
+![image](https://github.com/user-attachments/assets/25fab42d-f963-489e-b068-3de07946dc31)
+
 
 ### 4. **SonarQube Analysis**
 
 Realiza un análisis estático del código fuente utilizando **SonarQube**, excluyendo las pruebas.
 
+![image](https://github.com/user-attachments/assets/9c0dc849-1473-4989-96a9-80ab87291d48)
+
+
 ### 5. **Package**
 
 Genera un archivo JAR ejecutable, omitiendo las pruebas.
 
+![image](https://github.com/user-attachments/assets/cf4c5c59-7607-4107-8975-c386ba8a6ca5)
+
+
 ### 6. **Deploy (Publish)**
 
-Despliega la aplicación Spring Boot configurando el perfil de producción y las variables necesarias.
+Despliega la aplicación Spring Boot y las variables necesarias.
+
+![image](https://github.com/user-attachments/assets/d8a5ddd1-cd4d-4bc4-8ee9-d59b88437730)
+
 
 ### 7. **Health Check (Actuator)**
 
 Verifica que la aplicación esté corriendo correctamente utilizando el endpoint `/actuator/health`.
 
+![image](https://github.com/user-attachments/assets/9f8a2b2b-8d20-465c-b6f6-d89dcb0e0690)
+
+
 ### 8. **Performance Testing with JMeter**
 
 Ejecuta pruebas de rendimiento utilizando un archivo JMX de JMeter preconfigurado.
 
+![image](https://github.com/user-attachments/assets/2b85c978-eee7-41a1-9315-eba34925765a)
+
+
 ### 9. **Send Slack Notification**
 
 Notifica en Slack el estado exitoso o fallido del pipeline con detalles del trabajo.
+
+![image](https://github.com/user-attachments/assets/f0d94620-2b47-4887-9374-e66a6d0fd6b6)
+
 
 ## 📤 Comportamiento de Post-Ejecución
 
 - **`failure`**: Si algún paso falla, envía una notificación a Slack indicando el error.
 - **`always`**: Muestra un mensaje de finalización en la consola.
 
-## 📊 Resultados del Pipeline
+## 📊 Finalización del Pipeline
+
+![image](https://github.com/user-attachments/assets/18067bb1-aedc-4e7a-b21a-85f19037fdd4)
+
+## Timings del Pipeline
+
+![image](https://github.com/user-attachments/assets/11a814ab-be29-4cb1-8238-ec8bc8f05371)
 
