@@ -24,7 +24,8 @@
 - [🔧 Configuración de Plugins](#-configuración-de-plugins)
 - [🌍 Variables de Entorno](#-variables-de-entorno)
 - [🛠️ Stages del Pipeline](#-stages-del-pipeline)
-- [📊 Resultados del Pipeline](#-resultados-del-pipeline)
+- [📊 Finalización del Pipeline](#-finalización-del-pipeline)
+- [🚀 Timings del Pipeline](#timings-del-pipeline)
 
 ## 📖 Descripción del Proyecto
 
@@ -585,69 +586,196 @@ notificaciones.
 
 Clona el repositorio desde GitHub en la rama `master`.
 
-![image](https://github.com/user-attachments/assets/795635f1-6667-4a11-a749-77219fa422e8)
+```bash
+stage("Git Checkout") {
+    steps {
+        git branch: 'master', url: 'https://github.com/LuisBDev/Alumni-Portal-Backend.git'
+    }
+}
+```
 
+![image](https://github.com/user-attachments/assets/795635f1-6667-4a11-a749-77219fa422e8)
 
 ### 2. **Build with Maven**
 
 Compila el proyecto utilizando Maven.
 
-![image](https://github.com/user-attachments/assets/74b2d4ec-bb5f-4142-bc2b-24f2a929330b)
+```bash
+stage("Build with Maven") {
+    steps {
+        sh "mvn clean compile"
+    }
+}
+```
 
+![image](https://github.com/user-attachments/assets/74b2d4ec-bb5f-4142-bc2b-24f2a929330b)
 
 ### 3. **Run Tests**
 
 Ejecuta las pruebas unitarias definidas con **JUnit** y utiliza **Mockito** para los mocks.
 
-![image](https://github.com/user-attachments/assets/25fab42d-f963-489e-b068-3de07946dc31)
+```bash
+stage("Run Tests") {
+    steps {
+        sh "mvn clean test"
+    }
+}
+```
 
+![image](https://github.com/user-attachments/assets/25fab42d-f963-489e-b068-3de07946dc31)
 
 ### 4. **SonarQube Analysis**
 
 Realiza un análisis estático del código fuente utilizando **SonarQube**, excluyendo las pruebas.
 
-![image](https://github.com/user-attachments/assets/9c0dc849-1473-4989-96a9-80ab87291d48)
+```bash
+stage("SonarQube Analysis") {
+    steps {
+        script {
+            def scannerHome = tool 'sonar-scanner'
+            withEnv(["PATH+SONAR_SCANNER=${scannerHome}/bin"]) {
+                sh """
+                sonar-scanner \
+                -Dsonar.projectKey=test-alumni-cicd \
+                -Dsonar.sources=. \
+                -Dsonar.java.binaries=target/classes \
+                -Dsonar.host.url=http://sonarqube:9000 \
+                -Dsonar.login=yourtoken \
+                -Dsonar.exclusions=**/test/** 
+                """
+            }
+        }
+    }
+}
+```
 
+![image](https://github.com/user-attachments/assets/9c0dc849-1473-4989-96a9-80ab87291d48)
 
 ### 5. **Package**
 
 Genera un archivo JAR ejecutable, omitiendo las pruebas.
 
-![image](https://github.com/user-attachments/assets/cf4c5c59-7607-4107-8975-c386ba8a6ca5)
+```bash
+stage("Package") {
+    steps {
+        sh "mvn clean package -DskipTests"
+    }
+}
+```
 
+![image](https://github.com/user-attachments/assets/cf4c5c59-7607-4107-8975-c386ba8a6ca5)
 
 ### 6. **Deploy (Publish)**
 
 Despliega la aplicación Spring Boot y las variables necesarias.
 
-![image](https://github.com/user-attachments/assets/d8a5ddd1-cd4d-4bc4-8ee9-d59b88437730)
+```bash
+stage("Deploy (Publish)") {
+    steps {
+        sh """
+        java -jar ${SPRING_BOOT_APP_JAR} \
+        --server.port=8083 \
+        --spring.datasource.url=jdbc:mysql://alumni-mysql:3306/alumniportal \
+        --AWS_ACCESS_KEY_ID=${env.AWS_ACCESS_KEY_ID} \
+        --AWS_SECRET_ACCESS_KEY=${env.AWS_SECRET_ACCESS_KEY} \
+        --AWS_S3_BUCKET_NAME=${env.AWS_S3_BUCKET_NAME} \
+        --AWS_S3_REGION=${env.AWS_S3_REGION} &
+        """
+    }
+}
+```
 
+![image](https://github.com/user-attachments/assets/d8a5ddd1-cd4d-4bc4-8ee9-d59b88437730)
 
 ### 7. **Health Check (Actuator)**
 
 Verifica que la aplicación esté corriendo correctamente utilizando el endpoint `/actuator/health`.
 
-![image](https://github.com/user-attachments/assets/9f8a2b2b-8d20-465c-b6f6-d89dcb0e0690)
+```bash
+stage("Health Check (Actuator)") {
+    steps {
+        script {
+            sleep(time: 30, unit: "SECONDS")
+            def healthCheckUrl = "${env.SPRING_BOOT_APP_URL}/actuator/health"
+            def result = sh(script: "curl -s -o /dev/null -w '%{http_code}' ${healthCheckUrl}", returnStdout: true).trim()    
+            if (result == "200") {
+                echo "Application health check passed"
+            } else {
+                error "Application health check failed with status ${result}"
+            }
+        }
+    }
+}
+```
 
+![image](https://github.com/user-attachments/assets/9f8a2b2b-8d20-465c-b6f6-d89dcb0e0690)
 
 ### 8. **Performance Testing with JMeter**
 
 Ejecuta pruebas de rendimiento utilizando un archivo JMX de JMeter preconfigurado.
 
-![image](https://github.com/user-attachments/assets/2b85c978-eee7-41a1-9315-eba34925765a)
+```bash
+stage("Performance Testing with JMeter") {
+    steps {
+        script {
+            def jmeterHome = '/opt/jmeter'
+            def jmxFile = '/var/jenkins_home/TestingPlanAlumniPortal.jmx'
+            def jmeterLog = '/var/jenkins_home/jmeter.log'
+            def jmeterCommand = "${jmeterHome}/bin/jmeter -n -t ${jmxFile} -j ${jmeterLog} -Dserver_port=8090"
+            // Ejecutar JMeter
+            sh """
+            ${jmeterCommand}
+            """
+        }
+    }
+}
+```
 
+![image](https://github.com/user-attachments/assets/2b85c978-eee7-41a1-9315-eba34925765a)
 
 ### 9. **Send Slack Notification**
 
 Notifica en Slack el estado exitoso o fallido del pipeline con detalles del trabajo.
 
-![image](https://github.com/user-attachments/assets/f0d94620-2b47-4887-9374-e66a6d0fd6b6)
+```bash
+stage("Send Slack Notification") {
+    steps {
+        script {
+            def message = "✅*Build and Performance Testing Success* \n*Job:* ${env.JOB_NAME} \n*Build Number:* ${env.BUILD_NUMBER} \n*URL:* ${env.BUILD_URL} \nApp passed all tests."
+            sh """
+            curl -X POST -H 'Content-type: application/json' \
+            --data '{"channel": "${env.SLACK_CHANNEL}", "text": "${message}"}' \
+            ${env.SLACK_WEBHOOK_URL}
+            """
+        }
+    }
+}
+```
 
+![image](https://github.com/user-attachments/assets/f0d94620-2b47-4887-9374-e66a6d0fd6b6)
 
 ## 📤 Comportamiento de Post-Ejecución
 
 - **`failure`**: Si algún paso falla, envía una notificación a Slack indicando el error.
 - **`always`**: Muestra un mensaje de finalización en la consola.
+
+```bash
+post {
+    failure {
+        script {
+            def message = "❌ *Build or Performance Testing Failed* \n*Job:* ${env.JOB_NAME} \n*Build Number:* ${env.BUILD_NUMBER} \n*URL:* ${env.BUILD_URL}"
+            sh """
+            curl -X POST -H 'Content-type: application/json' \
+            --data '{"channel": "${env.SLACK_CHANNEL}", "text": "${message}"}' \
+            ${env.SLACK_WEBHOOK_URL}
+            """
+        }
+    }
+    always {
+        echo 'Pipeline complete.'
+    }
+}
+```
 
 ## 📊 Finalización del Pipeline
 
