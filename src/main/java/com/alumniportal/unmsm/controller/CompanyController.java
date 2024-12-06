@@ -19,71 +19,41 @@ public class CompanyController {
     private final ICompanyService companyService;
 
     @GetMapping("/all")
-    public List<CompanyResponseDTO> findAll() {
-        return companyService.findAll();
+    public ResponseEntity<List<CompanyResponseDTO>> findAll() {
+        List<CompanyResponseDTO> companyResponseDTOList = companyService.findAll();
+        return ResponseEntity.ok(companyResponseDTOList);
     }
 
     @GetMapping("/{id}")
-    public CompanyResponseDTO findById(@PathVariable Long id) {
-        return companyService.findById(id);
+    public ResponseEntity<CompanyResponseDTO> findById(@PathVariable Long id) {
+        CompanyResponseDTO companyResponseDTO = companyService.findById(id);
+        return ResponseEntity.ok(companyResponseDTO);
     }
 
-//    @PostMapping("/loginCompany")
-//    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDTO) {
-//        try {
-//            CompanyResponseDTO companyDTO = companyService.validateLogin(loginRequestDTO.getEmail(), loginRequestDTO.getPassword());
-//            return ResponseEntity.ok(companyDTO);
-//        } catch (RuntimeException e) {
-//            return ResponseEntity.badRequest().body(e.getMessage());
-//        }
-//
-//    }
-//
-//    @PostMapping("/registerCompany")
-//    public ResponseEntity<?> save(@RequestBody Company company) {
-//        try {
-//            companyService.saveCompany(company);
-//            return ResponseEntity.ok("Company registered successfully!");
-//        } catch (RuntimeException e) {
-//            return ResponseEntity.badRequest().body(e.getMessage());
-//        }
-//    }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteById(@PathVariable Long id) {
-        CompanyResponseDTO companyResponseDTO = companyService.findById(id);
-        if (companyResponseDTO == null) {
-            return ResponseEntity.badRequest().body("Error: Company not found!");
-        }
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         companyService.deleteById(id);
-        return ResponseEntity.ok("Company deleted successfully!");
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping
-    public CompanyResponseDTO findByEmail(@RequestBody String email) {
-        return companyService.findByEmail(email);
+    public ResponseEntity<CompanyResponseDTO> findByEmail(@RequestBody String email) {
+        CompanyResponseDTO companyResponseDTO = companyService.findByEmail(email);
+        return ResponseEntity.ok(companyResponseDTO);
     }
 
     //Actualizar parcialmente los campos
     @PatchMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
-        try {
-            companyService.updateCompany(id, updates);
-            return ResponseEntity.ok("Company updated successfully!");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+        companyService.updateCompany(id, updates);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/updatePassword/{id}")
-    public ResponseEntity<?> updatePassword(@PathVariable Long id, @RequestBody PasswordChangeRequestDTO passwordChangeRequestDTO) {
-        try {
-            companyService.updatePassword(id, passwordChangeRequestDTO);
-            return ResponseEntity.ok("Password updated successfully!");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<Void> updatePassword(@PathVariable Long id, @RequestBody PasswordChangeRequestDTO passwordChangeRequestDTO) {
+        companyService.updatePassword(id, passwordChangeRequestDTO);
+        return ResponseEntity.noContent().build();
     }
-
 
 }

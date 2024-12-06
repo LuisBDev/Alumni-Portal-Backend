@@ -2,6 +2,8 @@ package com.alumniportal.unmsm.service.impl;
 
 import com.alumniportal.unmsm.dto.response.CompanyResponseDTO;
 import com.alumniportal.unmsm.dto.request.PasswordChangeRequestDTO;
+import com.alumniportal.unmsm.exception.AppException;
+import com.alumniportal.unmsm.mapper.CompanyMapper;
 import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.persistence.interfaces.ICompanyDAO;
 import com.alumniportal.unmsm.service.interfaces.IActivityService;
@@ -24,7 +26,7 @@ public class CompanyServiceImpl implements ICompanyService {
 
     private final ICompanyDAO companyDAO;
 
-    private final ModelMapper modelMapper;
+    private final CompanyMapper companyMapper;
 
     private final ImageManagement imageManagement;
 
@@ -34,24 +36,24 @@ public class CompanyServiceImpl implements ICompanyService {
 
     @Override
     public List<CompanyResponseDTO> findAll() {
-        return companyDAO.findAll()
-                .stream()
-                .map(company -> modelMapper.map(company, CompanyResponseDTO.class))
-                .toList();
+        List<Company> companyList = companyDAO.findAll();
+        if (companyList.isEmpty()) {
+            throw new AppException("Error: Companies not found!", "NOT_FOUND");
+        }
+        return companyMapper.entityListToDTOList(companyList);
     }
 
     @Override
     public CompanyResponseDTO findById(Long id) {
         Company company = companyDAO.findById(id);
         if (company == null) {
-            return null;
+            throw new AppException("Error: Company not found!", "NOT_FOUND");
         }
-        return modelMapper.map(company, CompanyResponseDTO.class);
+        return companyMapper.entityToDTO(company);
     }
 
     @Override
     public void save(Company company) {
-
         companyDAO.save(company);
     }
 
@@ -59,7 +61,7 @@ public class CompanyServiceImpl implements ICompanyService {
     public void deleteById(Long id) {
         Company company = companyDAO.findById(id);
         if (company == null) {
-            throw new RuntimeException("Error: Company not found!");
+            throw new AppException("Error: Company not found!", "NOT_FOUND");
         }
         if (company.getPhotoUrl() != null) {
             imageManagement.deleteImageByUrl(company.getPhotoUrl());
@@ -90,16 +92,16 @@ public class CompanyServiceImpl implements ICompanyService {
     public CompanyResponseDTO findByEmail(String email) {
         Company company = companyDAO.findByEmail(email);
         if (company == null) {
-            return null;
+            throw new AppException("Error: Company not found!", "NOT_FOUND");
         }
-        return modelMapper.map(company, CompanyResponseDTO.class);
+        return companyMapper.entityToDTO(company);
     }
 
     @Override
     public void saveCompany(Company company) {
         boolean companyDB = companyDAO.existsByEmail(company.getEmail());
         if (companyDB) {
-            throw new RuntimeException("Error: Email already exists!");
+            throw new AppException("Error: Company already exists!", "CONFLICT");
         }
         company.setCreatedAt(LocalDate.now());
         companyDAO.save(company);
@@ -108,7 +110,7 @@ public class CompanyServiceImpl implements ICompanyService {
     public void updateCompany(Long id, Map<String, Object> fields) {
         Company companyFound = companyDAO.findById(id);
         if (companyFound == null) {
-            throw new RuntimeException("Error: Company not found!");
+            throw new AppException("Error: Company not found!", "NOT_FOUND");
         }
         fields.forEach((k, v) -> {
             Field field = ReflectionUtils.findField(Company.class, k);
@@ -126,14 +128,14 @@ public class CompanyServiceImpl implements ICompanyService {
     public void updatePassword(Long id, PasswordChangeRequestDTO passwordChangeRequestDTO) {
         Company company = companyDAO.findById(id);
         if (company == null) {
-            throw new RuntimeException("Error: Company not found!");
+            throw new AppException("Error: Company not found!", "NOT_FOUND");
         }
         if (!company.getEmail().equals(passwordChangeRequestDTO.getEmail())) {
-            throw new RuntimeException("Error: Invalid email!");
+            throw new AppException("Error: Email does not match!", "BAD_REQUEST");
         }
 
         if (!passwordEncoder.matches(passwordChangeRequestDTO.getPassword(), company.getPassword())) {
-            throw new RuntimeException("Error: Old password does not match!");
+            throw new AppException("Error: Old password does not match!", "BAD_REQUEST");
         }
         company.setPassword(passwordEncoder.encode(passwordChangeRequestDTO.getNewPassword()));
         company.setUpdatedAt(LocalDate.now());

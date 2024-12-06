@@ -1,6 +1,9 @@
 package com.alumniportal.unmsm.service.impl;
 
+import com.alumniportal.unmsm.dto.request.EducationRequestDTO;
 import com.alumniportal.unmsm.dto.response.EducationResponseDTO;
+import com.alumniportal.unmsm.exception.AppException;
+import com.alumniportal.unmsm.mapper.EducationMapper;
 import com.alumniportal.unmsm.model.Education;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.interfaces.IEducationDAO;
@@ -24,24 +27,25 @@ public class EducationServiceImpl implements IEducationService {
 
     private final IUserDAO userDAO;
 
-    private final ModelMapper modelMapper;
+    private final EducationMapper educationMapper;
 
 
     @Override
     public List<EducationResponseDTO> findAll() {
-        return educationDAO.findAll()
-                .stream()
-                .map(education -> modelMapper.map(education, EducationResponseDTO.class))
-                .toList();
+        List<Education> educationList = educationDAO.findAll();
+        if (educationList.isEmpty()) {
+            throw new AppException("No educations found", "NOT_FOUND");
+        }
+        return educationMapper.entityListToDTOList(educationList);
     }
 
     @Override
     public EducationResponseDTO findById(Long id) {
         Education education = educationDAO.findById(id);
         if (education == null) {
-            return null;
+            throw new AppException("Education not found", "NOT_FOUND");
         }
-        return modelMapper.map(education, EducationResponseDTO.class);
+        return educationMapper.entityToDTO(education);
     }
 
     @Override
@@ -51,34 +55,39 @@ public class EducationServiceImpl implements IEducationService {
 
     @Override
     public void deleteById(Long id) {
+        Education education = educationDAO.findById(id);
+        if (education == null) {
+            throw new AppException("Education not found", "NOT_FOUND");
+        }
         educationDAO.deleteById(id);
     }
 
     @Override
     public List<EducationResponseDTO> findEducationsByUserId(Long userId) {
-        return educationDAO.findEducationsByUserId(userId)
-                .stream()
-                .map(education -> modelMapper.map(education, EducationResponseDTO.class))
-                .toList();
+        List<Education> educationsByUserId = educationDAO.findEducationsByUserId(userId);
+        if (educationsByUserId.isEmpty()) {
+            throw new AppException("No educations found for user", "NOT_FOUND");
+        }
+        return educationMapper.entityListToDTOList(educationsByUserId);
     }
 
     @Override
-    public void saveEducation(Education education, Long userId) {
+    public void saveEducation(EducationRequestDTO educationRequestDTO, Long userId) {
         User user = userDAO.findById(userId);
         if (user == null) {
-            throw new RuntimeException("User not found");
+            throw new AppException("User not found", "NOT_FOUND");
         }
 
+        Education education = educationMapper.requestDtoToEntity(educationRequestDTO);
         education.setUser(user);
         educationDAO.save(education);
-
     }
 
     @Override
     public void updateEducation(Long id, Map<String, Object> fields) {
         Education education = educationDAO.findById(id);
         if (education == null) {
-            throw new RuntimeException("Error: education not found!");
+            throw new AppException("Education not found", "NOT_FOUND");
         }
         fields.forEach((k, v) -> {
             Field field = ReflectionUtils.findField(Education.class, k);

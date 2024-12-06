@@ -28,8 +28,9 @@ public class ActivityController {
 
 
     @GetMapping("/all")
-    public List<ActivityResponseDTO> findAll() {
-        return activityService.findAll();
+    public ResponseEntity<List<ActivityResponseDTO>> findAll() {
+        List<ActivityResponseDTO> activityResponseDTOList = activityService.findAll();
+        return ResponseEntity.ok(activityResponseDTOList);
     }
 
     @GetMapping("/{id}")
@@ -39,29 +40,28 @@ public class ActivityController {
     }
 
     @PostMapping("/save-user/{userId}")
-    public ResponseEntity<?> saveActivityByUserId(@RequestBody ActivityRequestDTO activityRequestDTO, @PathVariable Long userId) {
-
+    public ResponseEntity<Void> saveActivityByUserId(@RequestBody ActivityRequestDTO activityRequestDTO, @PathVariable Long userId) {
         activityService.saveActivityByUserId(activityRequestDTO, userId);
-        return ResponseEntity.ok("Actividad creada por el usuario correctamente: " + userId);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping("/save-company/{companyId}")
-    public ResponseEntity<?> saveActivityByCompanyId(@RequestBody ActivityRequestDTO activityRequestDTO, @PathVariable Long companyId) {
+    public ResponseEntity<Void> saveActivityByCompanyId(@RequestBody ActivityRequestDTO activityRequestDTO, @PathVariable Long companyId) {
         activityService.saveActivityByCompanyId(activityRequestDTO, companyId);
-        return ResponseEntity.ok("Actividad creada por la empresa correctamente: " + companyId);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PatchMapping("/update-activity/{id}")
-    public ResponseEntity<?> updateActivity(@PathVariable Long id, @RequestBody Map<String, Object> fields) {
+    public ResponseEntity<Void> updateActivity(@PathVariable Long id, @RequestBody Map<String, Object> fields) {
         activityService.updateActivity(id, fields);
-        return ResponseEntity.ok("Activity id: " + id + " updated successfully");
+        return ResponseEntity.noContent().build();
     }
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteById(@PathVariable Long id) throws Exception {
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) throws Exception {
         activityService.deleteById(id);
-        return ResponseEntity.ok("Activity id: " + id + " deleted successfully");
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/user/{userId}")
@@ -71,8 +71,9 @@ public class ActivityController {
     }
 
     @GetMapping("/company/{companyId}")
-    public List<ActivityResponseDTO> findActivitiesByCompanyId(@PathVariable Long companyId) {
-        return activityService.findActivitiesByCompanyId(companyId);
+    public ResponseEntity<List<ActivityResponseDTO>> findActivitiesByCompanyId(@PathVariable Long companyId) {
+        List<ActivityResponseDTO> activitiesByCompanyId = activityService.findActivitiesByCompanyId(companyId);
+        return ResponseEntity.ok(activitiesByCompanyId);
     }
 
 
