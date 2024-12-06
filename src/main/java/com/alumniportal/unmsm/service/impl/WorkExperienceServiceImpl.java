@@ -1,6 +1,6 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.dto.ResponseDTO.WorkExperienceResponseDTO;
+import com.alumniportal.unmsm.dto.response.WorkExperienceResponseDTO;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.model.WorkExperience;
 import com.alumniportal.unmsm.persistence.interfaces.IUserDAO;

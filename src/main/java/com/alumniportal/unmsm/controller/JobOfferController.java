@@ -1,8 +1,7 @@
 package com.alumniportal.unmsm.controller;
 
-import com.alumniportal.unmsm.dto.RequestDTO.JobOfferRequestDTO;
-import com.alumniportal.unmsm.dto.ResponseDTO.JobOfferResponseDTO;
-import com.alumniportal.unmsm.model.JobOffer;
+import com.alumniportal.unmsm.dto.request.JobOfferRequestDTO;
+import com.alumniportal.unmsm.dto.response.JobOfferResponseDTO;
 import com.alumniportal.unmsm.service.interfaces.IJobOfferService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

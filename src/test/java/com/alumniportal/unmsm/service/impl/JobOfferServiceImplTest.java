@@ -1,7 +1,7 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.dto.RequestDTO.JobOfferRequestDTO;
-import com.alumniportal.unmsm.dto.ResponseDTO.JobOfferResponseDTO;
+import com.alumniportal.unmsm.dto.request.JobOfferRequestDTO;
+import com.alumniportal.unmsm.dto.response.JobOfferResponseDTO;
 import com.alumniportal.unmsm.exception.AppException;
 import com.alumniportal.unmsm.mapper.JobOfferMapper;
 import com.alumniportal.unmsm.model.Company;
@@ -156,6 +156,6 @@ class JobOfferServiceImplTest {
         assertEquals("Job offer not found!", exception.getMessage());
         verify(jobOfferDAO, never()).save(any(JobOffer.class));
     }
-    
+
 
 }

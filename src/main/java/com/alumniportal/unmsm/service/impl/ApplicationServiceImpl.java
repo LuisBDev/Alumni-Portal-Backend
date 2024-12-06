@@ -1,7 +1,7 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.dto.RequestDTO.ApplicationRequestDTO;
-import com.alumniportal.unmsm.dto.ResponseDTO.ApplicationResponseDTO;
+import com.alumniportal.unmsm.dto.request.ApplicationRequestDTO;
+import com.alumniportal.unmsm.dto.response.ApplicationResponseDTO;
 import com.alumniportal.unmsm.exception.AppException;
 import com.alumniportal.unmsm.mapper.ApplicationMapper;
 import com.alumniportal.unmsm.model.Application;
@@ -12,7 +12,6 @@ import com.alumniportal.unmsm.service.interfaces.IApplicationService;
 import com.alumniportal.unmsm.util.EmailTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import com.alumniportal.unmsm.model.JobOffer;
 import com.alumniportal.unmsm.model.User;

@@ -1,6 +1,7 @@
 package com.alumniportal.unmsm.service.interfaces;
 
-import com.alumniportal.unmsm.dto.ResponseDTO.ProjectResponseDTO;
+import com.alumniportal.unmsm.dto.request.ProjectRequestDTO;
+import com.alumniportal.unmsm.dto.response.ProjectResponseDTO;
 import com.alumniportal.unmsm.model.Project;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public interface IProjectService {
     //    Buscar todos los projects de un usuario
     List<ProjectResponseDTO> findProjectsByUserId(Long userId);
 
-    void saveProject(Project project, Long userId);
+    void saveProject(ProjectRequestDTO projectRequestDTO, Long userId);
 
     void updateProject(Long id, Map<String, Object> fields);
 }

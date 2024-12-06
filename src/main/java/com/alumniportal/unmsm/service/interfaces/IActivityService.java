@@ -1,7 +1,7 @@
 package com.alumniportal.unmsm.service.interfaces;
 
-import com.alumniportal.unmsm.dto.ResponseDTO.ActivityResponseDTO;
-import com.alumniportal.unmsm.dto.RequestDTO.ActivityRequestDTO;
+import com.alumniportal.unmsm.dto.response.ActivityResponseDTO;
+import com.alumniportal.unmsm.dto.request.ActivityRequestDTO;
 import com.alumniportal.unmsm.model.Activity;
 import org.springframework.web.multipart.MultipartFile;
 

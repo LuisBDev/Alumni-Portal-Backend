@@ -1,7 +1,7 @@
 package com.alumniportal.unmsm.service.interfaces;
 
-import com.alumniportal.unmsm.dto.RequestDTO.JobOfferRequestDTO;
-import com.alumniportal.unmsm.dto.ResponseDTO.JobOfferResponseDTO;
+import com.alumniportal.unmsm.dto.request.JobOfferRequestDTO;
+import com.alumniportal.unmsm.dto.response.JobOfferResponseDTO;
 import com.alumniportal.unmsm.model.JobOffer;
 
 import java.util.List;

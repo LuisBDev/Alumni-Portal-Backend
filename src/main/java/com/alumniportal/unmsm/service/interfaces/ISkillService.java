@@ -1,6 +1,6 @@
 package com.alumniportal.unmsm.service.interfaces;
 
-import com.alumniportal.unmsm.dto.ResponseDTO.SkillResponseDTO;
+import com.alumniportal.unmsm.dto.response.SkillResponseDTO;
 import com.alumniportal.unmsm.model.Skill;
 
 import java.util.List;

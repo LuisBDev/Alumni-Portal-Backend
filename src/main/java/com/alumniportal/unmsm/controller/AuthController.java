@@ -1,15 +1,12 @@
 package com.alumniportal.unmsm.controller;
 
-import com.alumniportal.unmsm.dto.RequestDTO.CompanyRequestDTO;
-import com.alumniportal.unmsm.dto.RequestDTO.UserRequestDTO;
-import com.alumniportal.unmsm.dto.ResponseDTO.AuthCompanyResponseDTO;
-import com.alumniportal.unmsm.dto.ResponseDTO.AuthUserResponseDTO;
-import com.alumniportal.unmsm.dto.RequestDTO.LoginRequestDTO;
-import com.alumniportal.unmsm.model.Company;
-import com.alumniportal.unmsm.model.User;
+import com.alumniportal.unmsm.dto.request.CompanyRequestDTO;
+import com.alumniportal.unmsm.dto.request.UserRequestDTO;
+import com.alumniportal.unmsm.dto.response.AuthCompanyResponseDTO;
+import com.alumniportal.unmsm.dto.response.AuthUserResponseDTO;
+import com.alumniportal.unmsm.dto.request.LoginRequestDTO;
 import com.alumniportal.unmsm.service.interfaces.IAuthService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

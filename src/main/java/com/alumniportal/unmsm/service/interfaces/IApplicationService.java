@@ -1,7 +1,7 @@
 package com.alumniportal.unmsm.service.interfaces;
 
-import com.alumniportal.unmsm.dto.RequestDTO.ApplicationRequestDTO;
-import com.alumniportal.unmsm.dto.ResponseDTO.ApplicationResponseDTO;
+import com.alumniportal.unmsm.dto.request.ApplicationRequestDTO;
+import com.alumniportal.unmsm.dto.response.ApplicationResponseDTO;
 import com.alumniportal.unmsm.model.Application;
 
 import java.util.List;

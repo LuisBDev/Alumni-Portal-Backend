@@ -1,9 +1,9 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.dto.RequestDTO.ActivityRequestDTO;
-import com.alumniportal.unmsm.dto.RequestDTO.EnrollmentRequestDTO;
-import com.alumniportal.unmsm.dto.RequestDTO.UserRequestDTO;
-import com.alumniportal.unmsm.dto.ResponseDTO.EnrollmentResponseDTO;
+import com.alumniportal.unmsm.dto.request.ActivityRequestDTO;
+import com.alumniportal.unmsm.dto.request.EnrollmentRequestDTO;
+import com.alumniportal.unmsm.dto.request.UserRequestDTO;
+import com.alumniportal.unmsm.dto.response.EnrollmentResponseDTO;
 import com.alumniportal.unmsm.exception.AppException;
 import com.alumniportal.unmsm.mapper.EnrollmentMapper;
 import com.alumniportal.unmsm.model.Activity;
@@ -21,7 +21,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import software.amazon.awssdk.services.lambda.LambdaClient;
 
-import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 

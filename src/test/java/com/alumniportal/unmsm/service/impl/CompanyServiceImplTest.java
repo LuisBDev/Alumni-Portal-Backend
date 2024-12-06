@@ -1,8 +1,8 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.Data.CompanyProvider;
-import com.alumniportal.unmsm.dto.ResponseDTO.CompanyResponseDTO;
-import com.alumniportal.unmsm.dto.RequestDTO.PasswordChangeRequestDTO;
+import com.alumniportal.unmsm.data.CompanyProvider;
+import com.alumniportal.unmsm.dto.response.CompanyResponseDTO;
+import com.alumniportal.unmsm.dto.request.PasswordChangeRequestDTO;
 import com.alumniportal.unmsm.model.Activity;
 import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.persistence.interfaces.ICompanyDAO;
@@ -389,7 +389,7 @@ class CompanyServiceImplTest {
         assertThrows(Exception.class, () -> companyService.deleteById(1L));
         verify(companyDAO, never()).deleteById(1L);
 
-        
+
     }
 
 

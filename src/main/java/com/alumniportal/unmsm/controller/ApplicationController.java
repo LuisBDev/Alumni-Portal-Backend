@@ -1,15 +1,11 @@
 package com.alumniportal.unmsm.controller;
 
-import com.alumniportal.unmsm.dto.RequestDTO.ApplicationRequestDTO;
-import com.alumniportal.unmsm.dto.ResponseDTO.ApplicationResponseDTO;
-import com.alumniportal.unmsm.model.Application;
+import com.alumniportal.unmsm.dto.request.ApplicationRequestDTO;
+import com.alumniportal.unmsm.dto.response.ApplicationResponseDTO;
 import com.alumniportal.unmsm.service.interfaces.IApplicationService;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.web.server.authentication.RedirectServerAuthenticationEntryPoint;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

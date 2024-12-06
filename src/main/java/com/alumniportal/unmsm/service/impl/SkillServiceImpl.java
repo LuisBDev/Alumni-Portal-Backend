@@ -1,6 +1,6 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.dto.ResponseDTO.SkillResponseDTO;
+import com.alumniportal.unmsm.dto.response.SkillResponseDTO;
 import com.alumniportal.unmsm.model.Skill;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.interfaces.ISkillDAO;

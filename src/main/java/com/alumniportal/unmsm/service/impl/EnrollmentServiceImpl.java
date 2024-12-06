@@ -1,7 +1,7 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.dto.RequestDTO.EnrollmentRequestDTO;
-import com.alumniportal.unmsm.dto.ResponseDTO.EnrollmentResponseDTO;
+import com.alumniportal.unmsm.dto.request.EnrollmentRequestDTO;
+import com.alumniportal.unmsm.dto.response.EnrollmentResponseDTO;
 import com.alumniportal.unmsm.exception.AppException;
 import com.alumniportal.unmsm.mapper.EnrollmentMapper;
 import com.alumniportal.unmsm.model.Activity;
@@ -14,7 +14,6 @@ import com.alumniportal.unmsm.service.interfaces.IEnrollmentService;
 import com.alumniportal.unmsm.util.EmailTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.core.SdkBytes;
 import software.amazon.awssdk.services.lambda.LambdaClient;

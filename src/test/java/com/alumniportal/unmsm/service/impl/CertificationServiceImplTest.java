@@ -1,9 +1,9 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.Data.CertificationProvider;
-import com.alumniportal.unmsm.Data.UserProvider;
-import com.alumniportal.unmsm.dto.RequestDTO.CertificationRequestDTO;
-import com.alumniportal.unmsm.dto.ResponseDTO.CertificationResponseDTO;
+import com.alumniportal.unmsm.data.CertificationProvider;
+import com.alumniportal.unmsm.data.UserProvider;
+import com.alumniportal.unmsm.dto.request.CertificationRequestDTO;
+import com.alumniportal.unmsm.dto.response.CertificationResponseDTO;
 import com.alumniportal.unmsm.exception.AppException;
 import com.alumniportal.unmsm.mapper.CertificationMapper;
 import com.alumniportal.unmsm.model.Certification;

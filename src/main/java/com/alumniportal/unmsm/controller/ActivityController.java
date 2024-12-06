@@ -1,8 +1,8 @@
 package com.alumniportal.unmsm.controller;
 
 
-import com.alumniportal.unmsm.dto.ResponseDTO.ActivityResponseDTO;
-import com.alumniportal.unmsm.dto.RequestDTO.ActivityRequestDTO;
+import com.alumniportal.unmsm.dto.response.ActivityResponseDTO;
+import com.alumniportal.unmsm.dto.request.ActivityRequestDTO;
 import com.alumniportal.unmsm.service.interfaces.IActivityService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

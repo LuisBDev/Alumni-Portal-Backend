@@ -1,6 +1,6 @@
 package com.alumniportal.unmsm.service.interfaces;
 
-import com.alumniportal.unmsm.dto.ResponseDTO.WorkExperienceResponseDTO;
+import com.alumniportal.unmsm.dto.response.WorkExperienceResponseDTO;
 import com.alumniportal.unmsm.model.WorkExperience;
 
 import java.util.List;

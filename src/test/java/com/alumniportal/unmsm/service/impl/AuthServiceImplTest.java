@@ -1,11 +1,11 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.config.SpringSecurity.JwtService;
-import com.alumniportal.unmsm.dto.RequestDTO.CompanyRequestDTO;
-import com.alumniportal.unmsm.dto.RequestDTO.UserRequestDTO;
-import com.alumniportal.unmsm.dto.ResponseDTO.AuthCompanyResponseDTO;
-import com.alumniportal.unmsm.dto.ResponseDTO.AuthUserResponseDTO;
-import com.alumniportal.unmsm.dto.RequestDTO.LoginRequestDTO;
+import com.alumniportal.unmsm.config.security.JwtService;
+import com.alumniportal.unmsm.dto.request.CompanyRequestDTO;
+import com.alumniportal.unmsm.dto.request.UserRequestDTO;
+import com.alumniportal.unmsm.dto.response.AuthCompanyResponseDTO;
+import com.alumniportal.unmsm.dto.response.AuthUserResponseDTO;
+import com.alumniportal.unmsm.dto.request.LoginRequestDTO;
 import com.alumniportal.unmsm.exception.AppException;
 import com.alumniportal.unmsm.mapper.CompanyMapper;
 import com.alumniportal.unmsm.mapper.UserMapper;

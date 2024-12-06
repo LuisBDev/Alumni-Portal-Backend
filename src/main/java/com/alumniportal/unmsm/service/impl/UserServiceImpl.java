@@ -1,7 +1,7 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.dto.RequestDTO.PasswordChangeRequestDTO;
-import com.alumniportal.unmsm.dto.ResponseDTO.*;
+import com.alumniportal.unmsm.dto.request.PasswordChangeRequestDTO;
+import com.alumniportal.unmsm.dto.response.*;
 import com.alumniportal.unmsm.exception.AppException;
 import com.alumniportal.unmsm.mapper.UserMapper;
 import com.alumniportal.unmsm.model.User;
@@ -10,7 +10,6 @@ import com.alumniportal.unmsm.service.interfaces.IActivityService;
 import com.alumniportal.unmsm.service.interfaces.IUserService;
 import com.alumniportal.unmsm.util.ImageManagement;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;

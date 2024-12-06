@@ -1,9 +1,8 @@
 package com.alumniportal.unmsm.controller;
 
 
-import com.alumniportal.unmsm.dto.RequestDTO.CertificationRequestDTO;
-import com.alumniportal.unmsm.dto.ResponseDTO.CertificationResponseDTO;
-import com.alumniportal.unmsm.model.Certification;
+import com.alumniportal.unmsm.dto.request.CertificationRequestDTO;
+import com.alumniportal.unmsm.dto.response.CertificationResponseDTO;
 import com.alumniportal.unmsm.service.interfaces.ICertificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

@@ -1,6 +1,6 @@
 package com.alumniportal.unmsm.controller;
 
-import com.alumniportal.unmsm.dto.ResponseDTO.EducationResponseDTO;
+import com.alumniportal.unmsm.dto.response.EducationResponseDTO;
 import com.alumniportal.unmsm.model.Education;
 import com.alumniportal.unmsm.service.interfaces.IEducationService;
 import lombok.RequiredArgsConstructor;

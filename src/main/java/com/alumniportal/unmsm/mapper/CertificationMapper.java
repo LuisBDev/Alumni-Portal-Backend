@@ -1,7 +1,7 @@
 package com.alumniportal.unmsm.mapper;
 
-import com.alumniportal.unmsm.dto.RequestDTO.CertificationRequestDTO;
-import com.alumniportal.unmsm.dto.ResponseDTO.CertificationResponseDTO;
+import com.alumniportal.unmsm.dto.request.CertificationRequestDTO;
+import com.alumniportal.unmsm.dto.response.CertificationResponseDTO;
 import com.alumniportal.unmsm.model.Certification;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

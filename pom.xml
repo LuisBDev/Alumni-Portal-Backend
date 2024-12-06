@@ -40,7 +40,7 @@
         <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
         <sonar.coverage.exclusions>src/**/model/*, src/**/UnmsmApplication.java</sonar.coverage.exclusions>
         <!--        exclude util, controller, exception-->
-        <sonar.coverage.exclusions>src/**/util/*, src/**/controller/*, src/**/exception/*</sonar.coverage.exclusions>
+        <sonar.coverage.exclusions>src/**/util/*, src/**/exception/*</sonar.coverage.exclusions>
         <sonar.coverage.exclusions>src/**/config/*, src/**/mapper/*</sonar.coverage.exclusions>
     </properties>
     <dependencies>
@@ -284,7 +284,6 @@
                                 <exclude>**/util/**</exclude>
                                 <exclude>**/mapper/**</exclude>
                                 <exclude>**/exception/**</exclude>
-                                <exclude>**/controller/**</exclude>
                             </excludes>
                         </configuration>
                     </execution>

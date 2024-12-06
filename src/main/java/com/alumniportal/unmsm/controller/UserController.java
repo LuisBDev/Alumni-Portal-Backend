@@ -1,8 +1,8 @@
 package com.alumniportal.unmsm.controller;
 
-import com.alumniportal.unmsm.dto.RequestDTO.PasswordChangeRequestDTO;
-import com.alumniportal.unmsm.dto.ResponseDTO.UserCVResponseDTO;
-import com.alumniportal.unmsm.dto.ResponseDTO.UserResponseDTO;
+import com.alumniportal.unmsm.dto.request.PasswordChangeRequestDTO;
+import com.alumniportal.unmsm.dto.response.UserCVResponseDTO;
+import com.alumniportal.unmsm.dto.response.UserResponseDTO;
 import com.alumniportal.unmsm.service.interfaces.IUserService;
 import com.alumniportal.unmsm.util.CVGenerator;
 import lombok.RequiredArgsConstructor;

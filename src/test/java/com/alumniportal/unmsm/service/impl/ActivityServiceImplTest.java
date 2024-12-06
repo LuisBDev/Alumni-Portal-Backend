@@ -1,8 +1,8 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.Data.ActivityProvider;
-import com.alumniportal.unmsm.dto.RequestDTO.ActivityRequestDTO;
-import com.alumniportal.unmsm.dto.ResponseDTO.ActivityResponseDTO;
+import com.alumniportal.unmsm.data.ActivityProvider;
+import com.alumniportal.unmsm.dto.request.ActivityRequestDTO;
+import com.alumniportal.unmsm.dto.response.ActivityResponseDTO;
 import com.alumniportal.unmsm.exception.AppException;
 import com.alumniportal.unmsm.mapper.ActivityMapper;
 import com.alumniportal.unmsm.model.Activity;

@@ -1,7 +1,7 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.dto.RequestDTO.JobOfferRequestDTO;
-import com.alumniportal.unmsm.dto.ResponseDTO.JobOfferResponseDTO;
+import com.alumniportal.unmsm.dto.request.JobOfferRequestDTO;
+import com.alumniportal.unmsm.dto.response.JobOfferResponseDTO;
 import com.alumniportal.unmsm.exception.AppException;
 import com.alumniportal.unmsm.mapper.JobOfferMapper;
 import com.alumniportal.unmsm.model.Company;
@@ -10,7 +10,6 @@ import com.alumniportal.unmsm.persistence.interfaces.ICompanyDAO;
 import com.alumniportal.unmsm.persistence.interfaces.IJobOfferDAO;
 import com.alumniportal.unmsm.service.interfaces.IJobOfferService;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
