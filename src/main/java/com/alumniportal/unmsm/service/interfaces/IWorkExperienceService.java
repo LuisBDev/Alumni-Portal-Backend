@@ -1,5 +1,6 @@
 package com.alumniportal.unmsm.service.interfaces;
 
+import com.alumniportal.unmsm.dto.request.WorkExperienceRequestDTO;
 import com.alumniportal.unmsm.dto.response.WorkExperienceResponseDTO;
 import com.alumniportal.unmsm.model.WorkExperience;
 
@@ -20,7 +21,7 @@ public interface IWorkExperienceService {
     //    Buscar todas las experiencias laborales de un usuario
     List<WorkExperienceResponseDTO> findWorkExperiencesByUserId(Long userId);
 
-    void saveWorkExperience(WorkExperience workExperience, Long userId);
+    void saveWorkExperience(WorkExperienceRequestDTO workExperienceRequestDTO, Long userId);
 
     void updateWorkExperience(Long id, Map<String, Object> fields);
 
