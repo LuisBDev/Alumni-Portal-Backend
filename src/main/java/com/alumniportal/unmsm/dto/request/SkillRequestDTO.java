@@ -9,6 +9,7 @@ import lombok.*;
 @Builder
 public class SkillRequestDTO {
 
+    private Long id;
     private String name;
     private String level;
 }

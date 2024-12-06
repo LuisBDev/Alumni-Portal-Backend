@@ -106,7 +106,7 @@ public class User extends AbstractEntity implements UserDetails {
     //    Relacion con Activity
     @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Activity> activityList;
+    private List<Activity> activityList = new ArrayList<>();
 
     //    Relacion con Enrollment
     @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)

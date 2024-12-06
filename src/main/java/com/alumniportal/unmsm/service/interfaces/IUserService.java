@@ -25,9 +25,7 @@ public interface IUserService {
     void saveUser(User user);
 
     void updateUser(Long id, Map<String, Object> fields);
-
-    UserResponseDTO validateLogin(String email, String password);
-
+    
     UserCVResponseDTO getUserCV(Long userId);
 
     void updatePassword(Long id, PasswordChangeRequestDTO passwordChangeRequestDTO);

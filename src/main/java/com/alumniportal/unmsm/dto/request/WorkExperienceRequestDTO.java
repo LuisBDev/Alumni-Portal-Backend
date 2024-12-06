@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @Builder
 public class WorkExperienceRequestDTO {
 
+    private Long id;
     private String company;
     private String jobTitle;
     private LocalDate startDate;

@@ -10,6 +10,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 public class CertificationRequestDTO {
+
+    private Long id;
     private String name;
     private String issuingOrganization;
     private LocalDate issueDate;

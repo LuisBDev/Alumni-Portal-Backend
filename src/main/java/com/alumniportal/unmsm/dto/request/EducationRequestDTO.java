@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @Builder
 public class EducationRequestDTO {
 
+    private Long id;
     private String institution;
     private String degree;
     private String fieldOfStudy;

@@ -4,6 +4,7 @@ import com.alumniportal.unmsm.dto.request.PasswordChangeRequestDTO;
 import com.alumniportal.unmsm.dto.response.*;
 import com.alumniportal.unmsm.exception.AppException;
 import com.alumniportal.unmsm.mapper.UserMapper;
+import com.alumniportal.unmsm.model.Activity;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.interfaces.*;
 import com.alumniportal.unmsm.service.interfaces.IActivityService;
@@ -79,9 +80,22 @@ public class UserServiceImpl implements IUserService {
         if (user.getPhotoUrl() != null) {
             imageManagement.deleteImageByUrl(user.getPhotoUrl());
         }
-//TODO: Hacer mas eficiente la eliminación de las imagenes de las actividades a traves de url
-        if (!user.getActivityList().isEmpty()) {
-            user.getActivityList().stream()
+
+        deleteUserImage(user);
+        deleteUserActivitiesImages(user);
+        userDAO.deleteById(id);
+    }
+
+    private void deleteUserImage(User user) {
+        if (user.getPhotoUrl() != null) {
+            imageManagement.deleteImageByUrl(user.getPhotoUrl());
+        }
+    }
+
+    private void deleteUserActivitiesImages(User user) {
+        List<Activity> activities = user.getActivityList();
+        if (!activities.isEmpty()) {
+            activities.stream()
                     .filter(activity -> activity.getUrl() != null)
                     .forEach(activity -> {
                         try {
@@ -91,7 +105,6 @@ public class UserServiceImpl implements IUserService {
                         }
                     });
         }
-        userDAO.deleteById(id);
     }
 
     @Override
@@ -135,17 +148,6 @@ public class UserServiceImpl implements IUserService {
 
     }
 
-    @Override
-    public UserResponseDTO validateLogin(String email, String password) {
-        User user = userDAO.findByEmail(email);
-        if (user == null) {
-            throw new AppException("Error: User not found!", "NOT_FOUND");
-        }
-        if (!user.getPassword().equals(password)) {
-            throw new RuntimeException("Error: Invalid password!");
-        }
-        return userMapper.entityToDTO(user);
-    }
 
     @Override
     public UserCVResponseDTO getUserCV(Long userId) {
@@ -223,7 +225,6 @@ public class UserServiceImpl implements IUserService {
         if (!passwordEncoder.matches(passwordChangeRequestDTO.getPassword(), user.getPassword())) {
             throw new AppException("Error: Invalid password!", "BAD_REQUEST");
         }
-
 
         user.setPassword(passwordEncoder.encode(passwordChangeRequestDTO.getNewPassword()));
         user.setUpdatedAt(LocalDate.now());

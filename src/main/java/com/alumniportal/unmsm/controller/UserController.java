@@ -48,13 +48,9 @@ public class UserController {
 
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
-        try {
-            userService.updateUser(id, updates);
-            return ResponseEntity.ok("User updated successfully!");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+        userService.updateUser(id, updates);
+        return ResponseEntity.noContent().build();
     }
 
 
