@@ -9,7 +9,7 @@ import lombok.*;
 @Builder
 public class JobOfferRequestDTO {
 
-
+    private Long id;
     private String title;
     private String description;
     private Integer vacancies;

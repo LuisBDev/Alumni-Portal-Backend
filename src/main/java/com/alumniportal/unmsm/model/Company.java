@@ -63,7 +63,7 @@ public class Company extends AbstractEntity implements UserDetails {
     private Role role;
 
     //    Relacion con JobOffer
-    @OneToMany(mappedBy = "company", orphanRemoval = true)
+    @OneToMany(mappedBy = "company", orphanRemoval = true, cascade = CascadeType.ALL)
     @JsonIgnore
     private List<JobOffer> jobOfferList;
 
