@@ -85,7 +85,7 @@ public class User extends AbstractEntity implements UserDetails {
     //@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     @JsonIgnore
-    private List<WorkExperience> workExperienceList;    //    Relacion con WorkExperience
+    private List<WorkExperience> workExperienceList;
 
 
     //    Relacion con Education
@@ -119,7 +119,7 @@ public class User extends AbstractEntity implements UserDetails {
     private List<Application> applicationList;
 
     //    Relacion con Skill
-    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Skill> skillList;
 

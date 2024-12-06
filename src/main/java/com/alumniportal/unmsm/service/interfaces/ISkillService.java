@@ -1,5 +1,6 @@
 package com.alumniportal.unmsm.service.interfaces;
 
+import com.alumniportal.unmsm.dto.request.SkillRequestDTO;
 import com.alumniportal.unmsm.dto.response.SkillResponseDTO;
 import com.alumniportal.unmsm.model.Skill;
 
@@ -18,7 +19,7 @@ public interface ISkillService {
     //    Buscar todos los skills de un usuario
     List<SkillResponseDTO> findSkillsByUserId(Long userId);
 
-    public void saveSkill(Skill skill, Long userId);
+    public void saveSkill(SkillRequestDTO skillRequestDTO, Long userId);
 
     void updateSkill(Long id, Map<String, Object> fields);
 
