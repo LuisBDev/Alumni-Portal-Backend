@@ -5,6 +5,8 @@ import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.interfaces.ICompanyDAO;
 import com.alumniportal.unmsm.persistence.interfaces.IUserDAO;
 import com.alumniportal.unmsm.util.ImageManagement;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,6 +32,8 @@ public class ImageController {
 
 
     @PostMapping("/upload-user/{userId}")
+    @Operation(summary = "Upload user image by user id")
+    @ApiResponse(responseCode = "200", description = "File uploaded successfully")
     public ResponseEntity<?> uploadUserImage(@PathVariable Long userId, @RequestParam("image") MultipartFile file) {
         try {
             User user = userDAO.findById(userId);
@@ -42,6 +46,8 @@ public class ImageController {
 
 
     @PostMapping("/upload-company/{companyId}")
+    @Operation(summary = "Upload company image by company id")
+    @ApiResponse(responseCode = "200", description = "File uploaded successfully")
     public ResponseEntity<?> uploadCompanyImage(@PathVariable Long companyId, @RequestParam("image") MultipartFile file) {
         try {
             Company company = companyDAO.findById(companyId);
@@ -53,6 +59,8 @@ public class ImageController {
     }
 
     @GetMapping("/download-user/{userId}")
+    @Operation(summary = "Download user image by user id")
+    @ApiResponse(responseCode = "200", description = "Image found")
     public ResponseEntity<?> downloadUserImage(@PathVariable Long userId) throws IOException {
 
         try {
@@ -68,6 +76,8 @@ public class ImageController {
     }
 
     @GetMapping("/download-company/{companyId}")
+    @Operation(summary = "Download company image by company id")
+    @ApiResponse(responseCode = "200", description = "Image found")
     public ResponseEntity<?> downloadCompanyImage(@PathVariable Long companyId) throws IOException {
 
         try {
@@ -83,6 +93,8 @@ public class ImageController {
     }
 
     @DeleteMapping("/delete-image-user/{userId}")
+    @Operation(summary = "Delete user image by user id")
+    @ApiResponse(responseCode = "200", description = "Image deleted successfully")
     public ResponseEntity<?> deleteUserImage(@PathVariable Long userId) {
         try {
             User user = userDAO.findById(userId);
@@ -94,6 +106,8 @@ public class ImageController {
     }
 
     @DeleteMapping("/delete-image-company/{companyId}")
+    @Operation(summary = "Delete company image by company id")
+    @ApiResponse(responseCode = "200", description = "Image deleted successfully")
     public ResponseEntity<?> deleteCompanyImage(@PathVariable Long companyId) {
         try {
             Company company = companyDAO.findById(companyId);
