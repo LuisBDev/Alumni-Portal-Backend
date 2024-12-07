@@ -1,8 +1,10 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.Data.CompanyProvider;
-import com.alumniportal.unmsm.dto.ResponseDTO.CompanyResponseDTO;
-import com.alumniportal.unmsm.dto.RequestDTO.PasswordChangeRequestDTO;
+import com.alumniportal.unmsm.data.CompanyProvider;
+import com.alumniportal.unmsm.dto.response.CompanyResponseDTO;
+import com.alumniportal.unmsm.dto.request.PasswordChangeRequestDTO;
+import com.alumniportal.unmsm.exception.AppException;
+import com.alumniportal.unmsm.mapper.CompanyMapper;
 import com.alumniportal.unmsm.model.Activity;
 import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.persistence.interfaces.ICompanyDAO;
@@ -39,7 +41,7 @@ class CompanyServiceImplTest {
     private PasswordEncoder passwordEncoder;
 
     //   Real modelMapper
-    private ModelMapper modelMapper;
+    private CompanyMapper companyMapper;
 
     @InjectMocks
     private CompanyServiceImpl companyService;
@@ -47,8 +49,8 @@ class CompanyServiceImplTest {
     @BeforeEach
     void setUp() {
 
-        modelMapper = new ModelMapper();
-        companyService = new CompanyServiceImpl(companyDAO, modelMapper, imageManagement, activityService, passwordEncoder);
+        companyMapper = new CompanyMapper(new ModelMapper());
+        companyService = new CompanyServiceImpl(companyDAO, companyMapper, imageManagement, activityService, passwordEncoder);
     }
 
     @Test
@@ -64,12 +66,11 @@ class CompanyServiceImplTest {
     }
 
     @Test
-    void findAll_ReturnsEmptyList_WhenNoCompaniesExist() {
+    void findAll_ThrowsException_WhenNoCompaniesExist() {
         when(companyDAO.findAll()).thenReturn(List.of());
 
-        List<CompanyResponseDTO> result = companyService.findAll();
+        assertThrows(AppException.class, () -> companyService.findAll());
 
-        assertTrue(result.isEmpty());
         verify(companyDAO, times(1)).findAll();
     }
 
@@ -87,12 +88,11 @@ class CompanyServiceImplTest {
     }
 
     @Test
-    void findById_ReturnsNull_WhenCompanyDoesNotExist() {
+    void findById_ThrowsException_WhenCompanyDoesNotExist() {
         when(companyDAO.findById(1L)).thenReturn(null);
 
-        CompanyResponseDTO result = companyService.findById(1L);
+        assertThrows(AppException.class, () -> companyService.findById(1L));
 
-        assertNull(result);
         verify(companyDAO, times(1)).findById(1L);
     }
 
@@ -140,12 +140,10 @@ class CompanyServiceImplTest {
     }
 
     @Test
-    void findByEmail_ReturnsNull_WhenEmailDoesNotExist() {
+    void findByEmail_ThrowsException_WhenEmailDoesNotExist() {
         when(companyDAO.findByEmail("test@example.com")).thenReturn(null);
 
-        CompanyResponseDTO result = companyService.findByEmail("test@example.com");
-
-        assertNull(result);
+        assertThrows(AppException.class, () -> companyService.findByEmail("test@example.com"));
         verify(companyDAO, times(1)).findByEmail("test@example.com");
     }
 
@@ -389,7 +387,7 @@ class CompanyServiceImplTest {
         assertThrows(Exception.class, () -> companyService.deleteById(1L));
         verify(companyDAO, never()).deleteById(1L);
 
-        
+
     }
 
 

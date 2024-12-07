@@ -1,7 +1,7 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.dto.RequestDTO.EnrollmentRequestDTO;
-import com.alumniportal.unmsm.dto.ResponseDTO.EnrollmentResponseDTO;
+import com.alumniportal.unmsm.dto.request.EnrollmentRequestDTO;
+import com.alumniportal.unmsm.dto.response.EnrollmentResponseDTO;
 import com.alumniportal.unmsm.exception.AppException;
 import com.alumniportal.unmsm.mapper.EnrollmentMapper;
 import com.alumniportal.unmsm.model.Activity;
@@ -14,7 +14,6 @@ import com.alumniportal.unmsm.service.interfaces.IEnrollmentService;
 import com.alumniportal.unmsm.util.EmailTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.core.SdkBytes;
 import software.amazon.awssdk.services.lambda.LambdaClient;
@@ -101,7 +100,7 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
     }
 
 
-    public void saveEnrollment(EnrollmentRequestDTO enrollmentRequestDTO) {
+    public EnrollmentResponseDTO saveEnrollment(EnrollmentRequestDTO enrollmentRequestDTO) {
         User user = userDAO.findById(enrollmentRequestDTO.getUser().getId());
         if (user == null) {
             throw new AppException("Error: User not found!", "NOT_FOUND");
@@ -130,6 +129,7 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
 
         invokeLambdaWhenEnrollmentIsCreated("AlumniPortal | Confirmation of Activity Registration " + activity.getId(), enrollment);
 
+        return enrollmentMapper.entityToDTO(enrollment);
     }
 
     public void invokeLambdaWhenEnrollmentIsCreated(String subject, Enrollment enrollment) {
@@ -139,7 +139,7 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
                 enrollment.getActivity().getDescription(),
                 enrollment.getActivity().getEventType(),
                 enrollment.getActivity().getStartDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                enrollment.getActivity().getEndDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                enrollment.getActivity().getEndDate() != null ? enrollment.getActivity().getEndDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) : "",
                 enrollment.getActivity().getLocation(),
                 enrollment.getActivity().isEnrollable(),
                 enrollment.getEnrollmentDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),

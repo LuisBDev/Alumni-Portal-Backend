@@ -83,45 +83,45 @@ public class User extends AbstractEntity implements UserDetails {
 //    Relacion con WorkExperience, Education, Project, Certification, Skill, Interest, Enrollment, Activity, Application
 
     //@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<WorkExperience> workExperienceList;    //    Relacion con WorkExperience
+    private List<WorkExperience> workExperienceList = new ArrayList<>();
 
 
     //    Relacion con Education
     @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Education> educationList;
+    private List<Education> educationList = new ArrayList<>();
 
     //    Relacion con Certification
     @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Certification> certificationList;
+    private List<Certification> certificationList = new ArrayList<>();
 
     //    Relacion con Project
-    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Project> projectList;
+    private List<Project> projectList = new ArrayList<>();
 
     //    Relacion con Activity
     @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Activity> activityList;
+    private List<Activity> activityList = new ArrayList<>();
 
     //    Relacion con Enrollment
     @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Enrollment> enrollmentList;
+    private List<Enrollment> enrollmentList = new ArrayList<>();
 
     //    Relacion con Application
     @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Application> applicationList;
+    private List<Application> applicationList = new ArrayList<>();
 
     //    Relacion con Skill
-    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Skill> skillList;
+    private List<Skill> skillList = new ArrayList<>();
 
 
     @Override

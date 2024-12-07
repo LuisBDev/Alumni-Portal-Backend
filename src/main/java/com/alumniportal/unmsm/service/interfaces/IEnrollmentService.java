@@ -1,7 +1,7 @@
 package com.alumniportal.unmsm.service.interfaces;
 
-import com.alumniportal.unmsm.dto.RequestDTO.EnrollmentRequestDTO;
-import com.alumniportal.unmsm.dto.ResponseDTO.EnrollmentResponseDTO;
+import com.alumniportal.unmsm.dto.request.EnrollmentRequestDTO;
+import com.alumniportal.unmsm.dto.response.EnrollmentResponseDTO;
 import com.alumniportal.unmsm.model.Enrollment;
 
 import java.util.List;
@@ -22,6 +22,6 @@ public interface IEnrollmentService {
 
     EnrollmentResponseDTO findEnrollmentByUserIdAndActivityId(Long userId, Long activityId);
 
-    public void saveEnrollment(EnrollmentRequestDTO enrollmentRequestDTO);
+    EnrollmentResponseDTO saveEnrollment(EnrollmentRequestDTO enrollmentRequestDTO);
 
 }

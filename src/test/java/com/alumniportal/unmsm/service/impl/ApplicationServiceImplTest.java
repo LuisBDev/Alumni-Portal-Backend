@@ -1,7 +1,7 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.Data.ApplicationProvider;
-import com.alumniportal.unmsm.dto.ResponseDTO.ApplicationResponseDTO;
+import com.alumniportal.unmsm.data.ApplicationProvider;
+import com.alumniportal.unmsm.dto.response.ApplicationResponseDTO;
 import com.alumniportal.unmsm.exception.AppException;
 import com.alumniportal.unmsm.mapper.ApplicationMapper;
 import com.alumniportal.unmsm.model.Application;

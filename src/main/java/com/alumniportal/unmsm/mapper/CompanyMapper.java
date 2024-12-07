@@ -1,8 +1,8 @@
 package com.alumniportal.unmsm.mapper;
 
-import com.alumniportal.unmsm.dto.RequestDTO.CompanyRequestDTO;
-import com.alumniportal.unmsm.dto.ResponseDTO.AuthCompanyResponseDTO;
-import com.alumniportal.unmsm.dto.ResponseDTO.CompanyResponseDTO;
+import com.alumniportal.unmsm.dto.request.CompanyRequestDTO;
+import com.alumniportal.unmsm.dto.response.AuthCompanyResponseDTO;
+import com.alumniportal.unmsm.dto.response.CompanyResponseDTO;
 import com.alumniportal.unmsm.model.Company;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

@@ -1,6 +1,9 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.dto.ResponseDTO.EducationResponseDTO;
+import com.alumniportal.unmsm.dto.request.EducationRequestDTO;
+import com.alumniportal.unmsm.dto.response.EducationResponseDTO;
+import com.alumniportal.unmsm.exception.AppException;
+import com.alumniportal.unmsm.mapper.EducationMapper;
 import com.alumniportal.unmsm.model.Education;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.interfaces.IEducationDAO;
@@ -20,7 +23,6 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 class EducationServiceImplTest {
@@ -32,7 +34,7 @@ class EducationServiceImplTest {
     private IUserDAO userDAO;
 
 
-    private ModelMapper modelMapper;
+    private EducationMapper educationMapper;
 
     @InjectMocks
     private EducationServiceImpl educationService;
@@ -40,8 +42,8 @@ class EducationServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        modelMapper = new ModelMapper();
-        educationService = new EducationServiceImpl(educationDAO, userDAO, modelMapper);
+        educationMapper = new EducationMapper(new ModelMapper());
+        educationService = new EducationServiceImpl(educationDAO, userDAO, educationMapper);
     }
 
 
@@ -55,12 +57,12 @@ class EducationServiceImplTest {
     }
 
     @Test
-    void findAllReturnsEmptyListWhenNoEducations() {
+    void findAllReturnsEmptyListWhenNoEducationsFound() {
         when(educationDAO.findAll()).thenReturn(Collections.emptyList());
-        List<EducationResponseDTO> result = educationService.findAll();
-        assertTrue(result.isEmpty());
+        assertThrows(AppException.class, () -> educationService.findAll());
         verify(educationDAO, times(1)).findAll();
     }
+
 
     @Test
     void findByIdReturnsEducationDTOWhenFound() {
@@ -74,8 +76,7 @@ class EducationServiceImplTest {
     @Test
     void findByIdReturnsNullWhenNotFound() {
         when(educationDAO.findById(1L)).thenReturn(null);
-        EducationResponseDTO result = educationService.findById(1L);
-        assertNull(result);
+        assertThrows(AppException.class, () -> educationService.findById(1L));
         verify(educationDAO, times(1)).findById(1L);
     }
 
@@ -88,8 +89,17 @@ class EducationServiceImplTest {
 
     @Test
     void deleteByIdCallsEducationDAODeleteById() {
+
+        when(educationDAO.findById(1L)).thenReturn(new Education());
         educationService.deleteById(1L);
         verify(educationDAO, times(1)).deleteById(1L);
+    }
+
+    @Test
+    void deleteByIdThrowsExceptionWhenEducationNotFound() {
+        when(educationDAO.findById(1L)).thenReturn(null);
+        assertThrows(AppException.class, () -> educationService.deleteById(1L));
+        verify(educationDAO, never()).deleteById(1L);
     }
 
     @Test
@@ -102,18 +112,18 @@ class EducationServiceImplTest {
     }
 
     @Test
-    void findEducationsByUserIdReturnsEmptyListWhenNoEducations() {
+    void findEducationsByUserIdReturnsEmptyListWhenNoEducationsFound() {
         when(educationDAO.findEducationsByUserId(1L)).thenReturn(Collections.emptyList());
-        List<EducationResponseDTO> result = educationService.findEducationsByUserId(1L);
-        assertTrue(result.isEmpty());
+        assertThrows(AppException.class, () -> educationService.findEducationsByUserId(1L));
         verify(educationDAO, times(1)).findEducationsByUserId(1L);
     }
+
 
     @Test
     void saveEducationThrowsExceptionWhenUserNotFound() {
         when(userDAO.findById(1L)).thenReturn(null);
-        Education education = new Education();
-        assertThrows(RuntimeException.class, () -> educationService.saveEducation(education, 1L));
+        EducationRequestDTO education = new EducationRequestDTO();
+        assertThrows(AppException.class, () -> educationService.saveEducation(education, 1L));
         verify(userDAO, times(1)).findById(1L);
     }
 
@@ -121,9 +131,9 @@ class EducationServiceImplTest {
     void saveEducation() {
         User user = new User();
         when(userDAO.findById(1L)).thenReturn(user);
-        Education education = new Education();
+        EducationRequestDTO education = new EducationRequestDTO();
         educationService.saveEducation(education, 1L);
-        verify(educationDAO, times(1)).save(education);
+        verify(educationDAO, times(1)).save(any(Education.class));
     }
 
     @Test
@@ -145,6 +155,16 @@ class EducationServiceImplTest {
         verify(educationDAO, never()).save(any(Education.class));
     }
 
+    @Test
+    void updateEducationWhenFieldIsStartDateAndEndDate() {
+        Education education = new Education();
+        when(educationDAO.findById(1L)).thenReturn(education);
+        Map<String, Object> fields = Map.of("startDate", "2023-01-01", "endDate", "2024-01-01");
+        educationService.updateEducation(1L, fields);
+        assertEquals(LocalDate.of(2023, 1, 1), education.getStartDate());
+        assertEquals(LocalDate.of(2024, 1, 1), education.getEndDate());
+        verify(educationDAO, times(1)).save(education);
+    }
 
 
 }

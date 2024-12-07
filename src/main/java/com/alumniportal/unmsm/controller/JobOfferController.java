@@ -1,9 +1,12 @@
 package com.alumniportal.unmsm.controller;
 
-import com.alumniportal.unmsm.dto.ResponseDTO.JobOfferResponseDTO;
-import com.alumniportal.unmsm.model.JobOffer;
+import com.alumniportal.unmsm.dto.request.JobOfferRequestDTO;
+import com.alumniportal.unmsm.dto.response.JobOfferResponseDTO;
 import com.alumniportal.unmsm.service.interfaces.IJobOfferService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,49 +22,51 @@ public class JobOfferController {
 
 
     @GetMapping("/all")
-    public List<JobOfferResponseDTO> findAll() {
-        return jobOfferService.findAll();
+    @Operation(summary = "Get all job offers")
+    @ApiResponse(responseCode = "200", description = "List of job offers")
+    public ResponseEntity<List<JobOfferResponseDTO>> findAll() {
+        List<JobOfferResponseDTO> jobOfferResponseDTOList = jobOfferService.findAll();
+        return ResponseEntity.ok(jobOfferResponseDTOList);
     }
 
     @GetMapping("/{id}")
-    public JobOfferResponseDTO findById(@PathVariable Long id) {
-        return jobOfferService.findById(id);
+    @Operation(summary = "Find job offer by ID")
+    @ApiResponse(responseCode = "200", description = "Return job offer")
+    public ResponseEntity<JobOfferResponseDTO> findById(@PathVariable Long id) {
+        JobOfferResponseDTO jobOfferResponseDTO = jobOfferService.findById(id);
+        return ResponseEntity.ok(jobOfferResponseDTO);
     }
 
     @PostMapping("/save/{companyId}")
-    public ResponseEntity<?> save(@RequestBody JobOffer jobOffer, @PathVariable Long companyId) {
-
-        try {
-            jobOfferService.saveJobOffer(jobOffer, companyId);
-            return ResponseEntity.ok("JobOffer saved successfully!");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
-        }
+    @Operation(summary = "Create job offer for a company by company ID")
+    @ApiResponse(responseCode = "201", description = "Return saved job offer")
+    public ResponseEntity<JobOfferResponseDTO> save(@RequestBody JobOfferRequestDTO jobOfferRequestDTO, @PathVariable Long companyId) {
+        JobOfferResponseDTO jobOfferResponseDTO = jobOfferService.saveJobOffer(jobOfferRequestDTO, companyId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(jobOfferResponseDTO);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
-        try {
-            jobOfferService.updateJobOffer(id, updates);
-            return ResponseEntity.ok("JobOffer updated successfully!");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
-        }
+    @Operation(summary = "Update job offer by job offer ID")
+    @ApiResponse(responseCode = "200", description = "Return updated job offer")
+    public ResponseEntity<JobOfferResponseDTO> update(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+        JobOfferResponseDTO jobOfferResponseDTO = jobOfferService.updateJobOffer(id, updates);
+        return ResponseEntity.ok(jobOfferResponseDTO);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteById(@PathVariable Long id) {
-        JobOfferResponseDTO jobOfferResponseDTO = jobOfferService.findById(id);
-        if (jobOfferResponseDTO == null) {
-            return ResponseEntity.badRequest().body("Error: JobOffer not found!");
-        }
+    @Operation(summary = "Delete job offer by ID")
+    @ApiResponse(responseCode = "204", description = "Job offer deleted")
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         jobOfferService.deleteById(id);
-        return ResponseEntity.ok("JobOffer deleted successfully!");
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/company/{companyId}")
-    public List<JobOfferResponseDTO> findJobOffersByCompanyId(@PathVariable Long companyId) {
-        return jobOfferService.findJobOffersByCompanyId(companyId);
+    @Operation(summary = "List job offers by company ID")
+    @ApiResponse(responseCode = "200", description = "List of job offers by company")
+    public ResponseEntity<List<JobOfferResponseDTO>> findJobOffersByCompanyId(@PathVariable Long companyId) {
+        List<JobOfferResponseDTO> jobOffersByCompanyId = jobOfferService.findJobOffersByCompanyId(companyId);
+        return ResponseEntity.ok(jobOffersByCompanyId);
     }
 
 

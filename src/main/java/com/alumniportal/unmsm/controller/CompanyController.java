@@ -1,8 +1,10 @@
 package com.alumniportal.unmsm.controller;
 
-import com.alumniportal.unmsm.dto.ResponseDTO.CompanyResponseDTO;
-import com.alumniportal.unmsm.dto.RequestDTO.PasswordChangeRequestDTO;
+import com.alumniportal.unmsm.dto.response.CompanyResponseDTO;
+import com.alumniportal.unmsm.dto.request.PasswordChangeRequestDTO;
 import com.alumniportal.unmsm.service.interfaces.ICompanyService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 
@@ -19,71 +21,53 @@ public class CompanyController {
     private final ICompanyService companyService;
 
     @GetMapping("/all")
-    public List<CompanyResponseDTO> findAll() {
-        return companyService.findAll();
+    @Operation(summary = "Get all companies")
+    @ApiResponse(responseCode = "200", description = "List of companies")
+    public ResponseEntity<List<CompanyResponseDTO>> findAll() {
+        List<CompanyResponseDTO> companyResponseDTOList = companyService.findAll();
+        return ResponseEntity.ok(companyResponseDTOList);
     }
 
     @GetMapping("/{id}")
-    public CompanyResponseDTO findById(@PathVariable Long id) {
-        return companyService.findById(id);
+    @Operation(summary = "Get company by id")
+    @ApiResponse(responseCode = "200", description = "Return company found")
+    public ResponseEntity<CompanyResponseDTO> findById(@PathVariable Long id) {
+        CompanyResponseDTO companyResponseDTO = companyService.findById(id);
+        return ResponseEntity.ok(companyResponseDTO);
     }
 
-//    @PostMapping("/loginCompany")
-//    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDTO) {
-//        try {
-//            CompanyResponseDTO companyDTO = companyService.validateLogin(loginRequestDTO.getEmail(), loginRequestDTO.getPassword());
-//            return ResponseEntity.ok(companyDTO);
-//        } catch (RuntimeException e) {
-//            return ResponseEntity.badRequest().body(e.getMessage());
-//        }
-//
-//    }
-//
-//    @PostMapping("/registerCompany")
-//    public ResponseEntity<?> save(@RequestBody Company company) {
-//        try {
-//            companyService.saveCompany(company);
-//            return ResponseEntity.ok("Company registered successfully!");
-//        } catch (RuntimeException e) {
-//            return ResponseEntity.badRequest().body(e.getMessage());
-//        }
-//    }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteById(@PathVariable Long id) {
-        CompanyResponseDTO companyResponseDTO = companyService.findById(id);
-        if (companyResponseDTO == null) {
-            return ResponseEntity.badRequest().body("Error: Company not found!");
-        }
+    @Operation(summary = "Delete company by id")
+    @ApiResponse(responseCode = "204", description = "Company deleted")
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         companyService.deleteById(id);
-        return ResponseEntity.ok("Company deleted successfully!");
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping
-    public CompanyResponseDTO findByEmail(@RequestBody String email) {
-        return companyService.findByEmail(email);
+    @Operation(summary = "Get company by email")
+    @ApiResponse(responseCode = "200", description = "Return company found by email")
+    public ResponseEntity<CompanyResponseDTO> findByEmail(@RequestBody String email) {
+        CompanyResponseDTO companyResponseDTO = companyService.findByEmail(email);
+        return ResponseEntity.ok(companyResponseDTO);
     }
 
     //Actualizar parcialmente los campos
     @PatchMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
-        try {
-            companyService.updateCompany(id, updates);
-            return ResponseEntity.ok("Company updated successfully!");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @Operation(summary = "Update company by id")
+    @ApiResponse(responseCode = "200", description = "Return company updated")
+    public ResponseEntity<CompanyResponseDTO> update(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+        CompanyResponseDTO companyResponseDTO = companyService.updateCompany(id, updates);
+        return ResponseEntity.ok(companyResponseDTO);
     }
 
     @PostMapping("/updatePassword/{id}")
-    public ResponseEntity<?> updatePassword(@PathVariable Long id, @RequestBody PasswordChangeRequestDTO passwordChangeRequestDTO) {
-        try {
-            companyService.updatePassword(id, passwordChangeRequestDTO);
-            return ResponseEntity.ok("Password updated successfully!");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @Operation(summary = "Update password by id")
+    @ApiResponse(responseCode = "204", description = "Password updated")
+    public ResponseEntity<Void> updatePassword(@PathVariable Long id, @RequestBody PasswordChangeRequestDTO passwordChangeRequestDTO) {
+        companyService.updatePassword(id, passwordChangeRequestDTO);
+        return ResponseEntity.noContent().build();
     }
-
 
 }

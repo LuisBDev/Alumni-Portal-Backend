@@ -1,7 +1,7 @@
 package com.alumniportal.unmsm.mapper;
 
-import com.alumniportal.unmsm.dto.RequestDTO.ActivityRequestDTO;
-import com.alumniportal.unmsm.dto.ResponseDTO.ActivityResponseDTO;
+import com.alumniportal.unmsm.dto.request.ActivityRequestDTO;
+import com.alumniportal.unmsm.dto.response.ActivityResponseDTO;
 import com.alumniportal.unmsm.model.Activity;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

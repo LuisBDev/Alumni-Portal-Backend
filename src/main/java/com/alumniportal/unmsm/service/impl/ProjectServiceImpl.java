@@ -1,6 +1,9 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.dto.ResponseDTO.ProjectResponseDTO;
+import com.alumniportal.unmsm.dto.request.ProjectRequestDTO;
+import com.alumniportal.unmsm.dto.response.ProjectResponseDTO;
+import com.alumniportal.unmsm.exception.AppException;
+import com.alumniportal.unmsm.mapper.ProjectMapper;
 import com.alumniportal.unmsm.model.Project;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.interfaces.IProjectDAO;
@@ -24,24 +27,25 @@ public class ProjectServiceImpl implements IProjectService {
 
     private final IUserDAO userDAO;
 
-    private final ModelMapper modelMapper;
+    private final ProjectMapper projectMapper;
 
 
     @Override
     public List<ProjectResponseDTO> findAll() {
-        return projectDAO.findAll()
-                .stream()
-                .map(project -> modelMapper.map(project, ProjectResponseDTO.class))
-                .toList();
+        List<Project> projectList = projectDAO.findAll();
+        if (projectList.isEmpty()) {
+            throw new AppException("No projects found", "NOT_FOUND");
+        }
+        return projectMapper.entityListToDTOList(projectList);
     }
 
     @Override
     public ProjectResponseDTO findById(Long id) {
         Project project = projectDAO.findById(id);
         if (project == null) {
-            return null;
+            throw new AppException("Project not found", "NOT_FOUND");
         }
-        return modelMapper.map(project, ProjectResponseDTO.class);
+        return projectMapper.entityToDTO(project);
     }
 
     @Override
@@ -51,35 +55,38 @@ public class ProjectServiceImpl implements IProjectService {
 
     @Override
     public void deleteById(Long id) {
+        Project project = projectDAO.findById(id);
+        if (project == null) {
+            throw new AppException("Project not found", "NOT_FOUND");
+        }
         projectDAO.deleteById(id);
     }
 
     @Override
     public List<ProjectResponseDTO> findProjectsByUserId(Long userId) {
-        return projectDAO.findProjectsByUserId(userId)
-                .stream()
-                .map(project -> modelMapper.map(project, ProjectResponseDTO.class))
-                .toList();
+        List<Project> projectsByUserId = projectDAO.findProjectsByUserId(userId);
+        return projectMapper.entityListToDTOList(projectsByUserId);
     }
 
-    public void saveProject(Project project, Long userId) {
+    public ProjectResponseDTO saveProject(ProjectRequestDTO projectRequestDTO, Long userId) {
         User user = userDAO.findById(userId);
         if (user == null) {
-            throw new RuntimeException("User not found");
+            throw new AppException("User not found", "NOT_FOUND");
         }
+
+        Project project = projectMapper.requestDtoToEntity(projectRequestDTO);
+
 //        Asignando el usuario al project y persistiendo
         project.setUser(user);
         projectDAO.save(project);
-//        Agregando el project a la lista de projects del usuario
-        user.getProjectList().add(project);
-        userDAO.save(user);
+        return projectMapper.entityToDTO(project);
     }
 
     @Override
-    public void updateProject(Long id, Map<String, Object> fields) {
+    public ProjectResponseDTO updateProject(Long id, Map<String, Object> fields) {
         Project project = projectDAO.findById(id);
         if (project == null) {
-            throw new RuntimeException("Error: project not found!");
+            throw new AppException("Project not found", "NOT_FOUND");
         }
         fields.forEach((k, v) -> {
             Field field = ReflectionUtils.findField(Project.class, k);
@@ -93,6 +100,7 @@ public class ProjectServiceImpl implements IProjectService {
             }
         });
         projectDAO.save(project);
+        return projectMapper.entityToDTO(project);
     }
 
 }

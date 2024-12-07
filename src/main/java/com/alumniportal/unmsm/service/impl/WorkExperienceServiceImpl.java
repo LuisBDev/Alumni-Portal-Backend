@@ -1,6 +1,9 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.dto.ResponseDTO.WorkExperienceResponseDTO;
+import com.alumniportal.unmsm.dto.request.WorkExperienceRequestDTO;
+import com.alumniportal.unmsm.dto.response.WorkExperienceResponseDTO;
+import com.alumniportal.unmsm.exception.AppException;
+import com.alumniportal.unmsm.mapper.WorkExperienceMapper;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.model.WorkExperience;
 import com.alumniportal.unmsm.persistence.interfaces.IUserDAO;
@@ -24,15 +27,16 @@ public class WorkExperienceServiceImpl implements IWorkExperienceService {
 
     private final IUserDAO userDAO;
 
-    private final ModelMapper modelMapper;
+    private final WorkExperienceMapper workExperienceMapper;
 
 
     @Override
     public List<WorkExperienceResponseDTO> findAll() {
-        return workExperienceDAO.findAll()
-                .stream()
-                .map(workExperience -> modelMapper.map(workExperience, WorkExperienceResponseDTO.class))
-                .toList();
+        List<WorkExperience> workExperienceList = workExperienceDAO.findAll();
+        if (workExperienceList.isEmpty()) {
+            throw new AppException("No work experiences found", "NOT_FOUND");
+        }
+        return workExperienceMapper.entityListToDTOList(workExperienceList);
     }
 
 
@@ -40,9 +44,9 @@ public class WorkExperienceServiceImpl implements IWorkExperienceService {
     public WorkExperienceResponseDTO findById(Long id) {
         WorkExperience workExperience = workExperienceDAO.findById(id);
         if (workExperience == null) {
-            return null;
+            throw new AppException("Work experience not found", "NOT_FOUND");
         }
-        return modelMapper.map(workExperience, WorkExperienceResponseDTO.class);
+        return workExperienceMapper.entityToDTO(workExperience);
     }
 
     @Override
@@ -52,38 +56,42 @@ public class WorkExperienceServiceImpl implements IWorkExperienceService {
 
     @Override
     public void deleteById(Long id) {
+        WorkExperience workExperience = workExperienceDAO.findById(id);
+        if (workExperience == null) {
+            throw new AppException("Work experience not found", "NOT_FOUND");
+        }
         workExperienceDAO.deleteById(id);
     }
 
     @Override
     public List<WorkExperienceResponseDTO> findWorkExperiencesByUserId(Long userId) {
-        return workExperienceDAO.findWorkExperiencesByUserId(userId)
-                .stream()
-                .map(workExperience -> modelMapper.map(workExperience, WorkExperienceResponseDTO.class))
-                .toList();
+        List<WorkExperience> workExperiencesByUserId = workExperienceDAO.findWorkExperiencesByUserId(userId);
+        if (workExperiencesByUserId.isEmpty()) {
+            throw new AppException("No work experiences found for user", "NOT_FOUND");
+        }
+        return workExperienceMapper.entityListToDTOList(workExperiencesByUserId);
     }
 
     @Override
-    public void saveWorkExperience(WorkExperience workExperience, Long userId) {
+    public WorkExperienceResponseDTO saveWorkExperience(WorkExperienceRequestDTO workExperienceRequestDTO, Long userId) {
         User user = userDAO.findById(userId);
         if (user == null) {
-            throw new RuntimeException("User not found");
+            throw new AppException("User not found", "NOT_FOUND");
         }
-//        asignando el usuario a la experiencia laboral y persistiendo
+
+        WorkExperience workExperience = workExperienceMapper.requestDtoToEntity(workExperienceRequestDTO);
+
         workExperience.setUser(user);
         workExperienceDAO.save(workExperience);
-
-//        agregando la experiencia laboral al usuario y persistiendo
-        user.getWorkExperienceList().add(workExperience);
-        userDAO.save(user);
+        return workExperienceMapper.entityToDTO(workExperience);
 
     }
 
     @Override
-    public void updateWorkExperience(Long id, Map<String, Object> fields) {
+    public WorkExperienceResponseDTO updateWorkExperience(Long id, Map<String, Object> fields) {
         WorkExperience workExperience = workExperienceDAO.findById(id);
         if (workExperience == null) {
-            throw new RuntimeException("Error: workExperience not found!");
+            throw new AppException("Work experience not found", "NOT_FOUND");
         }
         fields.forEach((k, v) -> {
             Field field = ReflectionUtils.findField(WorkExperience.class, k);
@@ -97,6 +105,7 @@ public class WorkExperienceServiceImpl implements IWorkExperienceService {
             }
         });
         workExperienceDAO.save(workExperience);
+        return workExperienceMapper.entityToDTO(workExperience);
 
     }
 }

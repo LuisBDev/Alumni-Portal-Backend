@@ -1,13 +1,15 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.dto.ResponseDTO.JobOfferResponseDTO;
+import com.alumniportal.unmsm.dto.request.JobOfferRequestDTO;
+import com.alumniportal.unmsm.dto.response.JobOfferResponseDTO;
+import com.alumniportal.unmsm.exception.AppException;
+import com.alumniportal.unmsm.mapper.JobOfferMapper;
 import com.alumniportal.unmsm.model.Company;
 import com.alumniportal.unmsm.model.JobOffer;
 import com.alumniportal.unmsm.persistence.interfaces.ICompanyDAO;
 import com.alumniportal.unmsm.persistence.interfaces.IJobOfferDAO;
 import com.alumniportal.unmsm.service.interfaces.IJobOfferService;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
@@ -24,23 +26,24 @@ public class JobOfferServiceImpl implements IJobOfferService {
 
     private final ICompanyDAO companyDAO;
 
-    private final ModelMapper modelMapper;
+    private final JobOfferMapper jobOfferMapper;
 
     @Override
     public List<JobOfferResponseDTO> findAll() {
-        return jobOfferDAO.findAll()
-                .stream()
-                .map(jobOffer -> modelMapper.map(jobOffer, JobOfferResponseDTO.class))
-                .toList();
+        List<JobOffer> jobOfferList = jobOfferDAO.findAll();
+        if (jobOfferList.isEmpty()) {
+            throw new AppException("No job offers found!", "NOT_FOUND");
+        }
+        return jobOfferMapper.entityListToDTOList(jobOfferList);
     }
 
     @Override
     public JobOfferResponseDTO findById(Long id) {
         JobOffer jobOffer = jobOfferDAO.findById(id);
         if (jobOffer == null) {
-            return null;
+            throw new AppException("Job offer not found!", "NOT_FOUND");
         }
-        return modelMapper.map(jobOffer, JobOfferResponseDTO.class);
+        return jobOfferMapper.entityToDTO(jobOffer);
     }
 
     @Override
@@ -50,42 +53,51 @@ public class JobOfferServiceImpl implements IJobOfferService {
 
     @Override
     public void deleteById(Long id) {
+        JobOffer jobOffer = jobOfferDAO.findById(id);
+        if (jobOffer == null) {
+            throw new AppException("Job offer not found!", "NOT_FOUND");
+        }
         jobOfferDAO.deleteById(id);
     }
 
     @Override
     public List<JobOfferResponseDTO> findJobOffersByCompanyId(Long id) {
-        return jobOfferDAO.findJobOffersByCompanyId(id)
-                .stream()
-                .map(jobOffer -> modelMapper.map(jobOffer, JobOfferResponseDTO.class))
-                .toList();
+        List<JobOffer> jobOffersByCompanyId = jobOfferDAO.findJobOffersByCompanyId(id);
+        if (jobOffersByCompanyId.isEmpty()) {
+            throw new AppException("No job offers found for this company!", "NOT_FOUND");
+        }
+        return jobOfferMapper.entityListToDTOList(jobOffersByCompanyId);
     }
 
     @Override
-    public void saveJobOffer(JobOffer jobOffer, Long companyId) {
+    public JobOfferResponseDTO saveJobOffer(JobOfferRequestDTO jobOfferRequestDTO, Long companyId) {
         Company company = companyDAO.findById(companyId);
         if (company == null) {
-            throw new RuntimeException("Company not found!");
+            throw new AppException("Company not found!", "NOT_FOUND");
         }
+
+        JobOffer jobOffer = jobOfferMapper.requestDtoToEntity(jobOfferRequestDTO);
+
         jobOffer.setCompany(company);
         jobOffer.setCreatedAt(LocalDate.now());
         jobOfferDAO.save(jobOffer);
 
-        company.getJobOfferList().add(jobOffer);
-        companyDAO.save(company);
+        return jobOfferMapper.entityToDTO(jobOffer);
     }
 
     @Override
-    public void updateJobOffer(Long id, Map<String, Object> fields) {
+    public JobOfferResponseDTO updateJobOffer(Long id, Map<String, Object> fields) {
         JobOffer jobOffer = jobOfferDAO.findById(id);
         if (jobOffer == null) {
-            throw new RuntimeException("Error: jobOffer not found!");
+            throw new AppException("Job offer not found!", "NOT_FOUND");
         }
         fields.forEach((k, v) -> {
             Field field = ReflectionUtils.findField(JobOffer.class, k);
             field.setAccessible(true);
             ReflectionUtils.setField(field, jobOffer, v);
         });
+        jobOffer.setUpdatedAt(LocalDate.now());
         jobOfferDAO.save(jobOffer);
+        return jobOfferMapper.entityToDTO(jobOffer);
     }
 }

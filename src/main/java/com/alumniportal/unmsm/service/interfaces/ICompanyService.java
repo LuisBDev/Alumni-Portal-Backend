@@ -1,7 +1,7 @@
 package com.alumniportal.unmsm.service.interfaces;
 
-import com.alumniportal.unmsm.dto.ResponseDTO.CompanyResponseDTO;
-import com.alumniportal.unmsm.dto.RequestDTO.PasswordChangeRequestDTO;
+import com.alumniportal.unmsm.dto.response.CompanyResponseDTO;
+import com.alumniportal.unmsm.dto.request.PasswordChangeRequestDTO;
 import com.alumniportal.unmsm.model.Company;
 
 import java.util.List;
@@ -20,9 +20,9 @@ public interface ICompanyService {
 
     CompanyResponseDTO findByEmail(String email);
 
-    void saveCompany(Company company);
+    CompanyResponseDTO saveCompany(Company company);
 
-    void updateCompany(Long id, Map<String, Object> fields);
-    
+    CompanyResponseDTO updateCompany(Long id, Map<String, Object> fields);
+
     void updatePassword(Long id, PasswordChangeRequestDTO passwordChangeRequestDTO);
 }

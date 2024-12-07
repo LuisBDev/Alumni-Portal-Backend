@@ -1,7 +1,7 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.dto.ResponseDTO.ActivityResponseDTO;
-import com.alumniportal.unmsm.dto.RequestDTO.ActivityRequestDTO;
+import com.alumniportal.unmsm.dto.response.ActivityResponseDTO;
+import com.alumniportal.unmsm.dto.request.ActivityRequestDTO;
 import com.alumniportal.unmsm.exception.AppException;
 import com.alumniportal.unmsm.mapper.ActivityMapper;
 import com.alumniportal.unmsm.model.Activity;
@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.SdkBytes;
-import software.amazon.awssdk.core.exception.SdkException;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.lambda.LambdaClient;
 import software.amazon.awssdk.services.lambda.model.InvokeRequest;
@@ -159,7 +158,7 @@ public class ActivityServiceImpl implements IActivityService {
     }
 
     @Override
-    public void saveActivityByUserId(ActivityRequestDTO activityRequestDTO, Long userId) {
+    public ActivityResponseDTO saveActivityByUserId(ActivityRequestDTO activityRequestDTO, Long userId) {
         // Buscar el usuario
         User user = userDAO.findById(userId);
         if (user == null) {
@@ -175,12 +174,12 @@ public class ActivityServiceImpl implements IActivityService {
         // Guardar la actividad
         activityDAO.save(activity);
 
-
         invokeLambda("Nueva Actividad: " + activity.getTitle(), user.getName(), activity);
+        return activityMapper.entityToDTO(activity);
     }
 
     @Override
-    public void saveActivityByCompanyId(ActivityRequestDTO activityRequestDTO, Long companyId) {
+    public ActivityResponseDTO saveActivityByCompanyId(ActivityRequestDTO activityRequestDTO, Long companyId) {
 
         Company company = companyDAO.findById(companyId);
         if (company == null) {
@@ -197,7 +196,7 @@ public class ActivityServiceImpl implements IActivityService {
 
 
         invokeLambda("AlumniPortal | New Activity: " + activity.getTitle(), company.getName(), activity);
-
+        return activityMapper.entityToDTO(activity);
     }
 
     @Override
@@ -246,7 +245,7 @@ public class ActivityServiceImpl implements IActivityService {
 
 
     @Override
-    public void updateActivity(Long id, Map<String, Object> fields) {
+    public ActivityResponseDTO updateActivity(Long id, Map<String, Object> fields) {
         Activity activity = activityDAO.findById(id);
         if (activity == null) {
             throw new AppException("Actividad con id " + id + " no encontrada", "NOT_FOUND");
@@ -268,6 +267,7 @@ public class ActivityServiceImpl implements IActivityService {
         });
         activity.setUpdatedAt(LocalDate.now());
         activityDAO.save(activity);
+        return activityMapper.entityToDTO(activity);
     }
 
 

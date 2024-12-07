@@ -1,6 +1,9 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.dto.ResponseDTO.SkillResponseDTO;
+import com.alumniportal.unmsm.dto.request.SkillRequestDTO;
+import com.alumniportal.unmsm.dto.response.SkillResponseDTO;
+import com.alumniportal.unmsm.exception.AppException;
+import com.alumniportal.unmsm.mapper.SkillMapper;
 import com.alumniportal.unmsm.model.Skill;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.interfaces.ISkillDAO;
@@ -23,24 +26,25 @@ public class SkillServiceImpl implements ISkillService {
 
     private final IUserDAO userDAO;
 
-    private final ModelMapper modelMapper;
+    private final SkillMapper skillMapper;
 
 
     @Override
     public List<SkillResponseDTO> findAll() {
-        return skillDAO.findAll()
-                .stream()
-                .map(skill -> modelMapper.map(skill, SkillResponseDTO.class))
-                .toList();
+        List<Skill> skillList = skillDAO.findAll();
+        if (skillList.isEmpty()) {
+            throw new AppException("Skills not found", "NOT_FOUND");
+        }
+        return skillMapper.entityListToDTOList(skillList);
     }
 
     @Override
     public SkillResponseDTO findById(Long id) {
         Skill skill = skillDAO.findById(id);
         if (skill == null) {
-            return null;
+            throw new AppException("Skill not found", "NOT_FOUND");
         }
-        return modelMapper.map(skill, SkillResponseDTO.class);
+        return skillMapper.entityToDTO(skill);
     }
 
     @Override
@@ -50,35 +54,41 @@ public class SkillServiceImpl implements ISkillService {
 
     @Override
     public void deleteById(Long id) {
+        Skill skill = skillDAO.findById(id);
+        if (skill == null) {
+            throw new AppException("Skill not found", "NOT_FOUND");
+        }
         skillDAO.deleteById(id);
     }
 
     @Override
     public List<SkillResponseDTO> findSkillsByUserId(Long userId) {
-        return skillDAO.findSkillsByUserId(userId)
-                .stream()
-                .map(skill -> modelMapper.map(skill, SkillResponseDTO.class))
-                .toList();
+        List<Skill> skillsByUserId = skillDAO.findSkillsByUserId(userId);
+        if (skillsByUserId.isEmpty()) {
+            throw new AppException("Skills not found", "NOT_FOUND");
+        }
+        return skillMapper.entityListToDTOList(skillsByUserId);
     }
 
-    public void saveSkill(Skill skill, Long userId) {
+    public SkillResponseDTO saveSkill(SkillRequestDTO skillRequestDTO, Long userId) {
         User user = userDAO.findById(userId);
         if (user == null) {
-            throw new RuntimeException("User not found");
+            throw new AppException("User not found", "NOT_FOUND");
         }
+
+        Skill skill = skillMapper.requestDtoToEntity(skillRequestDTO);
+
 //        Asignando el usuario al skill y persistiendo
         skill.setUser(user);
         skillDAO.save(skill);
-//        Agregando el skill a la lista de skills del usuario
-        user.getSkillList().add(skill);
-        userDAO.save(user);
+        return skillMapper.entityToDTO(skill);
     }
 
     @Override
-    public void updateSkill(Long id, Map<String, Object> fields) {
+    public SkillResponseDTO updateSkill(Long id, Map<String, Object> fields) {
         Skill skill = skillDAO.findById(id);
         if (skill == null) {
-            throw new RuntimeException("Error: skill not found!");
+            throw new AppException("Skill not found", "NOT_FOUND");
         }
         fields.forEach((k, v) -> {
             Field field = ReflectionUtils.findField(Skill.class, k);
@@ -86,6 +96,7 @@ public class SkillServiceImpl implements ISkillService {
             ReflectionUtils.setField(field, skill, v);
         });
         skillDAO.save(skill);
+        return skillMapper.entityToDTO(skill);
     }
 
 }

@@ -1,6 +1,6 @@
 package com.alumniportal.unmsm.util;
 
-import com.alumniportal.unmsm.dto.ResponseDTO.*;
+import com.alumniportal.unmsm.dto.response.*;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;

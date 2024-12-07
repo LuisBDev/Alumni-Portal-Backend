@@ -1,16 +1,16 @@
 package com.alumniportal.unmsm.service.impl;
 
-import com.alumniportal.unmsm.dto.RequestDTO.PasswordChangeRequestDTO;
-import com.alumniportal.unmsm.dto.ResponseDTO.*;
+import com.alumniportal.unmsm.dto.request.PasswordChangeRequestDTO;
+import com.alumniportal.unmsm.dto.response.*;
 import com.alumniportal.unmsm.exception.AppException;
 import com.alumniportal.unmsm.mapper.UserMapper;
+import com.alumniportal.unmsm.model.Activity;
 import com.alumniportal.unmsm.model.User;
 import com.alumniportal.unmsm.persistence.interfaces.*;
 import com.alumniportal.unmsm.service.interfaces.IActivityService;
 import com.alumniportal.unmsm.service.interfaces.IUserService;
 import com.alumniportal.unmsm.util.ImageManagement;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
@@ -80,9 +80,22 @@ public class UserServiceImpl implements IUserService {
         if (user.getPhotoUrl() != null) {
             imageManagement.deleteImageByUrl(user.getPhotoUrl());
         }
-//TODO: Hacer mas eficiente la eliminación de las imagenes de las actividades a traves de url
-        if (!user.getActivityList().isEmpty()) {
-            user.getActivityList().stream()
+
+        deleteUserImage(user);
+        deleteUserActivitiesImages(user);
+        userDAO.deleteById(id);
+    }
+
+    private void deleteUserImage(User user) {
+        if (user.getPhotoUrl() != null) {
+            imageManagement.deleteImageByUrl(user.getPhotoUrl());
+        }
+    }
+
+    private void deleteUserActivitiesImages(User user) {
+        List<Activity> activities = user.getActivityList();
+        if (!activities.isEmpty()) {
+            activities.stream()
                     .filter(activity -> activity.getUrl() != null)
                     .forEach(activity -> {
                         try {
@@ -92,7 +105,6 @@ public class UserServiceImpl implements IUserService {
                         }
                     });
         }
-        userDAO.deleteById(id);
     }
 
     @Override
@@ -110,7 +122,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public void saveUser(User user) {
+    public UserResponseDTO saveUser(User user) {
         boolean emailExists = userDAO.existsByEmail(user.getEmail());
         if (emailExists) {
             throw new AppException("Error: Email is already in use!", "CONFLICT");
@@ -118,10 +130,11 @@ public class UserServiceImpl implements IUserService {
             user.setCreatedAt(LocalDate.now());
             userDAO.save(user);
         }
+        return userMapper.entityToDTO(user);
     }
 
     @Override
-    public void updateUser(Long id, Map<String, Object> fields) {
+    public UserResponseDTO updateUser(Long id, Map<String, Object> fields) {
         User user = userDAO.findById(id);
         if (user == null) {
             throw new AppException("User not found!", "NOT_FOUND");
@@ -133,20 +146,9 @@ public class UserServiceImpl implements IUserService {
         });
         user.setUpdatedAt(LocalDate.now());
         userDAO.save(user);
-
-    }
-
-    @Override
-    public UserResponseDTO validateLogin(String email, String password) {
-        User user = userDAO.findByEmail(email);
-        if (user == null) {
-            throw new AppException("Error: User not found!", "NOT_FOUND");
-        }
-        if (!user.getPassword().equals(password)) {
-            throw new RuntimeException("Error: Invalid password!");
-        }
         return userMapper.entityToDTO(user);
     }
+
 
     @Override
     public UserCVResponseDTO getUserCV(Long userId) {
@@ -224,7 +226,6 @@ public class UserServiceImpl implements IUserService {
         if (!passwordEncoder.matches(passwordChangeRequestDTO.getPassword(), user.getPassword())) {
             throw new AppException("Error: Invalid password!", "BAD_REQUEST");
         }
-
 
         user.setPassword(passwordEncoder.encode(passwordChangeRequestDTO.getNewPassword()));
         user.setUpdatedAt(LocalDate.now());
