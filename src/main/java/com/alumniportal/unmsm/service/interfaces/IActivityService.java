@@ -28,7 +28,7 @@ public interface IActivityService {
 
     void uploadActivityImage(Long activityId, MultipartFile file) throws IOException;
 
-    void updateActivity(Long id, Map<String, Object> fields);
+    ActivityResponseDTO updateActivity(Long id, Map<String, Object> fields);
 
     byte[] downloadActivityImage(Long activityId) throws Exception;
 
@@ -41,7 +41,7 @@ public interface IActivityService {
     String getFileName(Long activityId);
 
 
-    void saveActivityByUserId(ActivityRequestDTO activityRequestDTO, Long userId);
+    ActivityResponseDTO saveActivityByUserId(ActivityRequestDTO activityRequestDTO, Long userId);
 
-    void saveActivityByCompanyId(ActivityRequestDTO activityRequestDTO, Long companyId);
+    ActivityResponseDTO saveActivityByCompanyId(ActivityRequestDTO activityRequestDTO, Long companyId);
 }

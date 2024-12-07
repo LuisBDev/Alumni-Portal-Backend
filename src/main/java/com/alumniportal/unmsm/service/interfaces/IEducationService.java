@@ -19,9 +19,9 @@ public interface IEducationService {
 
     List<EducationResponseDTO> findEducationsByUserId(Long userId);
 
-    void saveEducation(EducationRequestDTO educationRequestDTO, Long userId);
+    EducationResponseDTO saveEducation(EducationRequestDTO educationRequestDTO, Long userId);
 
-    void updateEducation(Long id, Map<String, Object> fields);
+    EducationResponseDTO updateEducation(Long id, Map<String, Object> fields);
 
 
 }

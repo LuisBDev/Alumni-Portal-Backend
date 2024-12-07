@@ -5,6 +5,8 @@ import com.alumniportal.unmsm.dto.response.UserCVResponseDTO;
 import com.alumniportal.unmsm.dto.response.UserResponseDTO;
 import com.alumniportal.unmsm.service.interfaces.IUserService;
 import com.alumniportal.unmsm.util.CVGenerator;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -27,13 +29,16 @@ public class UserController {
 
 
     @GetMapping("/all")
+    @Operation(summary = "Get all users")
+    @ApiResponse(responseCode = "200", description = "List of users")
     public ResponseEntity<List<UserResponseDTO>> findAll() {
         List<UserResponseDTO> userResponseDTOList = userService.findAll();
         return ResponseEntity.ok(userResponseDTOList);
     }
 
     @GetMapping("/{id}")
-    @ResponseBody
+    @Operation(summary = "Get user by id")
+    @ApiResponse(responseCode = "200", description = "User found")
     public ResponseEntity<UserResponseDTO> findById(@PathVariable Long id) {
         UserResponseDTO userResponseDTO = userService.findById(id);
         return ResponseEntity.ok(userResponseDTO);
@@ -41,6 +46,8 @@ public class UserController {
 
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete user by user id")
+    @ApiResponse(responseCode = "204", description = "User deleted")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         userService.deleteById(id);
         return ResponseEntity.noContent().build();
@@ -48,13 +55,16 @@ public class UserController {
 
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
-        userService.updateUser(id, updates);
-        return ResponseEntity.noContent().build();
+    @Operation(summary = "Update user by user id")
+    public ResponseEntity<UserResponseDTO> update(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+        UserResponseDTO userResponseDTO = userService.updateUser(id, updates);
+        return ResponseEntity.ok(userResponseDTO);
     }
 
 
     @GetMapping("/cv/download/{userId}")
+    @Operation(summary = "Download user CV by user id")
+    @ApiResponse(responseCode = "200", description = "User CV")
     public ResponseEntity<?> downloadUserCV(@PathVariable Long userId) throws IOException {
 
         UserCVResponseDTO cv = userService.getUserCV(userId);
@@ -72,6 +82,8 @@ public class UserController {
     }
 
     @PostMapping("/updatePassword/{id}")
+    @Operation(summary = "Update user password by user id")
+    @ApiResponse(responseCode = "204", description = "Password updated")
     public ResponseEntity<Void> updatePassword(@PathVariable Long id, @RequestBody PasswordChangeRequestDTO passwordChangeRequestDTO) {
         userService.updatePassword(id, passwordChangeRequestDTO);
         return ResponseEntity.noContent().build();

@@ -22,6 +22,6 @@ public interface IEnrollmentService {
 
     EnrollmentResponseDTO findEnrollmentByUserIdAndActivityId(Long userId, Long activityId);
 
-    public void saveEnrollment(EnrollmentRequestDTO enrollmentRequestDTO);
+    EnrollmentResponseDTO saveEnrollment(EnrollmentRequestDTO enrollmentRequestDTO);
 
 }

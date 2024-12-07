@@ -20,9 +20,9 @@ public interface ICompanyService {
 
     CompanyResponseDTO findByEmail(String email);
 
-    void saveCompany(Company company);
+    CompanyResponseDTO saveCompany(Company company);
 
-    void updateCompany(Long id, Map<String, Object> fields);
+    CompanyResponseDTO updateCompany(Long id, Map<String, Object> fields);
 
     void updatePassword(Long id, PasswordChangeRequestDTO passwordChangeRequestDTO);
 }

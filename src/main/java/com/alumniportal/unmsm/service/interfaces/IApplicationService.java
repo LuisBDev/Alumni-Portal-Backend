@@ -22,5 +22,5 @@ public interface IApplicationService {
 
     ApplicationResponseDTO findApplicationByUserIdAndJobOfferId(Long userId, Long jobOfferId);
 
-    public void saveApplication(ApplicationRequestDTO applicationRequestDTO);
+    ApplicationResponseDTO saveApplication(ApplicationRequestDTO applicationRequestDTO);
 }

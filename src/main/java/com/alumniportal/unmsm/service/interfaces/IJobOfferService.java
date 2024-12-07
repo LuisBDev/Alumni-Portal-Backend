@@ -18,8 +18,8 @@ public interface IJobOfferService {
 
     List<JobOfferResponseDTO> findJobOffersByCompanyId(Long id);
 
-    void saveJobOffer(JobOfferRequestDTO jobOfferRequestDTO, Long companyId);
+    JobOfferResponseDTO saveJobOffer(JobOfferRequestDTO jobOfferRequestDTO, Long companyId);
 
-    void updateJobOffer(Long id, Map<String, Object> fields);
+    JobOfferResponseDTO updateJobOffer(Long id, Map<String, Object> fields);
 
 }

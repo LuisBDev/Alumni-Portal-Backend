@@ -98,16 +98,17 @@ public class CompanyServiceImpl implements ICompanyService {
     }
 
     @Override
-    public void saveCompany(Company company) {
+    public CompanyResponseDTO saveCompany(Company company) {
         boolean companyDB = companyDAO.existsByEmail(company.getEmail());
         if (companyDB) {
             throw new AppException("Error: Company already exists!", "CONFLICT");
         }
         company.setCreatedAt(LocalDate.now());
         companyDAO.save(company);
+        return companyMapper.entityToDTO(company);
     }
 
-    public void updateCompany(Long id, Map<String, Object> fields) {
+    public CompanyResponseDTO updateCompany(Long id, Map<String, Object> fields) {
         Company companyFound = companyDAO.findById(id);
         if (companyFound == null) {
             throw new AppException("Error: Company not found!", "NOT_FOUND");
@@ -121,6 +122,7 @@ public class CompanyServiceImpl implements ICompanyService {
         });
         companyFound.setUpdatedAt(LocalDate.now());
         companyDAO.save(companyFound);
+        return companyMapper.entityToDTO(companyFound);
     }
 
 

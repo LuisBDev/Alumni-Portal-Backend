@@ -70,7 +70,7 @@ public class SkillServiceImpl implements ISkillService {
         return skillMapper.entityListToDTOList(skillsByUserId);
     }
 
-    public void saveSkill(SkillRequestDTO skillRequestDTO, Long userId) {
+    public SkillResponseDTO saveSkill(SkillRequestDTO skillRequestDTO, Long userId) {
         User user = userDAO.findById(userId);
         if (user == null) {
             throw new AppException("User not found", "NOT_FOUND");
@@ -81,10 +81,11 @@ public class SkillServiceImpl implements ISkillService {
 //        Asignando el usuario al skill y persistiendo
         skill.setUser(user);
         skillDAO.save(skill);
+        return skillMapper.entityToDTO(skill);
     }
 
     @Override
-    public void updateSkill(Long id, Map<String, Object> fields) {
+    public SkillResponseDTO updateSkill(Long id, Map<String, Object> fields) {
         Skill skill = skillDAO.findById(id);
         if (skill == null) {
             throw new AppException("Skill not found", "NOT_FOUND");
@@ -95,6 +96,7 @@ public class SkillServiceImpl implements ISkillService {
             ReflectionUtils.setField(field, skill, v);
         });
         skillDAO.save(skill);
+        return skillMapper.entityToDTO(skill);
     }
 
 }

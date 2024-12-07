@@ -72,7 +72,7 @@ public class CertificationServiceImpl implements ICertificationService {
     }
 
     @Override
-    public void saveCertification(CertificationRequestDTO certificationRequestDTO, Long userId) {
+    public CertificationResponseDTO saveCertification(CertificationRequestDTO certificationRequestDTO, Long userId) {
         User user = userDAO.findById(userId);
         if (user == null) {
             throw new AppException("User with id " + userId + " not found!", "NOT_FOUND");
@@ -84,10 +84,11 @@ public class CertificationServiceImpl implements ICertificationService {
         certification.setUser(user);
         certificationDAO.save(certification);
 
+        return certificationMapper.entityToDTO(certification);
     }
 
     @Override
-    public void updateCertification(Long id, Map<String, Object> fields) {
+    public CertificationResponseDTO updateCertification(Long id, Map<String, Object> fields) {
         Certification certification = certificationDAO.findById(id);
         if (certification == null) {
             throw new AppException("Certification with id " + id + " not found!", "NOT_FOUND");
@@ -109,6 +110,7 @@ public class CertificationServiceImpl implements ICertificationService {
         });
 
         certificationDAO.save(certification);
+        return certificationMapper.entityToDTO(certification);
     }
 
 

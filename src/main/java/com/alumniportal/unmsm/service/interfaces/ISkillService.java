@@ -19,8 +19,8 @@ public interface ISkillService {
     //    Buscar todos los skills de un usuario
     List<SkillResponseDTO> findSkillsByUserId(Long userId);
 
-    public void saveSkill(SkillRequestDTO skillRequestDTO, Long userId);
+    SkillResponseDTO saveSkill(SkillRequestDTO skillRequestDTO, Long userId);
 
-    void updateSkill(Long id, Map<String, Object> fields);
+    SkillResponseDTO updateSkill(Long id, Map<String, Object> fields);
 
 }

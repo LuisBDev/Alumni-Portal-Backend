@@ -122,7 +122,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public void saveUser(User user) {
+    public UserResponseDTO saveUser(User user) {
         boolean emailExists = userDAO.existsByEmail(user.getEmail());
         if (emailExists) {
             throw new AppException("Error: Email is already in use!", "CONFLICT");
@@ -130,10 +130,11 @@ public class UserServiceImpl implements IUserService {
             user.setCreatedAt(LocalDate.now());
             userDAO.save(user);
         }
+        return userMapper.entityToDTO(user);
     }
 
     @Override
-    public void updateUser(Long id, Map<String, Object> fields) {
+    public UserResponseDTO updateUser(Long id, Map<String, Object> fields) {
         User user = userDAO.findById(id);
         if (user == null) {
             throw new AppException("User not found!", "NOT_FOUND");
@@ -145,7 +146,7 @@ public class UserServiceImpl implements IUserService {
         });
         user.setUpdatedAt(LocalDate.now());
         userDAO.save(user);
-
+        return userMapper.entityToDTO(user);
     }
 
 

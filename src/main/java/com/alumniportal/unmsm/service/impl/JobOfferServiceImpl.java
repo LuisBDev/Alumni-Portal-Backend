@@ -70,7 +70,7 @@ public class JobOfferServiceImpl implements IJobOfferService {
     }
 
     @Override
-    public void saveJobOffer(JobOfferRequestDTO jobOfferRequestDTO, Long companyId) {
+    public JobOfferResponseDTO saveJobOffer(JobOfferRequestDTO jobOfferRequestDTO, Long companyId) {
         Company company = companyDAO.findById(companyId);
         if (company == null) {
             throw new AppException("Company not found!", "NOT_FOUND");
@@ -82,10 +82,11 @@ public class JobOfferServiceImpl implements IJobOfferService {
         jobOffer.setCreatedAt(LocalDate.now());
         jobOfferDAO.save(jobOffer);
 
+        return jobOfferMapper.entityToDTO(jobOffer);
     }
 
     @Override
-    public void updateJobOffer(Long id, Map<String, Object> fields) {
+    public JobOfferResponseDTO updateJobOffer(Long id, Map<String, Object> fields) {
         JobOffer jobOffer = jobOfferDAO.findById(id);
         if (jobOffer == null) {
             throw new AppException("Job offer not found!", "NOT_FOUND");
@@ -95,6 +96,8 @@ public class JobOfferServiceImpl implements IJobOfferService {
             field.setAccessible(true);
             ReflectionUtils.setField(field, jobOffer, v);
         });
+        jobOffer.setUpdatedAt(LocalDate.now());
         jobOfferDAO.save(jobOffer);
+        return jobOfferMapper.entityToDTO(jobOffer);
     }
 }

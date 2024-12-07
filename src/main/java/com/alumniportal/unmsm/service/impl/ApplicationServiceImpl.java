@@ -102,7 +102,7 @@ public class ApplicationServiceImpl implements IApplicationService {
     }
 
 
-    public void saveApplication(ApplicationRequestDTO applicationRequestDTO) {
+    public ApplicationResponseDTO saveApplication(ApplicationRequestDTO applicationRequestDTO) {
         User user = userDAO.findById(applicationRequestDTO.getUser().getId());
         if (user == null) {
             throw new AppException("Error: User with id " + applicationRequestDTO.getUser().getId() + " not found", "NOT_FOUND");
@@ -130,7 +130,7 @@ public class ApplicationServiceImpl implements IApplicationService {
         applicationDAO.save(application);
 
         invokeLambdaWhenApplicationIsCreated("AlumniPortal | Successful Application " + application.getId(), application);
-
+        return applicationMapper.entityToDTO(application);
     }
 
     public void invokeLambdaWhenApplicationIsCreated(String subject, Application application) {

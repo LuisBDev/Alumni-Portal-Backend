@@ -68,7 +68,7 @@ public class ProjectServiceImpl implements IProjectService {
         return projectMapper.entityListToDTOList(projectsByUserId);
     }
 
-    public void saveProject(ProjectRequestDTO projectRequestDTO, Long userId) {
+    public ProjectResponseDTO saveProject(ProjectRequestDTO projectRequestDTO, Long userId) {
         User user = userDAO.findById(userId);
         if (user == null) {
             throw new AppException("User not found", "NOT_FOUND");
@@ -79,10 +79,11 @@ public class ProjectServiceImpl implements IProjectService {
 //        Asignando el usuario al project y persistiendo
         project.setUser(user);
         projectDAO.save(project);
+        return projectMapper.entityToDTO(project);
     }
 
     @Override
-    public void updateProject(Long id, Map<String, Object> fields) {
+    public ProjectResponseDTO updateProject(Long id, Map<String, Object> fields) {
         Project project = projectDAO.findById(id);
         if (project == null) {
             throw new AppException("Project not found", "NOT_FOUND");
@@ -99,6 +100,7 @@ public class ProjectServiceImpl implements IProjectService {
             }
         });
         projectDAO.save(project);
+        return projectMapper.entityToDTO(project);
     }
 
 }
