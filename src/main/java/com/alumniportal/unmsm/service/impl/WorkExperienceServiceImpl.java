@@ -73,7 +73,7 @@ public class WorkExperienceServiceImpl implements IWorkExperienceService {
     }
 
     @Override
-    public void saveWorkExperience(WorkExperienceRequestDTO workExperienceRequestDTO, Long userId) {
+    public WorkExperienceResponseDTO saveWorkExperience(WorkExperienceRequestDTO workExperienceRequestDTO, Long userId) {
         User user = userDAO.findById(userId);
         if (user == null) {
             throw new AppException("User not found", "NOT_FOUND");
@@ -83,11 +83,12 @@ public class WorkExperienceServiceImpl implements IWorkExperienceService {
 
         workExperience.setUser(user);
         workExperienceDAO.save(workExperience);
+        return workExperienceMapper.entityToDTO(workExperience);
 
     }
 
     @Override
-    public void updateWorkExperience(Long id, Map<String, Object> fields) {
+    public WorkExperienceResponseDTO updateWorkExperience(Long id, Map<String, Object> fields) {
         WorkExperience workExperience = workExperienceDAO.findById(id);
         if (workExperience == null) {
             throw new AppException("Work experience not found", "NOT_FOUND");
@@ -104,6 +105,7 @@ public class WorkExperienceServiceImpl implements IWorkExperienceService {
             }
         });
         workExperienceDAO.save(workExperience);
+        return workExperienceMapper.entityToDTO(workExperience);
 
     }
 }

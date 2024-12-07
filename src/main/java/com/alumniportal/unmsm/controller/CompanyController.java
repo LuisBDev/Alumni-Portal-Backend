@@ -45,9 +45,9 @@ public class CompanyController {
 
     //Actualizar parcialmente los campos
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
-        companyService.updateCompany(id, updates);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<CompanyResponseDTO> update(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+        CompanyResponseDTO companyResponseDTO = companyService.updateCompany(id, updates);
+        return ResponseEntity.ok(companyResponseDTO);
     }
 
     @PostMapping("/updatePassword/{id}")

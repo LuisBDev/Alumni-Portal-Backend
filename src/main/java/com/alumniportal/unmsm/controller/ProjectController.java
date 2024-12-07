@@ -32,15 +32,15 @@ public class ProjectController {
     }
 
     @PostMapping("/save/{userId}")
-    public ResponseEntity<Void> save(@RequestBody ProjectRequestDTO projectRequestDTO, @PathVariable Long userId) {
-        projectService.saveProject(projectRequestDTO, userId);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<ProjectResponseDTO> save(@RequestBody ProjectRequestDTO projectRequestDTO, @PathVariable Long userId) {
+        ProjectResponseDTO projectResponseDTO = projectService.saveProject(projectRequestDTO, userId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(projectResponseDTO);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
-        projectService.updateProject(id, updates);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<ProjectResponseDTO> update(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+        ProjectResponseDTO projectResponseDTO = projectService.updateProject(id, updates);
+        return ResponseEntity.ok(projectResponseDTO);
     }
 
 

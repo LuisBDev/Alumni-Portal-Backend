@@ -31,9 +31,9 @@ public class EnrollmentController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<Void> save(@RequestBody EnrollmentRequestDTO enrollmentRequestDTO) {
-        enrollmentService.saveEnrollment(enrollmentRequestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<EnrollmentResponseDTO> save(@RequestBody EnrollmentRequestDTO enrollmentRequestDTO) {
+        EnrollmentResponseDTO enrollmentResponseDTO = enrollmentService.saveEnrollment(enrollmentRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(enrollmentResponseDTO);
     }
 
     @DeleteMapping("/{id}")

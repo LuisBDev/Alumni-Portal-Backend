@@ -20,7 +20,7 @@ public interface IProjectService {
     //    Buscar todos los projects de un usuario
     List<ProjectResponseDTO> findProjectsByUserId(Long userId);
 
-    void saveProject(ProjectRequestDTO projectRequestDTO, Long userId);
+    ProjectResponseDTO saveProject(ProjectRequestDTO projectRequestDTO, Long userId);
 
-    void updateProject(Long id, Map<String, Object> fields);
+    ProjectResponseDTO updateProject(Long id, Map<String, Object> fields);
 }

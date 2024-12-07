@@ -33,15 +33,15 @@ public class EducationController {
     }
 
     @PostMapping("/save/{userId}")
-    public ResponseEntity<Void> save(@RequestBody EducationRequestDTO educationRequestDTO, @PathVariable Long userId) {
-        educationService.saveEducation(educationRequestDTO, userId);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<EducationResponseDTO> save(@RequestBody EducationRequestDTO educationRequestDTO, @PathVariable Long userId) {
+        EducationResponseDTO educationResponseDTO = educationService.saveEducation(educationRequestDTO, userId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(educationResponseDTO);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
-        educationService.updateEducation(id, updates);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<EducationResponseDTO> update(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+        EducationResponseDTO educationResponseDTO = educationService.updateEducation(id, updates);
+        return ResponseEntity.ok(educationResponseDTO);
     }
 
 
@@ -56,5 +56,5 @@ public class EducationController {
         List<EducationResponseDTO> educationsByUserId = educationService.findEducationsByUserId(userId);
         return ResponseEntity.ok(educationsByUserId);
     }
-    
+
 }

@@ -32,15 +32,15 @@ public class JobOfferController {
     }
 
     @PostMapping("/save/{companyId}")
-    public ResponseEntity<Void> save(@RequestBody JobOfferRequestDTO jobOfferRequestDTO, @PathVariable Long companyId) {
-        jobOfferService.saveJobOffer(jobOfferRequestDTO, companyId);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<JobOfferResponseDTO> save(@RequestBody JobOfferRequestDTO jobOfferRequestDTO, @PathVariable Long companyId) {
+        JobOfferResponseDTO jobOfferResponseDTO = jobOfferService.saveJobOffer(jobOfferRequestDTO, companyId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(jobOfferResponseDTO);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
-        jobOfferService.updateJobOffer(id, updates);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<JobOfferResponseDTO> update(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+        JobOfferResponseDTO jobOfferResponseDTO = jobOfferService.updateJobOffer(id, updates);
+        return ResponseEntity.ok(jobOfferResponseDTO);
     }
 
     @DeleteMapping("/{id}")

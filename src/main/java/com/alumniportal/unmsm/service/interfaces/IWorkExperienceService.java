@@ -21,9 +21,9 @@ public interface IWorkExperienceService {
     //    Buscar todas las experiencias laborales de un usuario
     List<WorkExperienceResponseDTO> findWorkExperiencesByUserId(Long userId);
 
-    void saveWorkExperience(WorkExperienceRequestDTO workExperienceRequestDTO, Long userId);
+    WorkExperienceResponseDTO saveWorkExperience(WorkExperienceRequestDTO workExperienceRequestDTO, Long userId);
 
-    void updateWorkExperience(Long id, Map<String, Object> fields);
+    WorkExperienceResponseDTO updateWorkExperience(Long id, Map<String, Object> fields);
 
 
 }

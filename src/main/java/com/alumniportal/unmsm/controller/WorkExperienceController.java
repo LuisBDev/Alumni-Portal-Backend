@@ -33,15 +33,15 @@ public class WorkExperienceController {
     }
 
     @PostMapping("/save/{userId}")
-    public ResponseEntity<Void> save(@RequestBody WorkExperienceRequestDTO workExperienceRequestDTO, @PathVariable Long userId) {
-        workExperienceService.saveWorkExperience(workExperienceRequestDTO, userId);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<WorkExperienceResponseDTO> save(@RequestBody WorkExperienceRequestDTO workExperienceRequestDTO, @PathVariable Long userId) {
+        WorkExperienceResponseDTO workExperienceResponseDTO = workExperienceService.saveWorkExperience(workExperienceRequestDTO, userId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(workExperienceResponseDTO);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
-        workExperienceService.updateWorkExperience(id, updates);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    public ResponseEntity<WorkExperienceResponseDTO> update(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+        WorkExperienceResponseDTO workExperienceResponseDTO = workExperienceService.updateWorkExperience(id, updates);
+        return ResponseEntity.ok(workExperienceResponseDTO);
     }
 
 

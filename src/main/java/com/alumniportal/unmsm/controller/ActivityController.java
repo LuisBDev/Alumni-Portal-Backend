@@ -40,21 +40,22 @@ public class ActivityController {
     }
 
     @PostMapping("/save-user/{userId}")
-    public ResponseEntity<Void> saveActivityByUserId(@RequestBody ActivityRequestDTO activityRequestDTO, @PathVariable Long userId) {
-        activityService.saveActivityByUserId(activityRequestDTO, userId);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<ActivityResponseDTO> saveActivityByUserId(@RequestBody ActivityRequestDTO activityRequestDTO, @PathVariable Long userId) {
+        ActivityResponseDTO activityResponseDTO = activityService.saveActivityByUserId(activityRequestDTO, userId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(activityResponseDTO);
+
     }
 
     @PostMapping("/save-company/{companyId}")
-    public ResponseEntity<Void> saveActivityByCompanyId(@RequestBody ActivityRequestDTO activityRequestDTO, @PathVariable Long companyId) {
-        activityService.saveActivityByCompanyId(activityRequestDTO, companyId);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<ActivityResponseDTO> saveActivityByCompanyId(@RequestBody ActivityRequestDTO activityRequestDTO, @PathVariable Long companyId) {
+        ActivityResponseDTO activityResponseDTO = activityService.saveActivityByCompanyId(activityRequestDTO, companyId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(activityResponseDTO);
     }
 
     @PatchMapping("/update-activity/{id}")
-    public ResponseEntity<Void> updateActivity(@PathVariable Long id, @RequestBody Map<String, Object> fields) {
-        activityService.updateActivity(id, fields);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<ActivityResponseDTO> updateActivity(@PathVariable Long id, @RequestBody Map<String, Object> fields) {
+        ActivityResponseDTO activityResponseDTO = activityService.updateActivity(id, fields);
+        return ResponseEntity.ok(activityResponseDTO);
     }
 
 

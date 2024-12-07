@@ -32,9 +32,9 @@ public class ApplicationController {
 
     @PostMapping("/save")
 //    @ApiResponse(responseCode = "201", description = "Application created")
-    public ResponseEntity<Void> save(@RequestBody ApplicationRequestDTO applicationRequestDTO) {
-        applicationService.saveApplication(applicationRequestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<ApplicationResponseDTO> save(@RequestBody ApplicationRequestDTO applicationRequestDTO) {
+        ApplicationResponseDTO applicationResponseDTO = applicationService.saveApplication(applicationRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(applicationResponseDTO);
     }
 
 

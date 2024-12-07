@@ -32,15 +32,15 @@ public class SkillController {
     }
 
     @PostMapping("/save/{userId}")
-    public ResponseEntity<Void> save(@RequestBody SkillRequestDTO skillRequestDTO, @PathVariable Long userId) {
-        skillService.saveSkill(skillRequestDTO, userId);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<SkillResponseDTO> save(@RequestBody SkillRequestDTO skillRequestDTO, @PathVariable Long userId) {
+        SkillResponseDTO skillResponseDTO = skillService.saveSkill(skillRequestDTO, userId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(skillResponseDTO);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
-        skillService.updateSkill(id, updates);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<SkillResponseDTO> update(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+        SkillResponseDTO skillResponseDTO = skillService.updateSkill(id, updates);
+        return ResponseEntity.ok(skillResponseDTO);
     }
 
 

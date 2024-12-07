@@ -22,10 +22,10 @@ public interface IUserService {
 
     UserResponseDTO findByEmail(String email);
 
-    void saveUser(User user);
+    UserResponseDTO saveUser(User user);
 
-    void updateUser(Long id, Map<String, Object> fields);
-    
+    UserResponseDTO updateUser(Long id, Map<String, Object> fields);
+
     UserCVResponseDTO getUserCV(Long userId);
 
     void updatePassword(Long id, PasswordChangeRequestDTO passwordChangeRequestDTO);

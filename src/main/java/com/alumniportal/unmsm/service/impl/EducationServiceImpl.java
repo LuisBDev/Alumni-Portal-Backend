@@ -72,7 +72,7 @@ public class EducationServiceImpl implements IEducationService {
     }
 
     @Override
-    public void saveEducation(EducationRequestDTO educationRequestDTO, Long userId) {
+    public EducationResponseDTO saveEducation(EducationRequestDTO educationRequestDTO, Long userId) {
         User user = userDAO.findById(userId);
         if (user == null) {
             throw new AppException("User not found", "NOT_FOUND");
@@ -81,10 +81,11 @@ public class EducationServiceImpl implements IEducationService {
         Education education = educationMapper.requestDtoToEntity(educationRequestDTO);
         education.setUser(user);
         educationDAO.save(education);
+        return educationMapper.entityToDTO(education);
     }
 
     @Override
-    public void updateEducation(Long id, Map<String, Object> fields) {
+    public EducationResponseDTO updateEducation(Long id, Map<String, Object> fields) {
         Education education = educationDAO.findById(id);
         if (education == null) {
             throw new AppException("Education not found", "NOT_FOUND");
@@ -101,5 +102,6 @@ public class EducationServiceImpl implements IEducationService {
             }
         });
         educationDAO.save(education);
+        return educationMapper.entityToDTO(education);
     }
 }

@@ -33,10 +33,10 @@ public class CertificationController {
     }
 
     @PostMapping("/save/{userId}")
-    public ResponseEntity<Void> save(@RequestBody CertificationRequestDTO certificationRequestDTO, @PathVariable Long userId) {
+    public ResponseEntity<CertificationResponseDTO> save(@RequestBody CertificationRequestDTO certificationRequestDTO, @PathVariable Long userId) {
 
-        certificationService.saveCertification(certificationRequestDTO, userId);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        CertificationResponseDTO certificationResponseDTO = certificationService.saveCertification(certificationRequestDTO, userId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(certificationResponseDTO);
     }
 
 
@@ -47,9 +47,9 @@ public class CertificationController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> updateCertification(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
-        certificationService.updateCertification(id, updates);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<CertificationResponseDTO> updateCertification(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+        CertificationResponseDTO certificationResponseDTO = certificationService.updateCertification(id, updates);
+        return ResponseEntity.ok(certificationResponseDTO);
     }
 
     @GetMapping("/user/{userId}")
