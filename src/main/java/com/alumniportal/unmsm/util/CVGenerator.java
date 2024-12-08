@@ -14,10 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CVGenerator {
 
-    public static byte[] generateCV(UserCVResponseDTO cv) throws IOException {
+    
+    public byte[] generateCV(UserCVResponseDTO cv) throws IOException {
         PDDocument document = new PDDocument();
         PDPage page = new PDPage();
         document.addPage(page);
@@ -176,7 +180,7 @@ public class CVGenerator {
         return byteArrayOutputStream.toByteArray();
     }
 
-    private static String formatNullableLocalDate(LocalDate date, DateTimeFormatter dateFormat) {
+    private String formatNullableLocalDate(LocalDate date, DateTimeFormatter dateFormat) {
         if (date != null) {
             return date.format(dateFormat);
         } else {
@@ -184,7 +188,7 @@ public class CVGenerator {
         }
     }
 
-    private static List<String> splitTextIntoLines(String text, float maxWidth, PDFont font, float fontSize) throws IOException {
+    private List<String> splitTextIntoLines(String text, float maxWidth, PDFont font, float fontSize) throws IOException {
         List<String> lines = new ArrayList<>();
         String[] words = text.split(" ");
         StringBuilder currentLine = new StringBuilder();
