@@ -9,7 +9,10 @@ COPY ./pom.xml /app
 COPY ./.mvn /app/.mvn
 COPY ./mvnw /app
 
-# Convertir finales de línea CRLF a LF
+# Asignar permisos de ejecución al archivo mvnw
+RUN chmod +x /app/mvnw
+
+# Convertir finales de línea CRLF a LF (opcional si desarrollas en Windows)
 RUN sed -i 's/\r$//' /app/mvnw
 
 # Descargar dependencias offline
