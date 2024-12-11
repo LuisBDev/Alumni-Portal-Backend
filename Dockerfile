@@ -22,7 +22,7 @@ COPY ./src /app/src
 RUN ./mvnw clean package -DskipTests -Pprod
 
 # Exponer el puerto
-EXPOSE 8083
+EXPOSE 8084
 
 # Entrypoint para ejecutar la aplicación
 ENTRYPOINT ["java", "-jar", "/app/target/unmsm-0.0.1-SNAPSHOT.jar"]
@@ -32,4 +32,4 @@ ENV AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
 ENV AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
 ENV AWS_S3_BUCKET_NAME=${AWS_S3_BUCKET_NAME}
 ENV AWS_S3_REGION=${AWS_S3_REGION}
-ENV SERVER_PORT=${SERVER_PORT:-8083}
+ENV SERVER_PORT=${SERVER_PORT:-8084}
