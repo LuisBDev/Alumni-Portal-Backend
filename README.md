@@ -48,7 +48,7 @@
 - [📜 Jenkins Pipeline](#-jenkins-pipeline)
 - [🔧 Configuración de Plugins](#-configuración-de-plugins)
 - [🌍 Variables de Entorno](#-variables-de-entorno)
-- [🛠️ Stages del Pipeline](#-stages-del-pipeline)
+- [📜 Ejecución de Etapas](-ejecución-de-etapas)
 - [📊 Finalización del Pipeline](#-finalización-del-pipeline)
 - [🚀 Timings del Pipeline](#timings-del-pipeline)
 
@@ -86,15 +86,27 @@ interacción directa entre estudiantes y empresas en un entorno moderno y accesi
 
 ### **Sprint 1**
 
+![image](https://github.com/user-attachments/assets/201d78f5-537c-45ec-8491-4b7381abee21)
+
 ### **Sprint 2**
+
+![image](https://github.com/user-attachments/assets/074a3e7e-220c-49f3-bb51-730710b61fe1)
 
 ### **Sprint 3**
 
+![image](https://github.com/user-attachments/assets/ab636211-12f4-4300-bf64-e9e8e4f5f541)
+![image](https://github.com/user-attachments/assets/d2943ee0-127b-44fb-9706-092e488dd3fc)
+
+
 ### **Sprint 4**
+
+![image](https://github.com/user-attachments/assets/423ff518-8f88-4dda-a532-8d2234626ba8)
+![image](https://github.com/user-attachments/assets/61705dab-a4f7-4838-842b-3388fc5f9e9e)
 
 ### **Tablero Kanban Jira**
 
-## Índice
+![image](https://github.com/user-attachments/assets/145f9731-4eaf-482a-bcd2-34c8bae50c23)
+
 
 ## ✨ Funcionalidades Principales
 
@@ -1172,7 +1184,7 @@ public class CertificationServiceImpl implements ICertificationService {
 
 ---
 
-## 🚀 Cómo Ejecutar el Proyecto
+## 🚀 Cómo Ejecutar el Proyecto (Backend)
 
 1. **Clonar el Repositorio**
 
@@ -1254,9 +1266,14 @@ notificaciones.
 - **SPRING_BOOT_APP_JAR**: Ubicación del archivo JAR generado.
 - **SPRING_BOOT_APP_URL**: URL de la aplicación Spring Boot para verificar su estado.
 
-## 🛠️ Stages del Pipeline
+## 📜 Ejecución de Etapas
 
-## Ejecución de Etapas
+![image](https://github.com/user-attachments/assets/4782be12-9d1e-436b-9d43-3d019af7cf36)
+![image](https://github.com/user-attachments/assets/719219a3-fe6f-4112-bf2a-48f5324be175)
+
+
+
+
 
 ## Etapas Frontend
 
@@ -1271,6 +1288,9 @@ stage("Frontend - Git Checkout") {
     }
 }
 ```
+
+![image](https://github.com/user-attachments/assets/af4c0a4f-f4e8-43cc-8948-87ad32fddfb8)
+
 
 ### 2. **Frontend - Instalación de Dependencias**
 
@@ -1287,6 +1307,9 @@ stage("Frontend - Install Dependencies") {
 }
 ```
 
+![image](https://github.com/user-attachments/assets/e3eee601-20f0-4dc4-bf2b-c8cd9de8dcee)
+
+
 ### 3. **Frontend - Build - Empaquetado**
 
 Ejecuta el comando `npm run build` para empaquetar la aplicación frontend.
@@ -1301,6 +1324,9 @@ stage("Frontend - Build") {
     }
 }
 ```
+
+![image](https://github.com/user-attachments/assets/77d2adff-4718-4a3b-8d8a-54212863fa37)
+
 
 ### 4. **Frontend - Unit Tests**
 
@@ -1318,6 +1344,9 @@ stage("Frontend - Unit Tests") {
 ```
 
 Resultado de las pruebas unitarias en el frontend.
+
+![image](https://github.com/user-attachments/assets/f4c969c7-adb9-4f74-bac6-b07289a97c4b)
+
 
 ### 5. **Frontend - SonarQube Analysis**
 
@@ -1343,6 +1372,8 @@ Ejecuta el análisis estático del código fuente Frontend utilizando **SonarQub
     }
 }
 ```
+![image](https://github.com/user-attachments/assets/28e8d05b-27a0-471a-89f0-a7adf33e1d14)
+
 
 ### 6. **Frontend - Start Server**
 
@@ -1356,6 +1387,9 @@ stage("Frontend - Start Server") {
     }
 }
 ```
+
+![image](https://github.com/user-attachments/assets/13574422-58c7-40d5-96d2-332d825b1984)
+
 
 ### 7. **Frontend - Health Check**
 
@@ -1378,6 +1412,9 @@ stage("Frontend - Health Check") {
 }
 ```
 
+![image](https://github.com/user-attachments/assets/a334f504-01f8-49e1-a94b-cc3d3a4d9d28)
+
+
 ### 8. **Frontend - Pruebas Funcionales**
 
 Ejecuta pruebas funcionales definidas en el frontend.
@@ -1392,8 +1429,11 @@ stage("Frontend - Functional Tests") {
     }
 }
 ```
-
 Resultado de las pruebas funcionales en el frontend.
+
+![image](https://github.com/user-attachments/assets/50b662b1-2ffd-414f-a66c-6bfe369d5074)
+![reporte html (1)_page-0001](https://github.com/user-attachments/assets/d514891c-2b63-4e1f-9ea7-c45bf2d1852c)
+
 
 ## Etapas Backend
 
@@ -1409,6 +1449,9 @@ stage("Git Checkout") {
 }
 ```
 
+![image](https://github.com/user-attachments/assets/cd352b07-a71e-4b57-ab37-e57e2a6a861c)
+
+
 ### 10. **Backend - Construcción con Maven**
 
 Compila el proyecto utilizando Maven con el perfil de staging.
@@ -1420,6 +1463,7 @@ stage("Build with Maven") {
     }
 }
 ```
+![image](https://github.com/user-attachments/assets/994fc19c-3002-4c5a-b2a2-abfd2b4d9c1e)
 
 ### 11. **Backend - Pruebas Unitarias**
 
@@ -1434,6 +1478,17 @@ stage("Run Tests") {
 ```
 
 Resultado de las 440 pruebas unitarias en el backend.
+
+![image](https://github.com/user-attachments/assets/c90f68c6-ea2e-4e00-9797-48f936f0b698)
+
+Reporte de Jacoco:
+
+![image](https://github.com/user-attachments/assets/4ef6484c-65d3-41f7-aa8e-38b24f2b76f5)
+
+Ejemplo Capa de Servicios:
+
+![image](https://github.com/user-attachments/assets/8ced5f29-ef5a-40f9-8e82-a7cd75ab9103)
+
 
 ### 12. **Backend - SonarQube - Análisis estático de código**
 
@@ -1460,6 +1515,12 @@ stage("SonarQube Analysis") {
 }
 ```
 
+![image](https://github.com/user-attachments/assets/d0bfb3cd-b09d-4066-b93f-9a4783b3e1b6)
+
+![image](https://github.com/user-attachments/assets/3c4aeb58-0915-4c32-890b-442f48872f04)
+
+
+
 ### 13. **Backend - Package - Perfil de Testing**
 
 Genera un archivo JAR ejecutable con el perfil de testing.
@@ -1471,6 +1532,9 @@ stage("Package") {
     }
 }
 ```
+
+![image](https://github.com/user-attachments/assets/cb4efb27-8db1-43db-b01a-727c4fc50fee)
+
 
 ### 14. **Backend - Start Test Server**
 
@@ -1491,6 +1555,9 @@ stage("Backend - Start Test Server") {
     }
 }
 ```
+
+![image](https://github.com/user-attachments/assets/171b50eb-4a2f-4f79-83c2-fd61df49b6d5)
+
 
 ### 15. **Backend - Health Check (Actuator)**
 
@@ -1514,6 +1581,7 @@ stage("Backend - Health Check (Actuator)") {
     }
 }
 ```
+![image](https://github.com/user-attachments/assets/4e3878a2-e77e-4a80-96bc-de65e5a98fb5)
 
 ### 16. **Backend - Newman - Instalación Dependencias**
 
@@ -1528,6 +1596,8 @@ stage('Newman Setup') {
     }
 }
 ```
+![image](https://github.com/user-attachments/assets/b163731c-1ae7-4096-a36d-95c7d47debf3)
+
 
 ### 17. **Backend Newman - Pruebas Funcionales**
 
@@ -1543,6 +1613,12 @@ stage('Backend - Pruebas Funcionales con Newman') {
 
 Resultado de las 27 pruebas funcionales con Newman en el backend.
 
+![image](https://github.com/user-attachments/assets/19a38f1b-7363-4e23-b710-c4ae2c764f29)
+
+![image](https://github.com/user-attachments/assets/15bc011e-e5d5-4541-a432-b90509ba549c)
+
+
+
 ### 18. **Backend - Limpieza de reportes previos de JMeter**
 
 Elimina los reportes anteriores de JMeter para evitar conflictos.
@@ -1555,6 +1631,9 @@ stage("Cleaning Old JMeter Reports") {
     }
 }
 ```
+
+![image](https://github.com/user-attachments/assets/99242ef4-1801-4d52-8c3e-35b4641cf026)
+
 
 ### 19. **Backend - JMeter - Pruebas de Rendimiento**
 
@@ -1578,6 +1657,12 @@ stage("Performance Testing with JMeter") {
 
 Resultado de las 360 peticiones en los endpoints del backend.
 
+![image](https://github.com/user-attachments/assets/2e9f8418-cd82-4430-a47a-f3195aed969d)
+
+![image](https://github.com/user-attachments/assets/5163e19a-cfda-4623-91f3-72dcea7665ff)
+
+
+
 ### 20. **Backend - ZAP - Pruebas de Seguridad y Reporte**
 
 ```bash
@@ -1595,6 +1680,12 @@ stage("Run ZAP Scan and Generate Report") {
 
 Resultado de las pruebas de seguridad en el backend.
 
+![image](https://github.com/user-attachments/assets/1f47a493-bb5e-4d92-ba6a-e7e9a676d89d)
+
+![image](https://github.com/user-attachments/assets/b5765fd9-4be0-47b0-b66f-68ed2ad54e91)
+
+
+
 ### Entrega Continua (CD)
 
 ### 21. **Docker - Construcción Imagen de Backend**
@@ -1608,6 +1699,12 @@ stage("Docker - Backend Build Image") {
     }
 }
 ```
+
+![image](https://github.com/user-attachments/assets/ec7c80ab-fda6-4a0b-ad27-27f5ceab69a2)
+
+![image](https://github.com/user-attachments/assets/00b44c4f-7603-4eb3-b680-cafef15141c6)
+
+
 
 ### 22. **Docker Login**
 
@@ -1626,6 +1723,9 @@ stage("Docker - Login") {
 }
 ```
 
+![image](https://github.com/user-attachments/assets/e58f1cf1-13f3-45e4-b622-0f5366658872)
+
+
 ### 23. **Docker Push Image en DockerHub**
 
 Sube la imagen de Docker al repositorio de DockerHub.
@@ -1637,6 +1737,12 @@ stage("Docker - Push Image to DockerHub") {
     }
 }
 ```
+
+![image](https://github.com/user-attachments/assets/fd05b6cd-587c-4aff-a062-1c21445f34e7)
+
+![image](https://github.com/user-attachments/assets/0a63bc3d-da9f-4588-b1c6-7b56b4475c7c)
+
+
 
 ### 24. **Envío de notificación Slack**
 
@@ -1656,6 +1762,12 @@ stage("Send Slack Notification") {
     }
 }
 ```
+
+![image](https://github.com/user-attachments/assets/274e00aa-3e5f-47db-b559-c4d0bc43d150)
+
+![image](https://github.com/user-attachments/assets/2a8cf41e-fedb-4b55-b0a6-09d259d09bce)
+
+
 
 ## 📤 Comportamiento de Post-Ejecución
 
@@ -1682,5 +1794,10 @@ post {
 
 ## 📊 Finalización del Pipeline
 
+![image](https://github.com/user-attachments/assets/ca6814d2-d4da-45d1-8c31-2728e8bf3a2e)
+
+
 ## Timings del Pipeline
+
+![image](https://github.com/user-attachments/assets/9e270e53-951b-477a-85b2-0afef0b3220d)
 
