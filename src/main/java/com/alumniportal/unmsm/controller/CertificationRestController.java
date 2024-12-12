@@ -15,11 +15,14 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/certification")
 public class CertificationRestController {
 
     private final ICertificationService certificationService;
+
+    public CertificationRestController(ICertificationService certificationService) {
+        this.certificationService = certificationService;
+    }
 
 
     @GetMapping("/all")
