@@ -104,7 +104,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void saveCallsUserDAOSave() {
+    void saveSavesUserSuccessfully() {
         User user = new User();
         userService.save(user);
         verify(userDAO, times(1)).save(user);

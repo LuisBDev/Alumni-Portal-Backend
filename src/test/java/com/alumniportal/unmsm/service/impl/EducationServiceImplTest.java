@@ -57,7 +57,7 @@ class EducationServiceImplTest {
     }
 
     @Test
-    void findAllReturnsEmptyListWhenNoEducationsFound() {
+    void findAllReturnsThrowsExceptionWhenNoEducationsFound() {
         when(educationDAO.findAll()).thenReturn(Collections.emptyList());
         assertThrows(AppException.class, () -> educationService.findAll());
         verify(educationDAO, times(1)).findAll();
@@ -74,14 +74,14 @@ class EducationServiceImplTest {
     }
 
     @Test
-    void findByIdReturnsNullWhenNotFound() {
+    void findByIdThrowsExceptionWhenEducationNotFound() {
         when(educationDAO.findById(1L)).thenReturn(null);
         assertThrows(AppException.class, () -> educationService.findById(1L));
         verify(educationDAO, times(1)).findById(1L);
     }
 
     @Test
-    void testSave() {
+    void saveSavesEducationSuccessfully() {
         Education education = new Education();
         educationService.save(education);
         verify(educationDAO, times(1)).save(education);
@@ -112,7 +112,7 @@ class EducationServiceImplTest {
     }
 
     @Test
-    void findEducationsByUserIdReturnsEmptyListWhenNoEducationsFound() {
+    void findEducationsByUserIdThrowsExceptionWhenNoEducationsFound() {
         when(educationDAO.findEducationsByUserId(1L)).thenReturn(Collections.emptyList());
         assertThrows(AppException.class, () -> educationService.findEducationsByUserId(1L));
         verify(educationDAO, times(1)).findEducationsByUserId(1L);
@@ -128,7 +128,7 @@ class EducationServiceImplTest {
     }
 
     @Test
-    void saveEducation() {
+    void saveEducationSavesEducationSuccessfully() {
         User user = new User();
         when(userDAO.findById(1L)).thenReturn(user);
         EducationRequestDTO education = new EducationRequestDTO();

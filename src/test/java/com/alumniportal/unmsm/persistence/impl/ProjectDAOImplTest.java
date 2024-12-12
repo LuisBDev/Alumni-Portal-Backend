@@ -26,7 +26,7 @@ class ProjectDAOImplTest {
     private ProjectDAOImpl projectDAO;
 
     @Test
-    void findAll_ReturnsListOfProjects_WhenProjectsExist() {
+    void findAllReturnsListOfProjectsWhenProjectsExist() {
         List<Project> projects = List.of(new Project(), new Project());
         when(projectRepository.findAll()).thenReturn(projects);
 
@@ -38,7 +38,7 @@ class ProjectDAOImplTest {
     }
 
     @Test
-    void findAll_ReturnsEmptyList_WhenNoProjectsExist() {
+    void findAllReturnsEmptyListWhenNoProjectsExist() {
         when(projectRepository.findAll()).thenReturn(List.of());
 
         List<Project> result = projectDAO.findAll();
@@ -49,7 +49,7 @@ class ProjectDAOImplTest {
     }
 
     @Test
-    void findById_ReturnsProject_WhenProjectExists() {
+    void findByIdReturnsProjectWhenProjectExists() {
         Project project = new Project();
         project.setId(1L);
 
@@ -63,7 +63,7 @@ class ProjectDAOImplTest {
     }
 
     @Test
-    void findById_ReturnsNull_WhenProjectDoesNotExist() {
+    void findByIdReturnsNullWhenProjectDoesNotExist() {
         when(projectRepository.findById(1L)).thenReturn(Optional.empty());
 
         Project result = projectDAO.findById(1L);
@@ -73,7 +73,7 @@ class ProjectDAOImplTest {
     }
 
     @Test
-    void save_SavesProjectSuccessfully_WhenValidProjectProvided() {
+    void saveSavesProjectSuccessfullyWhenValidProjectProvided() {
         Project project = new Project();
         project.setId(1L);
         project.setName("Test Project");
@@ -85,7 +85,7 @@ class ProjectDAOImplTest {
 
 
     @Test
-    void deleteById_DeletesProjectSuccessfully_WhenProjectExists() {
+    void deleteByIdDeletesProjectSuccessfullyWhenProjectExists() {
         doNothing().when(projectRepository).deleteById(1L);
 
         projectDAO.deleteById(1L);
@@ -94,7 +94,7 @@ class ProjectDAOImplTest {
     }
 
     @Test
-    void deleteById_ThrowsException_WhenProjectDoesNotExist() {
+    void deleteByIdThrowsExceptionWhenProjectDoesNotExist() {
         doThrow(new RuntimeException("Project not found")).when(projectRepository).deleteById(1L);
 
         assertThrows(RuntimeException.class, () -> projectDAO.deleteById(1L));
@@ -102,7 +102,7 @@ class ProjectDAOImplTest {
     }
 
     @Test
-    void findProjectsByUserId_ReturnsListOfProjects_WhenProjectsExistForUser() {
+    void findProjectsByUserIdReturnsListOfProjectsWhenProjectsExistForUser() {
         List<Project> projects = List.of(new Project(), new Project());
         when(projectRepository.findProjectsByUserId(1L)).thenReturn(projects);
 
@@ -114,7 +114,7 @@ class ProjectDAOImplTest {
     }
 
     @Test
-    void findProjectsByUserId_ReturnsEmptyList_WhenNoProjectsExistForUser() {
+    void findProjectsByUserIdReturnsEmptyListWhenNoProjectsExistForUser() {
         when(projectRepository.findProjectsByUserId(1L)).thenReturn(List.of());
 
         List<Project> result = projectDAO.findProjectsByUserId(1L);

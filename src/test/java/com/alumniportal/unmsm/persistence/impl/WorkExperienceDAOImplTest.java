@@ -25,7 +25,7 @@ class WorkExperienceDAOImplTest {
     private WorkExperienceDAOImpl workExperienceDAO;
 
     @Test
-    void findAll_ReturnsListOfWorkExperiences_WhenWorkExperiencesExist() {
+    void findAllReturnsListOfWorkExperiencesWhenWorkExperiencesExist() {
         List<WorkExperience> workExperiences = List.of(new WorkExperience(), new WorkExperience());
         when(workExperienceRepository.findAll()).thenReturn(workExperiences);
 
@@ -37,7 +37,7 @@ class WorkExperienceDAOImplTest {
     }
 
     @Test
-    void findAll_ReturnsEmptyList_WhenNoWorkExperiencesExist() {
+    void findAllReturnsEmptyListWhenNoWorkExperiencesExist() {
         when(workExperienceRepository.findAll()).thenReturn(List.of());
 
         List<WorkExperience> result = workExperienceDAO.findAll();
@@ -48,7 +48,7 @@ class WorkExperienceDAOImplTest {
     }
 
     @Test
-    void findById_ReturnsWorkExperience_WhenWorkExperienceExists() {
+    void findByIdReturnsWorkExperienceWhenWorkExperienceExists() {
         WorkExperience workExperience = new WorkExperience();
         workExperience.setId(1L);
 
@@ -62,7 +62,7 @@ class WorkExperienceDAOImplTest {
     }
 
     @Test
-    void findById_ReturnsNull_WhenWorkExperienceDoesNotExist() {
+    void findByIdReturnsNullWhenWorkExperienceDoesNotExist() {
         when(workExperienceRepository.findById(1L)).thenReturn(Optional.empty());
 
         WorkExperience result = workExperienceDAO.findById(1L);
@@ -72,7 +72,7 @@ class WorkExperienceDAOImplTest {
     }
 
     @Test
-    void save_SavesWorkExperienceSuccessfully_WhenValidWorkExperienceProvided() {
+    void saveSavesWorkExperienceSuccessfullyWhenValidWorkExperienceProvided() {
         WorkExperience workExperience = new WorkExperience();
         workExperience.setId(1L);
 
@@ -83,7 +83,7 @@ class WorkExperienceDAOImplTest {
 
 
     @Test
-    void deleteById_DeletesWorkExperienceSuccessfully_WhenWorkExperienceExists() {
+    void deleteByIdDeletesWorkExperienceSuccessfullyWhenWorkExperienceExists() {
         doNothing().when(workExperienceRepository).deleteById(1L);
 
         workExperienceDAO.deleteById(1L);
@@ -92,7 +92,7 @@ class WorkExperienceDAOImplTest {
     }
 
     @Test
-    void deleteById_ThrowsException_WhenWorkExperienceDoesNotExist() {
+    void deleteByIdThrowsExceptionWhenWorkExperienceDoesNotExist() {
         doThrow(new RuntimeException("Work Experience not found")).when(workExperienceRepository).deleteById(1L);
 
         assertThrows(RuntimeException.class, () -> workExperienceDAO.deleteById(1L));
@@ -100,7 +100,7 @@ class WorkExperienceDAOImplTest {
     }
 
     @Test
-    void findWorkExperiencesByUserId_ReturnsListOfWorkExperiences_WhenWorkExperiencesExistForUser() {
+    void findWorkExperiencesByUserIdReturnsListOfWorkExperiencesWhenWorkExperiencesExistForUser() {
         List<WorkExperience> workExperiences = List.of(new WorkExperience(), new WorkExperience());
         when(workExperienceRepository.findWorkExperiencesByUserId(1L)).thenReturn(workExperiences);
 
@@ -112,7 +112,7 @@ class WorkExperienceDAOImplTest {
     }
 
     @Test
-    void findWorkExperiencesByUserId_ReturnsEmptyList_WhenNoWorkExperiencesExistForUser() {
+    void findWorkExperiencesByUserIdReturnsEmptyListWhenNoWorkExperiencesExistForUser() {
         when(workExperienceRepository.findWorkExperiencesByUserId(1L)).thenReturn(List.of());
 
         List<WorkExperience> result = workExperienceDAO.findWorkExperiencesByUserId(1L);

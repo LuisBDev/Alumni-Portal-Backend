@@ -25,7 +25,7 @@ class ApplicationDAOImplTest {
 
 
     @Test
-    void findAll_ReturnsListOfApplications_WhenApplicationsExist() {
+    void findAllReturnsListOfApplicationsWhenApplicationsExist() {
         List<Application> applications = List.of(new Application(), new Application());
         when(applicationRepository.findAll()).thenReturn(applications);
 
@@ -37,7 +37,7 @@ class ApplicationDAOImplTest {
     }
 
     @Test
-    void findAll_ReturnsEmptyList_WhenNoApplicationsExist() {
+    void findAllReturnsEmptyListWhenNoApplicationsExist() {
         when(applicationRepository.findAll()).thenReturn(List.of());
 
         List<Application> result = applicationDAO.findAll();
@@ -48,7 +48,7 @@ class ApplicationDAOImplTest {
     }
 
     @Test
-    void findById_ReturnsApplication_WhenApplicationExists() {
+    void findByIdReturnsApplicationWhenApplicationExists() {
         Application application = new Application();
         application.setId(1L);
 
@@ -62,7 +62,7 @@ class ApplicationDAOImplTest {
     }
 
     @Test
-    void findById_ReturnsNull_WhenApplicationDoesNotExist() {
+    void findByIdReturnsNullWhenApplicationDoesNotExist() {
         when(applicationRepository.findById(1L)).thenReturn(Optional.empty());
 
         Application result = applicationDAO.findById(1L);
@@ -72,7 +72,7 @@ class ApplicationDAOImplTest {
     }
 
     @Test
-    void save_SavesApplicationSuccessfully_WhenValidApplicationProvided() {
+    void saveSavesApplicationSuccessfullyWhenValidApplicationProvided() {
         Application application = new Application();
         application.setId(1L);
 
@@ -84,7 +84,7 @@ class ApplicationDAOImplTest {
 
 
     @Test
-    void deleteById_DeletesApplicationSuccessfully_WhenApplicationExists() {
+    void deleteByIdDeletesApplicationSuccessfullyWhenApplicationExists() {
         doNothing().when(applicationRepository).deleteById(1L);
 
         applicationDAO.deleteById(1L);
@@ -93,7 +93,7 @@ class ApplicationDAOImplTest {
     }
 
     @Test
-    void deleteById_ThrowsException_WhenApplicationDoesNotExist() {
+    void deleteByIdThrowsExceptionWhenApplicationDoesNotExist() {
         doThrow(new RuntimeException("Application not found")).when(applicationRepository).deleteById(1L);
 
         assertThrows(RuntimeException.class, () -> applicationDAO.deleteById(1L));
@@ -101,7 +101,7 @@ class ApplicationDAOImplTest {
     }
 
     @Test
-    void findApplicationsByUserId_ReturnsListOfApplications_WhenApplicationsExistForUser() {
+    void findApplicationsByUserIdReturnsListOfApplicationsWhenApplicationsExistForUser() {
         List<Application> applications = List.of(new Application(), new Application());
         when(applicationRepository.findApplicationsByUserId(1L)).thenReturn(applications);
 
@@ -113,7 +113,7 @@ class ApplicationDAOImplTest {
     }
 
     @Test
-    void findApplicationsByUserId_ReturnsEmptyList_WhenNoApplicationsExistForUser() {
+    void findApplicationsByUserIdReturnsEmptyListWhenNoApplicationsExistForUser() {
         when(applicationRepository.findApplicationsByUserId(1L)).thenReturn(List.of());
 
         List<Application> result = applicationDAO.findApplicationsByUserId(1L);
@@ -124,7 +124,7 @@ class ApplicationDAOImplTest {
     }
 
     @Test
-    void findApplicationsByJobOfferId_ReturnsListOfApplications_WhenApplicationsExistForJobOffer() {
+    void findApplicationsByJobOfferIdReturnsListOfApplicationsWhenApplicationsExistForJobOffer() {
         List<Application> applications = List.of(new Application(), new Application());
         when(applicationRepository.findApplicationsByJobOfferId(1L)).thenReturn(applications);
 
@@ -136,7 +136,7 @@ class ApplicationDAOImplTest {
     }
 
     @Test
-    void findApplicationsByJobOfferId_ReturnsEmptyList_WhenNoApplicationsExistForJobOffer() {
+    void findApplicationsByJobOfferIdReturnsEmptyListWhenNoApplicationsExistForJobOffer() {
         when(applicationRepository.findApplicationsByJobOfferId(1L)).thenReturn(List.of());
 
         List<Application> result = applicationDAO.findApplicationsByJobOfferId(1L);
@@ -147,7 +147,7 @@ class ApplicationDAOImplTest {
     }
 
     @Test
-    void findApplicationByUserIdAndJobOfferId_ReturnsApplication_WhenApplicationExistsForUserAndJobOffer() {
+    void findApplicationByUserIdAndJobOfferIdReturnsApplicationWhenApplicationExistsForUserAndJobOffer() {
         Application application = new Application();
         application.setId(1L);
 
@@ -161,7 +161,7 @@ class ApplicationDAOImplTest {
     }
 
     @Test
-    void findApplicationByUserIdAndJobOfferId_ReturnsNull_WhenNoApplicationExistsForUserAndJobOffer() {
+    void findApplicationByUserIdAndJobOfferIdReturnsNullWhenNoApplicationExistsForUserAndJobOffer() {
         when(applicationRepository.findApplicationByUserIdAndJobOfferId(1L, 1L)).thenReturn(null);
 
         Application result = applicationDAO.findApplicationByUserIdAndJobOfferId(1L, 1L);

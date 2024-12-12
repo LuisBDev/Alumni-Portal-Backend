@@ -81,7 +81,7 @@ class JobOfferServiceImplTest {
     }
 
     @Test
-    void saveCallsJobOfferDAOSave() {
+    void saveSavesJobOfferSuccessfully() {
         JobOffer jobOffer = new JobOffer();
         jobOfferService.save(jobOffer);
         verify(jobOfferDAO, times(1)).save(jobOffer);
