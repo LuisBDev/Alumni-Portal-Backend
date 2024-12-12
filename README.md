@@ -366,10 +366,11 @@ el siguiente enlace: *
   // ...
   ```
 
-  |         Funcionalidad          | Acciones                                                              | Resultados esperados                                                   |
-                                                  | :----------------------------: | --------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-  | Inicio de Sesión Institucional | El usuario ingresa credenciales válidas para un usuario preexistente. | Mensaje: “Inicio de sesión exitoso” Se redirige al perfil del usuario. |
-  |              ...               | ...                                                                   | ...                                                                    |
+|          Funcionalidad          | Acciones                                                              | Resultados esperados                                                   |
+|:-------------------------------:|----------------------------------------------------------------------|------------------------------------------------------------------------|
+| Inicio de Sesión Institucional | El usuario ingresa credenciales válidas para un usuario preexistente. | Mensaje: “Inicio de sesión exitoso”. Se redirige al perfil del usuario. |
+|              ...               | ...                                                                  | ...                                                                    |
+
 
 - **Usuario empresa**
 
@@ -394,12 +395,11 @@ el siguiente enlace: *
   // ...
   ```
 
-  |        Funcionalidad         | Acciones                                                              | Resultados esperados                                                   |
-                                                  | :--------------------------: | --------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-  | Inicio de Sesión Empresarial | El usuario ingresa credenciales válidas para un usuario preexistente. | Mensaje: “Inicio de sesión exitoso” Se redirige al perfil del usuario. |
-  |             ...              | ...                                                                   | ...                                                                    |
+|          Funcionalidad          | Acciones                                                              | Resultados esperados                                                   |
+|:-------------------------------:|----------------------------------------------------------------------|------------------------------------------------------------------------|
+| Inicio de Sesión Empresarial   | El usuario ingresa credenciales válidas para un usuario preexistente. | Mensaje: “Inicio de sesión exitoso”. Se redirige al perfil del usuario. |
+|              ...               | ...                                                                  | ...                                                                    |
 
----
 
 ### Casos de Pruebas del Módulo de Gestión de Perfil
 
@@ -433,10 +433,11 @@ el siguiente enlace: *
   // ...
   ```
 
-  |               Funcionalidad                | Acciones                                                 | Resultados esperados                                                                   |
-                                                  | :----------------------------------------: | -------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-  | Editar información personal del Estudiante | El usuario ingresa todos los datos requeridos y válidos. | La información personal se actualiza correctamente; se muestra un mensaje confirmando. |
-  |                    ...                     | ...                                                      | ...                                                                                    |
+|               Funcionalidad                | Acciones                                                 | Resultados esperados                                                                   |
+|:------------------------------------------:|---------------------------------------------------------|--------------------------------------------------------------------------------------|
+| Editar información personal del Estudiante | El usuario ingresa todos los datos requeridos y válidos. | La información personal se actualiza correctamente; se muestra un mensaje confirmando. |
+|                    ...                     | ...                                                     | ...                                                                                  |
+
 
 - **Usuario empresa**
 
@@ -470,12 +471,11 @@ el siguiente enlace: *
   // ...
   ```
 
-  |               Funcionalidad                | Acciones                                                 | Resultados esperados                                                                        |
-                                                  | :----------------------------------------: | -------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-  | Editar información personal del la Empresa | El usuario ingresa todos los datos requeridos y válidos. | La información de la empresa se actualiza correctamente; se muestra un mensaje confirmando. |
-  |                    ...                     | ...                                                      | ...                                                                                         |
+|               Funcionalidad                | Acciones                                                 | Resultados esperados                                                                        |
+|:------------------------------------------:|---------------------------------------------------------|-------------------------------------------------------------------------------------------|
+| Editar información personal de la Empresa  | El usuario ingresa todos los datos requeridos y válidos. | La información de la empresa se actualiza correctamente; se muestra un mensaje confirmando. |
+|                    ...                     | ...                                                     | ...                                                                                       |
 
----
 
 ### Casos de Pruebas del Módulo de Gestión de Actividades
 
@@ -518,10 +518,11 @@ el siguiente enlace: *
   // ...
   ```
 
-  |     Funcionalidad      | Acciones                                                 | Resultados esperados                                           |
-                                                  | :--------------------: | -------------------------------------------------------- | -------------------------------------------------------------- |
-  | Crear actividad válida | El usuario ingresa todos los datos requeridos y válidos. | Actividad creada con éxito; se muestra un mensaje confirmando. |
-  |          ...           | ...                                                      | ...                                                            |
+|       Funcionalidad       | Acciones                                                 | Resultados esperados                                           |
+|:--------------------------:|---------------------------------------------------------|----------------------------------------------------------------|
+| Crear actividad válida     | El usuario ingresa todos los datos requeridos y válidos. | Actividad creada con éxito; se muestra un mensaje confirmando. |
+|           ...              | ...                                                     | ...                                                            |
+
 
 - **Usuario empresa**
 
@@ -557,12 +558,11 @@ el siguiente enlace: *
   // ...
   ```
 
-  |     Funcionalidad      | Acciones                                                 | Resultados esperados                                           |
-                                                  | :--------------------: | -------------------------------------------------------- | -------------------------------------------------------------- |
-  | Crear actividad válida | El usuario ingresa todos los datos requeridos y válidos. | Actividad creada con éxito; se muestra un mensaje confirmando. |
-  |          ...           | ...                                                      | ...                                                            |
+|     Funcionalidad      | Acciones                                                 | Resultados esperados                                           |
+|:----------------------:|---------------------------------------------------------|----------------------------------------------------------------|
+| Crear actividad válida | El usuario ingresa todos los datos requeridos y válidos. | Actividad creada con éxito; se muestra un mensaje confirmando. |
+|          ...           | ...                                                     | ...                                                            |
 
----
 
 ### Casos de Pruebas del Módulo de Gestión de Empleabilidad
 
@@ -616,11 +616,11 @@ el siguiente enlace: *
     // ...
   // ...
   ```
+|        Funcionalidad        | Acciones                                                 | Resultados esperados                                                                         |
+|:---------------------------:|---------------------------------------------------------|---------------------------------------------------------------------------------------------|
+| Aplicar a oferta laboral    | El usuario clickea en el botón "POSTULAR" de una oferta. | El usuario ha aplicado exitosamente a la oferta laboral; se muestra mensaje de confirmación. |
+|            ...              | ...                                                     | ...                                                                                         |
 
-  |      Funcionalidad       | Acciones                                                 | Resultados esperados                                                                         |
-                                                  | :----------------------: | -------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-  | Aplicar a oferta laboral | El usuario clickea en el botón "POSTULAR" de una oferta. | El usuario ha aplicado exitosamente a la oferta laboral; se muestra mensaje de confirmación. |
-  |           ...            | ...                                                      | ...                                                                                          |
 
 - **Usuario empresa**
 
@@ -676,12 +676,11 @@ el siguiente enlace: *
   // ...
   ```
 
-  |       Funcionalidad        | Acciones                                       | Resultados esperados                                                                         |
-                                                  | :------------------------: | ---------------------------------------------- | -------------------------------------------------------------------------------------------- |
-  | Crear nueva oferta laboral | La empresa ingresa todos los datos requeridos. | El usuario ha aplicado exitosamente a la oferta laboral; se muestra mensaje de confirmación. |
-  |            ...             | ...                                            | ...                                                                                          |
+|       Funcionalidad        | Acciones                                       | Resultados esperados                                                                         |
+|:--------------------------:|-----------------------------------------------|---------------------------------------------------------------------------------------------|
+| Crear nueva oferta laboral | La empresa ingresa todos los datos requeridos. | El usuario ha aplicado exitosamente a la oferta laboral; se muestra mensaje de confirmación. |
+|            ...             | ...                                            | ...                                                                                         |
 
----
 
 ### Integración de las Pruebas Funcionales
 
