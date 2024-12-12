@@ -48,7 +48,7 @@
 - [📜 Jenkins Pipeline](#-jenkins-pipeline)
 - [🔧 Configuración de Plugins](#-configuración-de-plugins)
 - [🌍 Variables de Entorno](#-variables-de-entorno)
-- [📜 Ejecución de Etapas](-ejecución-de-etapas)
+- [📜 Ejecución de Etapas](#-ejecución-de-etapas)
 - [📊 Finalización del Pipeline](#-finalización-del-pipeline)
 - [🚀 Timings del Pipeline](#timings-del-pipeline)
 
