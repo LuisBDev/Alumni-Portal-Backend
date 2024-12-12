@@ -19,7 +19,7 @@
 
 | **Atributo** | **Detalle**   |
 |--------------|---------------|
-| **Version**  | 1.5           |
+| **Version**  | 2.0           |
 | **Autor**    | Grupo 2 - V&V |
 | **Tamaño**   | 1.5 MB        |
 
@@ -255,45 +255,49 @@ interacción directa entre estudiantes y empresas en un entorno moderno y accesi
 A continuación se presenta la estructura de carpetas del repositorio:
 
 ```bash
-├── public/ # Archivos estáticos públicos accesibles directamente, como imágenes
+├── config/
+| ├── default.conf
+├── public/
 ├── src/
-│ ├── app/ # Contiene la lógica principal de la aplicación, como servicios o configuración
-│ ├── assets/ # Almacena recursos estáticos como imágenes, íconos, fuentes, y botones
-│ ├── components/ # Contiene los componentes reutilizables de la interfaz de usuario (UI)
-│ │  ├── atoms/ # Componentes básicos y reutilizables, como botones o inputs
-│ │  ├── organisms/ # Componentes más complejos compuestos por cards, dialog, forms
-│ │  └── templates/ # Plantillas que definen la estructura de páginas como home o login
-│ ├── contexts/ # Proveedores de contexto para la gestión de estado global con React Context API
-│ │  ├── alertContext.jsx # Contexto para gestionar alertas o notificaciones en la aplicación
-│ │  └── userContext.jsx # Contexto para la gestión del estado del usuario
-│ ├── hooks/ # Hooks personalizados para encapsular lógica reutilizable
-│ ├── tests/
-│ │  ├── components/ # Pruebas unitarias de los componentes de la UI
-│ │  │  ├── atoms/ # Pruebas unitarias de componentes básicos
-│ │  │  ├── organisms/ # Pruebas unitarias de componentes complejos
-│ │  │  └── templates/ # Pruebas unitarias de las plantillas de la aplicación
-│ │  ├── context/ # Pruebas unitarias relacionadas con los contextos
-│ │  │  ├── alertContext.jsx # Pruebas del contexto de alertas
-│ │  │  └── userContext.jsx # Pruebas del contexto del usuario
-│ │  ├── hooks/ # Pruebas unitarias para los hooks personalizados
-│ │  └── functional testing/ # Pruebas funcionales de la aplicación
-│ ├── utils/ # Funciones auxiliares o herramientas que no pertenecen a ninguna categoría específica
-│ ├── App.css # Archivo de estilos globales para la aplicación
-│ ├── App.jsx # Componente principal que define la estructura básica de la aplicación
-│ ├── index.css # Archivo de estilos de inicialización, generalmente para normalizar o reiniciar CSS
-│ └── main.jsx # Punto de entrada de la aplicación, donde se monta el componente principal en el DOM
-├── .env # Archivo de configuración para variables de entorno
-├── README.md # Archivo de documentación del proyecto que incluye la descripción del proyecto, instrucciones de uso y configuración
-├── eslint.config.js # Configuración para las reglas de ESLint para mantener un código consistente
-├── index.html # Archivo HTML principal que sirve como contenedor para la aplicación
-├── package-lock.json # Archivo de bloqueo para asegurar versiones específicas de las dependencias
-└── package.json # Archivo de configuración de Node.js que define dependencias y scripts del proyecto
+│ ├── app/
+│ ├── assets/
+│ ├── components/
+│ │  ├── atoms/
+│ │  ├── organisms/
+│ │  └── templates/
+│ ├── contexts/
+│ │  ├── alertContext.jsx
+│ │  └── userContext.jsx
+│ ├── hooks/
+│ ├── utils/
+│ ├── App.css
+│ ├── App.jsx
+│ ├── index.css
+│ └── main.jsx
+├── test/
+│ ├── components/
+│ │  ├── atoms/
+│ │  ├── organisms/
+│ │  └── templates/
+│ ├── context/
+│ │  ├── alertContext.jsx
+│ │  └── userContext.jsx
+│ ├── hooks/
+│ └── functional testing/
+├── Dockerfile
+├── .env
+├── README.md
+├── eslint.config.js
+├── index.html
+├── package-lock.json
+└── package.json
 ```
 
 ### Descripción de los Componentes (Frontend)
 
 #### **`Raíz del proyecto:`**
 
+- **`config/:`** Contiene archivo para la configuración con Docker.
 - **`public/:`** Contiene archivos estáticos accesibles directamente desde el navegador.
 - **`.env:`** Archivo que almacena variables de entorno para la configuración del proyecto, como claves API o URLs.
 - **`README.md:`** Archivo de documentación que describe el proyecto, cómo configurarlo, ejecutarlo y cualquier detalle
@@ -305,21 +309,30 @@ A continuación se presenta la estructura de carpetas del repositorio:
 - **`package-lock.json:`** Archivo de bloqueo que asegura versiones específicas de las dependencias instaladas,
   garantizando la replicabilidad.
 - **`package.json:`** Archivo de configuración que define las dependencias, scripts, y metadatos del proyecto.
-
-#### **`Directorio src/:`**
-
 - **`app/:`** Contiene la lógica central de la aplicación, como servicios, configuración, y lógica de negocio.
-- **`assets/:`** Almacena recursos estáticos como imágenes, íconos, fuentes y botones que se utilizan en toda la
-  aplicación.
-- **`components/:`** Agrupa los componentes reutilizables de la UI.
-    - **`atoms/:`** Componentes básicos y autónomos, como botones, inputs o etiquetas.
-    - **`organisms/:`** Componentes más complejos que combinan átomos, como cards, diálogos o formularios.
-    - **`templates/:`** Plantillas que estructuran páginas completas o secciones principales como "Home" o "Login".
-- **`contexts/:`** Contiene los proveedores de React Context para gestionar el estado global.
-    - **`alertContext.jsx:`** Proveedor de contexto para manejar alertas o notificaciones.
-    - **`userContext.jsx:`** Proveedor de contexto para gestionar la información y el estado del usuario.
-- **`hooks/:`** Almacena hooks personalizados para encapsular y reutilizar lógica específica en varios componentes.
-- **`tests/:`** Agrupa las pruebas del proyecto.
+
+#### **Directorio principal del proyecto**
+
+- **`src/:`** Contiene todos los archivos fuente de la aplicación React.
+    - **`app/:`** Contiene la lógica central de la aplicación, como servicios, configuración y lógica de negocio.
+    - **`assets/:`** Almacena recursos estáticos como imágenes, íconos, fuentes y botones que se utilizan en toda la
+      aplicación.
+    - **`components/:`** Agrupa los componentes reutilizables de la UI.
+        - **`atoms/:`** Componentes básicos y autónomos, como botones, inputs o etiquetas.
+        - **`organisms/:`** Componentes más complejos que combinan átomos, como cards, diálogos o formularios.
+        - **`templates/:`** Plantillas que estructuran páginas completas o secciones principales como "Home" o "Login".
+    - **`contexts/:`** Contiene los proveedores de React Context para gestionar el estado global.
+        - **`alertContext.jsx:`** Proveedor de contexto para manejar alertas o notificaciones.
+        - **`userContext.jsx:`** Proveedor de contexto para gestionar la información y el estado del usuario.
+    - **`hooks/:`** Almacena hooks personalizados para encapsular y reutilizar lógica específica en varios componentes.
+    - **`utils/:`** Contiene funciones auxiliares y herramientas reutilizables, como manipuladores de datos,
+      validaciones o transformadores.
+    - **`App.css:`** Archivo de estilos globales aplicados a toda la aplicación.
+    - **`App.jsx:`** Componente principal que define la estructura básica de la aplicación React.
+    - **`index.css:`** Archivo de estilos para inicializar y normalizar CSS en la aplicación.
+    - **`main.jsx:`** Punto de entrada donde se inicializa y monta el componente principal (`App.jsx`) en el DOM.
+
+- **`test/:`** Agrupa las pruebas del proyecto.
     - **`components/:`** Pruebas unitarias de los componentes de la UI.
         - **`atoms/:`** Pruebas de componentes básicos.
         - **`organisms/:`** Pruebas de componentes complejos.
@@ -327,16 +340,10 @@ A continuación se presenta la estructura de carpetas del repositorio:
     - **`context/:`** Pruebas unitarias para los contextos, como `alertContext.jsx` y `userContext.jsx`.
     - **`hooks/:`** Pruebas de los hooks personalizados.
     - **`functional testing/:`** Pruebas funcionales que validan el comportamiento de la aplicación completa.
-- **`utils/:`** Contiene funciones auxiliares y herramientas reutilizables, como manipuladores de datos, validaciones o
-  transformadores.
-- **`App.css:`** Archivo de estilos globales aplicados a toda la aplicación.
-- **`App.jsx:`** Componente principal que define la estructura básica de la aplicación React.
-- **`index.css:`** Archivo de estilos para inicializar y normalizar CSS en la aplicación.
-- **`main.jsx:`** Punto de entrada donde se inicializa y monta el componente principal (`App.jsx`) en el DOM.
 
 ---
 
-## :sparkle: Pruebas Funcionales
+## Pruebas Funcionales
 
 Puedes consultar el conjunto completo de casos de prueba realizados para los cuatro módulos principales del sistema en
 el siguiente enlace: *
@@ -1258,8 +1265,13 @@ notificaciones.
 
 ## 📜 Ejecución de Etapas
 
-![image](https://github.com/user-attachments/assets/4782be12-9d1e-436b-9d43-3d019af7cf36)
-![image](https://github.com/user-attachments/assets/719219a3-fe6f-4112-bf2a-48f5324be175)
+
+![image](https://github.com/user-attachments/assets/a97cfc79-de42-42b8-bb32-c5f595e7f2a8)
+![image](https://github.com/user-attachments/assets/d8cf61eb-34b6-47b1-abf8-c27eb9468e23)
+![image](https://github.com/user-attachments/assets/c56a0fdc-a58b-450c-bcf6-39285be0e01e)
+
+
+
 
 ## Etapas Frontend
 
@@ -1275,7 +1287,8 @@ stage("Frontend - Git Checkout") {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/af4c0a4f-f4e8-43cc-8948-87ad32fddfb8)
+![image](https://github.com/user-attachments/assets/362ebec0-38a5-4c54-bf58-9a78d2a8cab8)
+
 
 ### 2. **Frontend - Instalación de Dependencias**
 
@@ -1292,7 +1305,8 @@ stage("Frontend - Install Dependencies") {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/e3eee601-20f0-4dc4-bf2b-c8cd9de8dcee)
+![image](https://github.com/user-attachments/assets/bfce5d0e-6bdc-40fe-875b-ebe6cf4bcfa0)
+
 
 ### 3. **Frontend - Build - Empaquetado**
 
@@ -1309,7 +1323,8 @@ stage("Frontend - Build") {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/77d2adff-4718-4a3b-8d8a-54212863fa37)
+![image](https://github.com/user-attachments/assets/76790ad5-2fed-44fc-85cb-0fcef6c8fee5)
+
 
 ### 4. **Frontend - Unit Tests**
 
@@ -1328,7 +1343,8 @@ stage("Frontend - Unit Tests") {
 
 Resultado de las pruebas unitarias en el frontend.
 
-![image](https://github.com/user-attachments/assets/f4c969c7-adb9-4f74-bac6-b07289a97c4b)
+![image](https://github.com/user-attachments/assets/92ebaeef-7409-465d-bcb9-cae4ea3636d2)
+
 
 ### 5. **Frontend - SonarQube Analysis**
 
@@ -1355,7 +1371,8 @@ Ejecuta el análisis estático del código fuente Frontend utilizando **SonarQub
 }
 ```
 
-![image](https://github.com/user-attachments/assets/28e8d05b-27a0-471a-89f0-a7adf33e1d14)
+![image](https://github.com/user-attachments/assets/090c42e6-67eb-46c1-bfb9-a75fd842cf24)
+
 
 ### 6. **Frontend - Start Server**
 
@@ -1370,7 +1387,8 @@ stage("Frontend - Start Server") {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/13574422-58c7-40d5-96d2-332d825b1984)
+![image](https://github.com/user-attachments/assets/7c2630c5-7a37-463a-9d68-629374346b32)
+
 
 ### 7. **Frontend - Health Check**
 
@@ -1393,7 +1411,8 @@ stage("Frontend - Health Check") {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/a334f504-01f8-49e1-a94b-cc3d3a4d9d28)
+![image](https://github.com/user-attachments/assets/7c3dcc33-c92e-47c7-bf5b-eaed65bcd3b3)
+
 
 ### 8. **Frontend - Pruebas Funcionales**
 
@@ -1412,12 +1431,70 @@ stage("Frontend - Functional Tests") {
 
 Resultado de las pruebas funcionales en el frontend.
 
-![image](https://github.com/user-attachments/assets/50b662b1-2ffd-414f-a66c-6bfe369d5074)
+![image](https://github.com/user-attachments/assets/1be39d54-e10a-4a33-99c8-896ce959ee66)
+
 ![reporte html (1)_page-0001](https://github.com/user-attachments/assets/d514891c-2b63-4e1f-9ea7-c45bf2d1852c)
+
+### 9. **Frontend - Build Docker Image**
+
+```bash
+stage("Frontend - Docker Build Image") {
+    steps {
+        sh "docker build -t luisbdev/alumni-frontend-image:latest . --no-cache"
+    }
+}
+```
+
+![image](https://github.com/user-attachments/assets/06ac702f-14aa-435b-8f1b-7b4292e34bf0)
+
+
+### 10. **Frontend - Docker Login**
+
+```bash
+stage("Frontend - Docker Login") {
+    steps {
+        withCredentials([usernamePassword(credentialsId: 'luisbdev-dockerhub', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+            sh '''
+                mkdir -p ~/.docker
+                echo '{"auths":{"https://index.docker.io/v1/":{"auth":"'"$(echo -n $DOCKERHUB_USERNAME:$DOCKERHUB_PASSWORD | base64)"'"}}}' > ~/.docker/config.json
+            '''
+        }
+    }
+}
+```
+
+![image](https://github.com/user-attachments/assets/186e3956-39ac-4368-ac9a-af7be69f3c3a)
+
+
+### 11. **Frontend - Docker Push Image**
+
+```bash
+stage("Frontend - Docker Push Image") {
+    steps {
+        sh "docker push luisbdev/alumni-frontend-image:latest"
+    }
+}
+```
+
+![image](https://github.com/user-attachments/assets/c92d44c6-17b1-45db-ba89-cc18197aef48)
+
+
+### 12. **Docker - Logout**
+
+```bash
+stage("Docker Logout") {
+    steps {
+        sh "docker logout"
+    }
+}
+```
+
+![image](https://github.com/user-attachments/assets/d0d259c9-9c5b-4b43-970a-0162df2a639e)
+
 
 ## Etapas Backend
 
-### 09. **Backend - Git Checkout**
+### 13. **Backend - Git Checkout**
 
 Clona el repositorio desde GitHub en la rama `master`.
 
@@ -1429,9 +1506,10 @@ stage("Git Checkout") {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/cd352b07-a71e-4b57-ab37-e57e2a6a861c)
+![image](https://github.com/user-attachments/assets/c43faab4-f5db-472d-83d0-c685ac8e68fa)
 
-### 10. **Backend - Construcción con Maven**
+
+### 14. **Backend - Construcción con Maven**
 
 Compila el proyecto utilizando Maven con el perfil de staging.
 
@@ -1443,9 +1521,10 @@ stage("Build with Maven") {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/994fc19c-3002-4c5a-b2a2-abfd2b4d9c1e)
+![image](https://github.com/user-attachments/assets/e2b33978-4ce3-4139-817d-6f9d071bcb79)
 
-### 11. **Backend - Pruebas Unitarias**
+
+### 15. **Backend - Pruebas Unitarias**
 
 Ejecuta las pruebas unitarias definidas con **JUnit** y utiliza **Mockito** para los mocks.
 
@@ -1459,7 +1538,8 @@ stage("Run Tests") {
 
 Resultado de las 440 pruebas unitarias en el backend.
 
-![image](https://github.com/user-attachments/assets/c90f68c6-ea2e-4e00-9797-48f936f0b698)
+![image](https://github.com/user-attachments/assets/13b4f92e-4ef8-4d59-99dc-651746fb283b)
+
 
 Reporte de Jacoco:
 
@@ -1469,7 +1549,7 @@ Ejemplo Capa de Servicios:
 
 ![image](https://github.com/user-attachments/assets/8ced5f29-ef5a-40f9-8e82-a7cd75ab9103)
 
-### 12. **Backend - SonarQube - Análisis estático de código**
+### 16. **Backend - SonarQube - Análisis estático de código**
 
 Realiza un análisis estático del código fuente utilizando **SonarQube**, excluyendo las pruebas.
 
@@ -1494,11 +1574,12 @@ stage("SonarQube Analysis") {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/d0bfb3cd-b09d-4066-b93f-9a4783b3e1b6)
+![image](https://github.com/user-attachments/assets/77c2f605-b20c-43c6-bcc5-a8578744de40)
+
 
 ![image](https://github.com/user-attachments/assets/3c4aeb58-0915-4c32-890b-442f48872f04)
 
-### 13. **Backend - Package - Perfil de Testing**
+### 17. **Backend - Package - Perfil de Testing**
 
 Genera un archivo JAR ejecutable con el perfil de testing.
 
@@ -1510,9 +1591,10 @@ stage("Package") {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/cb4efb27-8db1-43db-b01a-727c4fc50fee)
+![image](https://github.com/user-attachments/assets/f92146ee-65d4-4a90-9eb6-ece5948f9196)
 
-### 14. **Backend - Start Test Server**
+
+### 18. **Backend - Start Test Server**
 
 Despliega la aplicación Spring Boot con el perfil de testing y las variables necesarias.
 
@@ -1532,9 +1614,10 @@ stage("Backend - Start Test Server") {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/171b50eb-4a2f-4f79-83c2-fd61df49b6d5)
+![image](https://github.com/user-attachments/assets/d175e753-9140-4891-8dd8-b726a1255b05)
 
-### 15. **Backend - Health Check (Actuator)**
+
+### 19. **Backend - Health Check (Actuator)**
 
 Verifica que la aplicación esté corriendo correctamente utilizando el endpoint `/actuator/health`.
 
@@ -1557,9 +1640,10 @@ stage("Backend - Health Check (Actuator)") {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/4e3878a2-e77e-4a80-96bc-de65e5a98fb5)
+![image](https://github.com/user-attachments/assets/6ae1b424-15ba-47fb-bd63-a117f422a4f3)
 
-### 16. **Backend - Newman - Instalación Dependencias**
+
+### 20. **Backend - Newman - Instalación Dependencias**
 
 Instala Newman, una herramienta de línea de comandos para ejecutar y probar colecciones de Postman.
 
@@ -1573,9 +1657,10 @@ stage('Newman Setup') {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/b163731c-1ae7-4096-a36d-95c7d47debf3)
+![image](https://github.com/user-attachments/assets/6e6caeb5-f5e9-426a-baae-210b5f87d5d9)
 
-### 17. **Backend Newman - Pruebas Funcionales**
+
+### 21. **Backend Newman - Pruebas Funcionales**
 
 Ejecuta pruebas funcionales con Newman utilizando una colección de Postman preconfigurada.
 
@@ -1589,11 +1674,12 @@ stage('Backend - Pruebas Funcionales con Newman') {
 
 Resultado de las 27 pruebas funcionales con Newman en el backend.
 
-![image](https://github.com/user-attachments/assets/19a38f1b-7363-4e23-b710-c4ae2c764f29)
+![image](https://github.com/user-attachments/assets/f816f823-82dc-4816-b769-ec2872e5657e)
+
 
 ![image](https://github.com/user-attachments/assets/15bc011e-e5d5-4541-a432-b90509ba549c)
 
-### 18. **Backend - Limpieza de reportes previos de JMeter**
+### 22. **Backend - Limpieza de reportes previos de JMeter**
 
 Elimina los reportes anteriores de JMeter para evitar conflictos.
 
@@ -1606,9 +1692,10 @@ stage("Cleaning Old JMeter Reports") {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/99242ef4-1801-4d52-8c3e-35b4641cf026)
+![image](https://github.com/user-attachments/assets/f248a5d0-ae26-4cc1-b377-2f39a5254965)
 
-### 19. **Backend - JMeter - Pruebas de Rendimiento**
+
+### 23. **Backend - JMeter - Pruebas de Rendimiento**
 
 Ejecuta pruebas de rendimiento utilizando un archivo JMX de JMeter preconfigurado.
 
@@ -1630,11 +1717,12 @@ stage("Performance Testing with JMeter") {
 
 Resultado de las 360 peticiones en los endpoints del backend.
 
-![image](https://github.com/user-attachments/assets/2e9f8418-cd82-4430-a47a-f3195aed969d)
+![image](https://github.com/user-attachments/assets/1cefa394-2917-4d38-b502-43a2e7605cb1)
+
 
 ![image](https://github.com/user-attachments/assets/5163e19a-cfda-4623-91f3-72dcea7665ff)
 
-### 20. **Backend - ZAP - Pruebas de Seguridad y Reporte**
+### 24. **Backend - ZAP - Pruebas de Seguridad y Reporte**
 
 ```bash
 stage("Run ZAP Scan and Generate Report") {
@@ -1651,13 +1739,14 @@ stage("Run ZAP Scan and Generate Report") {
 
 Resultado de las pruebas de seguridad en el backend.
 
-![image](https://github.com/user-attachments/assets/1f47a493-bb5e-4d92-ba6a-e7e9a676d89d)
+![image](https://github.com/user-attachments/assets/19a9bf31-54fa-4bee-8a16-f07bf889206b)
+
 
 ![image](https://github.com/user-attachments/assets/b5765fd9-4be0-47b0-b66f-68ed2ad54e91)
 
 ### Entrega Continua (CD)
 
-### 21. **Docker - Construcción Imagen de Backend**
+### 25. **Docker - Construcción Imagen de Backend**
 
 Construye una imagen de Docker para la aplicación Spring Boot.
 
@@ -1669,11 +1758,12 @@ stage("Docker - Backend Build Image") {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/ec7c80ab-fda6-4a0b-ad27-27f5ceab69a2)
+![image](https://github.com/user-attachments/assets/8125b0bd-e16f-428b-871a-7a10d89c655e)
+
 
 ![image](https://github.com/user-attachments/assets/00b44c4f-7603-4eb3-b680-cafef15141c6)
 
-### 22. **Docker Login**
+### 26. **Docker Login**
 
 Inicia sesión en Docker Hub utilizando las credenciales almacenadas en Jenkins.
 
@@ -1690,9 +1780,10 @@ stage("Docker - Login") {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/e58f1cf1-13f3-45e4-b622-0f5366658872)
+![image](https://github.com/user-attachments/assets/e618b72a-eebc-4e7d-a7aa-d478e07f7e11)
 
-### 23. **Docker Push Image en DockerHub**
+
+### 27. **Docker Push Image en DockerHub**
 
 Sube la imagen de Docker al repositorio de DockerHub.
 
@@ -1704,11 +1795,12 @@ stage("Docker - Push Image to DockerHub") {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/fd05b6cd-587c-4aff-a062-1c21445f34e7)
+![image](https://github.com/user-attachments/assets/c09812cb-548c-4737-adc2-3ec6562ad76e)
+
 
 ![image](https://github.com/user-attachments/assets/0a63bc3d-da9f-4588-b1c6-7b56b4475c7c)
 
-### 24. **Envío de notificación Slack**
+### 28. **Envío de notificación Slack**
 
 Notifica en Slack el estado exitoso o fallido del pipeline con detalles del trabajo.
 
@@ -1727,9 +1819,11 @@ stage("Send Slack Notification") {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/274e00aa-3e5f-47db-b559-c4d0bc43d150)
+![image](https://github.com/user-attachments/assets/ed57a320-3152-4d53-bcd6-700540deae1d)
 
-![image](https://github.com/user-attachments/assets/2a8cf41e-fedb-4b55-b0a6-09d259d09bce)
+
+![image](https://github.com/user-attachments/assets/e9bb9988-400a-476e-bb43-2d213e33a5cb)
+
 
 ## 📤 Comportamiento de Post-Ejecución
 
@@ -1756,9 +1850,12 @@ post {
 
 ## 📊 Finalización del Pipeline
 
-![image](https://github.com/user-attachments/assets/ca6814d2-d4da-45d1-8c31-2728e8bf3a2e)
+![image](https://github.com/user-attachments/assets/207e8397-4a1f-49a3-821f-55b698cf7e91)
+
+
 
 ## Timings del Pipeline
 
-![image](https://github.com/user-attachments/assets/9e270e53-951b-477a-85b2-0afef0b3220d)
+![image](https://github.com/user-attachments/assets/5d46138b-8620-45b5-bcb4-ad1775f02885)
+
 
