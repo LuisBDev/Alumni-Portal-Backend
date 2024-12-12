@@ -1265,8 +1265,13 @@ notificaciones.
 
 ## 📜 Ejecución de Etapas
 
-![image](https://github.com/user-attachments/assets/4782be12-9d1e-436b-9d43-3d019af7cf36)
-![image](https://github.com/user-attachments/assets/719219a3-fe6f-4112-bf2a-48f5324be175)
+
+![image](https://github.com/user-attachments/assets/a97cfc79-de42-42b8-bb32-c5f595e7f2a8)
+![image](https://github.com/user-attachments/assets/d8cf61eb-34b6-47b1-abf8-c27eb9468e23)
+![image](https://github.com/user-attachments/assets/c56a0fdc-a58b-450c-bcf6-39285be0e01e)
+
+
+
 
 ## Etapas Frontend
 
@@ -1282,7 +1287,8 @@ stage("Frontend - Git Checkout") {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/af4c0a4f-f4e8-43cc-8948-87ad32fddfb8)
+![image](https://github.com/user-attachments/assets/362ebec0-38a5-4c54-bf58-9a78d2a8cab8)
+
 
 ### 2. **Frontend - Instalación de Dependencias**
 
@@ -1299,7 +1305,8 @@ stage("Frontend - Install Dependencies") {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/e3eee601-20f0-4dc4-bf2b-c8cd9de8dcee)
+![image](https://github.com/user-attachments/assets/bfce5d0e-6bdc-40fe-875b-ebe6cf4bcfa0)
+
 
 ### 3. **Frontend - Build - Empaquetado**
 
@@ -1316,7 +1323,8 @@ stage("Frontend - Build") {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/77d2adff-4718-4a3b-8d8a-54212863fa37)
+![image](https://github.com/user-attachments/assets/76790ad5-2fed-44fc-85cb-0fcef6c8fee5)
+
 
 ### 4. **Frontend - Unit Tests**
 
@@ -1335,7 +1343,8 @@ stage("Frontend - Unit Tests") {
 
 Resultado de las pruebas unitarias en el frontend.
 
-![image](https://github.com/user-attachments/assets/f4c969c7-adb9-4f74-bac6-b07289a97c4b)
+![image](https://github.com/user-attachments/assets/92ebaeef-7409-465d-bcb9-cae4ea3636d2)
+
 
 ### 5. **Frontend - SonarQube Analysis**
 
@@ -1362,7 +1371,8 @@ Ejecuta el análisis estático del código fuente Frontend utilizando **SonarQub
 }
 ```
 
-![image](https://github.com/user-attachments/assets/28e8d05b-27a0-471a-89f0-a7adf33e1d14)
+![image](https://github.com/user-attachments/assets/090c42e6-67eb-46c1-bfb9-a75fd842cf24)
+
 
 ### 6. **Frontend - Start Server**
 
@@ -1377,7 +1387,8 @@ stage("Frontend - Start Server") {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/13574422-58c7-40d5-96d2-332d825b1984)
+![image](https://github.com/user-attachments/assets/7c2630c5-7a37-463a-9d68-629374346b32)
+
 
 ### 7. **Frontend - Health Check**
 
@@ -1400,7 +1411,8 @@ stage("Frontend - Health Check") {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/a334f504-01f8-49e1-a94b-cc3d3a4d9d28)
+![image](https://github.com/user-attachments/assets/7c3dcc33-c92e-47c7-bf5b-eaed65bcd3b3)
+
 
 ### 8. **Frontend - Pruebas Funcionales**
 
@@ -1419,7 +1431,8 @@ stage("Frontend - Functional Tests") {
 
 Resultado de las pruebas funcionales en el frontend.
 
-![image](https://github.com/user-attachments/assets/50b662b1-2ffd-414f-a66c-6bfe369d5074)
+![image](https://github.com/user-attachments/assets/1be39d54-e10a-4a33-99c8-896ce959ee66)
+
 ![reporte html (1)_page-0001](https://github.com/user-attachments/assets/d514891c-2b63-4e1f-9ea7-c45bf2d1852c)
 
 ### 9. **Frontend - Build Docker Image**
@@ -1431,6 +1444,9 @@ stage("Frontend - Docker Build Image") {
     }
 }
 ```
+
+![image](https://github.com/user-attachments/assets/06ac702f-14aa-435b-8f1b-7b4292e34bf0)
+
 
 ### 10. **Frontend - Docker Login**
 
@@ -1447,6 +1463,9 @@ stage("Frontend - Docker Login") {
 }
 ```
 
+![image](https://github.com/user-attachments/assets/186e3956-39ac-4368-ac9a-af7be69f3c3a)
+
+
 ### 11. **Frontend - Docker Push Image**
 
 ```bash
@@ -1457,6 +1476,9 @@ stage("Frontend - Docker Push Image") {
 }
 ```
 
+![image](https://github.com/user-attachments/assets/c92d44c6-17b1-45db-ba89-cc18197aef48)
+
+
 ### 12. **Docker - Logout**
 
 ```bash
@@ -1466,6 +1488,9 @@ stage("Docker Logout") {
     }
 }
 ```
+
+![image](https://github.com/user-attachments/assets/d0d259c9-9c5b-4b43-970a-0162df2a639e)
+
 
 ## Etapas Backend
 
@@ -1481,7 +1506,8 @@ stage("Git Checkout") {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/cd352b07-a71e-4b57-ab37-e57e2a6a861c)
+![image](https://github.com/user-attachments/assets/c43faab4-f5db-472d-83d0-c685ac8e68fa)
+
 
 ### 14. **Backend - Construcción con Maven**
 
@@ -1495,7 +1521,8 @@ stage("Build with Maven") {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/994fc19c-3002-4c5a-b2a2-abfd2b4d9c1e)
+![image](https://github.com/user-attachments/assets/e2b33978-4ce3-4139-817d-6f9d071bcb79)
+
 
 ### 15. **Backend - Pruebas Unitarias**
 
@@ -1511,7 +1538,8 @@ stage("Run Tests") {
 
 Resultado de las 440 pruebas unitarias en el backend.
 
-![image](https://github.com/user-attachments/assets/c90f68c6-ea2e-4e00-9797-48f936f0b698)
+![image](https://github.com/user-attachments/assets/13b4f92e-4ef8-4d59-99dc-651746fb283b)
+
 
 Reporte de Jacoco:
 
@@ -1546,7 +1574,8 @@ stage("SonarQube Analysis") {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/d0bfb3cd-b09d-4066-b93f-9a4783b3e1b6)
+![image](https://github.com/user-attachments/assets/77c2f605-b20c-43c6-bcc5-a8578744de40)
+
 
 ![image](https://github.com/user-attachments/assets/3c4aeb58-0915-4c32-890b-442f48872f04)
 
@@ -1562,7 +1591,8 @@ stage("Package") {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/cb4efb27-8db1-43db-b01a-727c4fc50fee)
+![image](https://github.com/user-attachments/assets/f92146ee-65d4-4a90-9eb6-ece5948f9196)
+
 
 ### 18. **Backend - Start Test Server**
 
@@ -1584,7 +1614,8 @@ stage("Backend - Start Test Server") {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/171b50eb-4a2f-4f79-83c2-fd61df49b6d5)
+![image](https://github.com/user-attachments/assets/d175e753-9140-4891-8dd8-b726a1255b05)
+
 
 ### 19. **Backend - Health Check (Actuator)**
 
@@ -1609,7 +1640,8 @@ stage("Backend - Health Check (Actuator)") {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/4e3878a2-e77e-4a80-96bc-de65e5a98fb5)
+![image](https://github.com/user-attachments/assets/6ae1b424-15ba-47fb-bd63-a117f422a4f3)
+
 
 ### 20. **Backend - Newman - Instalación Dependencias**
 
@@ -1625,7 +1657,8 @@ stage('Newman Setup') {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/b163731c-1ae7-4096-a36d-95c7d47debf3)
+![image](https://github.com/user-attachments/assets/6e6caeb5-f5e9-426a-baae-210b5f87d5d9)
+
 
 ### 21. **Backend Newman - Pruebas Funcionales**
 
@@ -1641,7 +1674,8 @@ stage('Backend - Pruebas Funcionales con Newman') {
 
 Resultado de las 27 pruebas funcionales con Newman en el backend.
 
-![image](https://github.com/user-attachments/assets/19a38f1b-7363-4e23-b710-c4ae2c764f29)
+![image](https://github.com/user-attachments/assets/f816f823-82dc-4816-b769-ec2872e5657e)
+
 
 ![image](https://github.com/user-attachments/assets/15bc011e-e5d5-4541-a432-b90509ba549c)
 
@@ -1658,7 +1692,8 @@ stage("Cleaning Old JMeter Reports") {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/99242ef4-1801-4d52-8c3e-35b4641cf026)
+![image](https://github.com/user-attachments/assets/f248a5d0-ae26-4cc1-b377-2f39a5254965)
+
 
 ### 23. **Backend - JMeter - Pruebas de Rendimiento**
 
@@ -1682,7 +1717,8 @@ stage("Performance Testing with JMeter") {
 
 Resultado de las 360 peticiones en los endpoints del backend.
 
-![image](https://github.com/user-attachments/assets/2e9f8418-cd82-4430-a47a-f3195aed969d)
+![image](https://github.com/user-attachments/assets/1cefa394-2917-4d38-b502-43a2e7605cb1)
+
 
 ![image](https://github.com/user-attachments/assets/5163e19a-cfda-4623-91f3-72dcea7665ff)
 
@@ -1703,7 +1739,8 @@ stage("Run ZAP Scan and Generate Report") {
 
 Resultado de las pruebas de seguridad en el backend.
 
-![image](https://github.com/user-attachments/assets/1f47a493-bb5e-4d92-ba6a-e7e9a676d89d)
+![image](https://github.com/user-attachments/assets/19a9bf31-54fa-4bee-8a16-f07bf889206b)
+
 
 ![image](https://github.com/user-attachments/assets/b5765fd9-4be0-47b0-b66f-68ed2ad54e91)
 
@@ -1721,7 +1758,8 @@ stage("Docker - Backend Build Image") {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/ec7c80ab-fda6-4a0b-ad27-27f5ceab69a2)
+![image](https://github.com/user-attachments/assets/8125b0bd-e16f-428b-871a-7a10d89c655e)
+
 
 ![image](https://github.com/user-attachments/assets/00b44c4f-7603-4eb3-b680-cafef15141c6)
 
@@ -1742,7 +1780,8 @@ stage("Docker - Login") {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/e58f1cf1-13f3-45e4-b622-0f5366658872)
+![image](https://github.com/user-attachments/assets/e618b72a-eebc-4e7d-a7aa-d478e07f7e11)
+
 
 ### 27. **Docker Push Image en DockerHub**
 
@@ -1756,7 +1795,8 @@ stage("Docker - Push Image to DockerHub") {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/fd05b6cd-587c-4aff-a062-1c21445f34e7)
+![image](https://github.com/user-attachments/assets/c09812cb-548c-4737-adc2-3ec6562ad76e)
+
 
 ![image](https://github.com/user-attachments/assets/0a63bc3d-da9f-4588-b1c6-7b56b4475c7c)
 
@@ -1779,9 +1819,11 @@ stage("Send Slack Notification") {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/274e00aa-3e5f-47db-b559-c4d0bc43d150)
+![image](https://github.com/user-attachments/assets/ed57a320-3152-4d53-bcd6-700540deae1d)
 
-![image](https://github.com/user-attachments/assets/2a8cf41e-fedb-4b55-b0a6-09d259d09bce)
+
+![image](https://github.com/user-attachments/assets/e9bb9988-400a-476e-bb43-2d213e33a5cb)
+
 
 ## 📤 Comportamiento de Post-Ejecución
 
@@ -1808,9 +1850,12 @@ post {
 
 ## 📊 Finalización del Pipeline
 
-![image](https://github.com/user-attachments/assets/ca6814d2-d4da-45d1-8c31-2728e8bf3a2e)
+![image](https://github.com/user-attachments/assets/207e8397-4a1f-49a3-821f-55b698cf7e91)
+
+
 
 ## Timings del Pipeline
 
-![image](https://github.com/user-attachments/assets/9e270e53-951b-477a-85b2-0afef0b3220d)
+![image](https://github.com/user-attachments/assets/5d46138b-8620-45b5-bcb4-ad1775f02885)
+
 
