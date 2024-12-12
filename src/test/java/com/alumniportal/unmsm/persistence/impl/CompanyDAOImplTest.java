@@ -25,7 +25,7 @@ class CompanyDAOImplTest {
     private CompanyDAOImpl companyDAO;
 
     @Test
-    void findAll_ReturnsListOfCompanies_WhenCompaniesExist() {
+    void findAllReturnsListOfCompaniesWhenCompaniesExist() {
         List<Company> companies = List.of(new Company(), new Company());
         when(companyRepository.findAll()).thenReturn(companies);
 
@@ -37,7 +37,7 @@ class CompanyDAOImplTest {
     }
 
     @Test
-    void findAll_ReturnsEmptyList_WhenNoCompaniesExist() {
+    void findAllReturnsEmptyListWhenNoCompaniesExist() {
         when(companyRepository.findAll()).thenReturn(List.of());
 
         List<Company> result = companyDAO.findAll();
@@ -48,7 +48,7 @@ class CompanyDAOImplTest {
     }
 
     @Test
-    void findById_ReturnsCompany_WhenCompanyExists() {
+    void findByIdReturnsCompanyWhenCompanyExists() {
         Company company = new Company();
         company.setId(1L);
 
@@ -62,7 +62,7 @@ class CompanyDAOImplTest {
     }
 
     @Test
-    void findById_ReturnsNull_WhenCompanyDoesNotExist() {
+    void findByIdReturnsNullWhenCompanyDoesNotExist() {
         when(companyRepository.findById(1L)).thenReturn(Optional.empty());
 
         Company result = companyDAO.findById(1L);
@@ -72,7 +72,7 @@ class CompanyDAOImplTest {
     }
 
     @Test
-    void save_SavesCompanySuccessfully_WhenValidCompanyProvided() {
+    void saveSavesCompanySuccessfullyWhenValidCompanyProvided() {
         Company company = new Company();
         company.setId(1L);
         company.setName("Test Company");
@@ -84,7 +84,7 @@ class CompanyDAOImplTest {
 
 
     @Test
-    void deleteById_DeletesCompanySuccessfully_WhenCompanyExists() {
+    void deleteByIdDeletesCompanySuccessfullyWhenCompanyExists() {
         doNothing().when(companyRepository).deleteById(1L);
 
         companyDAO.deleteById(1L);
@@ -93,7 +93,7 @@ class CompanyDAOImplTest {
     }
 
     @Test
-    void deleteById_ThrowsException_WhenCompanyDoesNotExist() {
+    void deleteByIdThrowsExceptionWhenCompanyDoesNotExist() {
         doThrow(new RuntimeException("Company not found")).when(companyRepository).deleteById(1L);
 
         assertThrows(RuntimeException.class, () -> companyDAO.deleteById(1L));
@@ -101,7 +101,7 @@ class CompanyDAOImplTest {
     }
 
     @Test
-    void existsByEmail_ReturnsTrue_WhenCompanyExistsWithEmail() {
+    void existsByEmailReturnsTrueWhenCompanyExistsWithEmail() {
         when(companyRepository.existsByEmail("test@example.com")).thenReturn(true);
 
         boolean result = companyDAO.existsByEmail("test@example.com");
@@ -111,7 +111,7 @@ class CompanyDAOImplTest {
     }
 
     @Test
-    void existsByEmail_ReturnsFalse_WhenNoCompanyExistsWithEmail() {
+    void existsByEmailReturnsFalseWhenNoCompanyExistsWithEmail() {
         when(companyRepository.existsByEmail("test@example.com")).thenReturn(false);
 
         boolean result = companyDAO.existsByEmail("test@example.com");
@@ -121,7 +121,7 @@ class CompanyDAOImplTest {
     }
 
     @Test
-    void findByEmail_ReturnsCompany_WhenCompanyExistsWithEmail() {
+    void findByEmailReturnsCompanyWhenCompanyExistsWithEmail() {
         Company company = new Company();
         company.setEmail("test@example.com");
 
@@ -135,7 +135,7 @@ class CompanyDAOImplTest {
     }
 
     @Test
-    void findByEmail_ReturnsNull_WhenNoCompanyExistsWithEmail() {
+    void findByEmailReturnsNullWhenNoCompanyExistsWithEmail() {
         when(companyRepository.findByEmail("test@example.com")).thenReturn(null);
 
         Company result = companyDAO.findByEmail("test@example.com");

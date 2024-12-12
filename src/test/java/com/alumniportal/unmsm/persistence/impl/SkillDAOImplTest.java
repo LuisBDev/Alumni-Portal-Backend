@@ -25,7 +25,7 @@ class SkillDAOImplTest {
     private SkillDAOImpl skillDAO;
 
     @Test
-    void findAll_ReturnsListOfSkills_WhenSkillsExist() {
+    void findAllReturnsListOfSkillsWhenSkillsExist() {
         List<Skill> skills = List.of(new Skill(), new Skill());
         when(skillRepository.findAll()).thenReturn(skills);
 
@@ -37,7 +37,7 @@ class SkillDAOImplTest {
     }
 
     @Test
-    void findAll_ReturnsEmptyList_WhenNoSkillsExist() {
+    void findAllReturnsEmptyListWhenNoSkillsExist() {
         when(skillRepository.findAll()).thenReturn(List.of());
 
         List<Skill> result = skillDAO.findAll();
@@ -48,7 +48,7 @@ class SkillDAOImplTest {
     }
 
     @Test
-    void findById_ReturnsSkill_WhenSkillExists() {
+    void findByIdReturnsSkillWhenSkillExists() {
         Skill skill = new Skill();
         skill.setId(1L);
 
@@ -62,7 +62,7 @@ class SkillDAOImplTest {
     }
 
     @Test
-    void findById_ReturnsNull_WhenSkillDoesNotExist() {
+    void findByIdReturnsNullWhenSkillDoesNotExist() {
         when(skillRepository.findById(1L)).thenReturn(Optional.empty());
 
         Skill result = skillDAO.findById(1L);
@@ -72,7 +72,7 @@ class SkillDAOImplTest {
     }
 
     @Test
-    void save_SavesSkillSuccessfully_WhenValidSkillProvided() {
+    void saveSavesSkillSuccessfullyWhenValidSkillProvided() {
         Skill skill = new Skill();
         skill.setId(1L);
         skill.setName("Test Skill");
@@ -84,7 +84,7 @@ class SkillDAOImplTest {
 
 
     @Test
-    void deleteById_DeletesSkillSuccessfully_WhenSkillExists() {
+    void deleteByIdDeletesSkillSuccessfullyWhenSkillExists() {
         doNothing().when(skillRepository).deleteById(1L);
 
         skillDAO.deleteById(1L);
@@ -93,7 +93,7 @@ class SkillDAOImplTest {
     }
 
     @Test
-    void deleteById_ThrowsException_WhenSkillDoesNotExist() {
+    void deleteByIdThrowsExceptionWhenSkillDoesNotExist() {
         doThrow(new RuntimeException("Skill not found")).when(skillRepository).deleteById(1L);
 
         assertThrows(RuntimeException.class, () -> skillDAO.deleteById(1L));
@@ -101,7 +101,7 @@ class SkillDAOImplTest {
     }
 
     @Test
-    void findSkillsByUserId_ReturnsListOfSkills_WhenSkillsExistForUser() {
+    void findSkillsByUserIdReturnsListOfSkillsWhenSkillsExistForUser() {
         List<Skill> skills = List.of(new Skill(), new Skill());
         when(skillRepository.findSkillsByUserId(1L)).thenReturn(skills);
 
@@ -113,7 +113,7 @@ class SkillDAOImplTest {
     }
 
     @Test
-    void findSkillsByUserId_ReturnsEmptyList_WhenNoSkillsExistForUser() {
+    void findSkillsByUserIdReturnsEmptyListWhenNoSkillsExistForUser() {
         when(skillRepository.findSkillsByUserId(1L)).thenReturn(List.of());
 
         List<Skill> result = skillDAO.findSkillsByUserId(1L);

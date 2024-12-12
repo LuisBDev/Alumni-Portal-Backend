@@ -26,7 +26,7 @@ class EducationDAOImplTest {
     private EducationDAOImpl educationDAO;
 
     @Test
-    void findAll_ReturnsListOfEducations_WhenEducationsExist() {
+    void findAllReturnsListOfEducationsWhenEducationsExist() {
         List<Education> educations = List.of(new Education(), new Education());
         when(educationRepository.findAll()).thenReturn(educations);
 
@@ -38,7 +38,7 @@ class EducationDAOImplTest {
     }
 
     @Test
-    void findAll_ReturnsEmptyList_WhenNoEducationsExist() {
+    void findAllReturnsEmptyListWhenNoEducationsExist() {
         when(educationRepository.findAll()).thenReturn(List.of());
 
         List<Education> result = educationDAO.findAll();
@@ -49,7 +49,7 @@ class EducationDAOImplTest {
     }
 
     @Test
-    void findById_ReturnsEducation_WhenEducationExists() {
+    void findByIdReturnsEducationWhenEducationExists() {
         Education education = new Education();
         education.setId(1L);
 
@@ -63,7 +63,7 @@ class EducationDAOImplTest {
     }
 
     @Test
-    void findById_ReturnsNull_WhenEducationDoesNotExist() {
+    void findByIdReturnsNullWhenEducationDoesNotExist() {
         when(educationRepository.findById(1L)).thenReturn(Optional.empty());
 
         Education result = educationDAO.findById(1L);
@@ -73,17 +73,17 @@ class EducationDAOImplTest {
     }
 
     @Test
-    void save_SavesEducationSuccessfully_WhenValidEducationProvided() {
+    void saveSavesEducationSuccessfullyWhenValidEducationProvided() {
         Education education = new Education();
         education.setId(1L);
         educationDAO.save(education);
 
         verify(educationRepository, times(1)).save(education);
     }
-    
+
 
     @Test
-    void deleteById_DeletesEducationSuccessfully_WhenEducationExists() {
+    void deleteByIdDeletesEducationSuccessfullyWhenEducationExists() {
         doNothing().when(educationRepository).deleteById(1L);
 
         educationDAO.deleteById(1L);
@@ -92,7 +92,7 @@ class EducationDAOImplTest {
     }
 
     @Test
-    void deleteById_ThrowsException_WhenEducationDoesNotExist() {
+    void deleteByIdThrowsExceptionWhenEducationDoesNotExist() {
         doThrow(new RuntimeException("Education not found")).when(educationRepository).deleteById(1L);
 
         assertThrows(RuntimeException.class, () -> educationDAO.deleteById(1L));
@@ -100,7 +100,7 @@ class EducationDAOImplTest {
     }
 
     @Test
-    void findEducationsByUserId_ReturnsListOfEducations_WhenEducationsExistForUser() {
+    void findEducationsByUserIdReturnsListOfEducationsWhenEducationsExistForUser() {
         List<Education> educations = List.of(new Education(), new Education());
         when(educationRepository.findEducationsByUserId(1L)).thenReturn(educations);
 
@@ -112,7 +112,7 @@ class EducationDAOImplTest {
     }
 
     @Test
-    void findEducationsByUserId_ReturnsEmptyList_WhenNoEducationsExistForUser() {
+    void findEducationsByUserIdReturnsEmptyListWhenNoEducationsExistForUser() {
         when(educationRepository.findEducationsByUserId(1L)).thenReturn(List.of());
 
         List<Education> result = educationDAO.findEducationsByUserId(1L);

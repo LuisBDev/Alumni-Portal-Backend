@@ -25,7 +25,7 @@ class ActivityDAOImplTest {
     private ActivityDAOImpl activityDAO;
 
     @Test
-    void findAll_ReturnsListOfActivities_WhenActivitiesExist() {
+    void findAllReturnsListOfActivitiesWhenActivitiesExist() {
 
         List<Activity> activities = List.of(new Activity(), new Activity());
         when(activityRepository.findAll()).thenReturn(activities);
@@ -38,7 +38,7 @@ class ActivityDAOImplTest {
     }
 
     @Test
-    void findAll_ReturnsEmptyList_WhenNoActivitiesExist() {
+    void findAllReturnsEmptyListWhenNoActivitiesExist() {
         when(activityRepository.findAll()).thenReturn(List.of());
 
         List<Activity> result = activityDAO.findAll();
@@ -49,7 +49,7 @@ class ActivityDAOImplTest {
     }
 
     @Test
-    void findById_ReturnsActivity_WhenActivityExists() {
+    void findByIdReturnsActivityWhenActivityExists() {
         Activity activity = new Activity();
         activity.setId(1L);
 
@@ -63,7 +63,7 @@ class ActivityDAOImplTest {
     }
 
     @Test
-    void findById_ReturnsNull_WhenActivityDoesNotExist() {
+    void findByIdReturnsNullWhenActivityDoesNotExist() {
         when(activityRepository.findById(1L)).thenReturn(Optional.empty());
 
         Activity result = activityDAO.findById(1L);
@@ -73,7 +73,7 @@ class ActivityDAOImplTest {
     }
 
     @Test
-    void save_SavesActivitySuccessfully_WhenValidActivityProvided() {
+    void saveSavesActivitySuccessfullyWhenValidActivityProvided() {
         Activity activity = new Activity();
         activity.setId(1L);
         activity.setTitle("Test Activity");
@@ -84,7 +84,7 @@ class ActivityDAOImplTest {
     }
 
     @Test
-    void deleteById_DeletesActivitySuccessfully_WhenActivityExists() {
+    void deleteByIdDeletesActivitySuccessfullyWhenActivityExists() {
         doNothing().when(activityRepository).deleteById(1L);
 
         activityDAO.deleteById(1L);
@@ -93,7 +93,7 @@ class ActivityDAOImplTest {
     }
 
     @Test
-    void deleteById_ThrowsException_WhenActivityDoesNotExist() {
+    void deleteByIdThrowsExceptionWhenActivityDoesNotExist() {
         doThrow(new IllegalArgumentException()).when(activityRepository).deleteById(anyLong());
 
         assertThrows(IllegalArgumentException.class, () -> activityDAO.deleteById(500L));
@@ -101,7 +101,7 @@ class ActivityDAOImplTest {
     }
 
     @Test
-    void findActivitiesByUserId_ReturnsListOfActivities_WhenActivitiesExistForUser() {
+    void findActivitiesByUserIdReturnsListOfActivitiesWhenActivitiesExistForUser() {
         List<Activity> activities = List.of(new Activity(), new Activity());
         when(activityRepository.findActivitiesByUserId(anyLong())).thenReturn(activities);
 
@@ -113,7 +113,7 @@ class ActivityDAOImplTest {
     }
 
     @Test
-    void findActivitiesByUserId_ReturnsEmptyList_WhenNoActivitiesExistForUser() {
+    void findActivitiesByUserIdReturnsEmptyListWhenNoActivitiesExistForUser() {
         when(activityRepository.findActivitiesByUserId(anyLong())).thenReturn(List.of());
 
         List<Activity> result = activityDAO.findActivitiesByUserId(1L);
@@ -124,7 +124,7 @@ class ActivityDAOImplTest {
     }
 
     @Test
-    void findActivitiesByCompanyId_ReturnsListOfActivities_WhenActivitiesExistForCompany() {
+    void findActivitiesByCompanyIdReturnsListOfActivitiesWhenActivitiesExistForCompany() {
         List<Activity> activities = List.of(new Activity(), new Activity());
         when(activityRepository.findActivitiesByCompanyId(1L)).thenReturn(activities);
 
@@ -136,7 +136,7 @@ class ActivityDAOImplTest {
     }
 
     @Test
-    void findActivitiesByCompanyId_ReturnsEmptyList_WhenNoActivitiesExistForCompany() {
+    void findActivitiesByCompanyIdReturnsEmptyListWhenNoActivitiesExistForCompany() {
         when(activityRepository.findActivitiesByCompanyId(1L)).thenReturn(List.of());
 
         List<Activity> result = activityDAO.findActivitiesByCompanyId(1L);

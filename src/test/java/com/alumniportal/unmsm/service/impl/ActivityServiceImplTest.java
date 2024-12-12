@@ -61,7 +61,7 @@ public class ActivityServiceImplTest {
     }
 
     @Test
-    void testFindAll() {
+    void findAllReturnsActivityDTOList() {
         when(activityDAO.findAll()).thenReturn(ActivityProvider.activityList());
 
         List<ActivityResponseDTO> activityDTOList = activityService.findAll();
@@ -72,7 +72,7 @@ public class ActivityServiceImplTest {
 
 
     @Test
-    void testFindActivitiesByUserId_ReturnsActivityDTOList_WhenActivitiesExist() {
+    void findActivitiesByUserIdReturnsActivityDTOListWhenActivitiesExist() {
         Long userId = 1L;
         when(activityDAO.findActivitiesByUserId(userId)).thenReturn(ActivityProvider.activityList());
 
@@ -83,7 +83,7 @@ public class ActivityServiceImplTest {
     }
 
     @Test
-    void testFindActivitiesByUserId_ReturnsEmptyList_WhenNoActivitiesExist() {
+    void findActivitiesByUserIdThrowsExceptionWhenNoActivitiesExist() {
         Long userId = 1L;
         when(activityDAO.findActivitiesByUserId(userId)).thenReturn(List.of());
 
@@ -92,7 +92,7 @@ public class ActivityServiceImplTest {
     }
 
     @Test
-    void testFindActivitiesByCompanyId_ReturnsActivityDTOList_WhenActivitiesExist() {
+    void findActivitiesByCompanyIdReturnsActivityDTOListWhenActivitiesExist() {
         Long companyId = 1L;
         when(activityDAO.findActivitiesByCompanyId(companyId)).thenReturn(ActivityProvider.activityList());
 
@@ -103,7 +103,7 @@ public class ActivityServiceImplTest {
     }
 
     @Test
-    void testFindActivitiesByCompanyId_ReturnsEmptyList_WhenNoActivitiesExist() {
+    void findActivitiesByCompanyIdThrowsExceptionWhenNoActivitiesExist() {
         Long companyId = 1L;
         when(activityDAO.findActivitiesByCompanyId(companyId)).thenReturn(List.of());
 
@@ -112,7 +112,7 @@ public class ActivityServiceImplTest {
     }
 
     @Test
-    void testFindActivityById_ReturnsActivityDTO_WhenActivityExists() {
+    void findActivityByIdReturnsActivityDTOWhenActivityExists() {
         Long activityId = 1L;
         when(activityDAO.findById(activityId)).thenReturn(ActivityProvider.activityOne());
 
@@ -123,7 +123,7 @@ public class ActivityServiceImplTest {
     }
 
     @Test
-    void testFindActivityById_ReturnsNull() {
+    void findActivityByIdReturnsNull() {
         Long activityId = 1L;
         when(activityDAO.findById(activityId)).thenReturn(null);
 
@@ -133,7 +133,7 @@ public class ActivityServiceImplTest {
     }
 
     @Test
-    void testSaveActivitySuccessfully() {
+    void SaveActivitySuccessfully() {
         // Arrange
         Activity activity = ActivityProvider.activityOne();
 
@@ -146,7 +146,7 @@ public class ActivityServiceImplTest {
     }
 
     @Test
-    void deleteById_DeletesActivity_WhenActivityHasNoImage() throws Exception {
+    void deleteByIdDeletesActivityWhenActivityHasNoImage() throws Exception {
         Long activityId = 1L;
         Activity activity = new Activity();
         activity.setId(activityId);
@@ -158,7 +158,7 @@ public class ActivityServiceImplTest {
     }
 
     @Test
-    void deleteById_ThrowsException_WhenActivityNotFound() {
+    void deleteByIdThrowsExceptionWhenActivityNotFound() {
         Long activityId = 1L;
         when(activityDAO.findById(activityId)).thenReturn(null);
 
@@ -166,7 +166,7 @@ public class ActivityServiceImplTest {
     }
 
     @Test
-    void deleteById_DeletesActivityAndImage_WhenActivityHasImage() throws Exception {
+    void deleteByIdDeletesActivityAndImageWhenActivityHasImage() throws Exception {
         Long activityId = 1L;
         Activity activity = new Activity();
         activity.setId(activityId);
@@ -180,7 +180,7 @@ public class ActivityServiceImplTest {
     }
 
     @Test
-    void testSaveActivityByUserId() {
+    void saveActivityByUserIdSaveActivitySuccessfully() {
         User user = User.builder().id(1L).name("Luis").activityList(new ArrayList<>()).build();
 
         ActivityRequestDTO activity = new ActivityRequestDTO();
@@ -194,7 +194,7 @@ public class ActivityServiceImplTest {
     }
 
     @Test
-    void testSaveActivityByUserId_WhenUserIsNull() {
+    void saveActivityByUserIdThrowsExceptionWhenUserIsNull() {
         ActivityRequestDTO activity = new ActivityRequestDTO();
 
         when(userDAO.findById(anyLong())).thenReturn(null);
@@ -203,7 +203,7 @@ public class ActivityServiceImplTest {
     }
 
     @Test
-    void testSaveActivityByCompanyId() {
+    void saveActivityByCompanyIdSaveActivitySuccessfully() {
 
         Company company = Company.builder().id(1L).name("UNMSM").activityList(new ArrayList<>()).build();
 
@@ -219,7 +219,7 @@ public class ActivityServiceImplTest {
     }
 
     @Test
-    void testSaveActivityByCompanyId_WhenCompanyIsNull() {
+    void saveActivityByCompanyIdThrowsExceptionWhenCompanyIsNull() {
         ActivityRequestDTO activity = new ActivityRequestDTO();
 
         when(companyDAO.findById(anyLong())).thenReturn(null);
@@ -229,26 +229,9 @@ public class ActivityServiceImplTest {
 //        No se necesita generar el doNothing para invokeLambda porque no se llama a ese método en el caso de que la compañía sea nula.
     }
 
-//    @Test
-//    void testSaveActivityWithImageByUserId() throws IOException {
-//
-//        User user = User.builder().id(1L).name("Luis").activityList(new ArrayList<>()).build();
-//        MultipartFile image = mock(MultipartFile.class);
-//        ActivityRequestDTO activityRequestDTO = new ActivityRequestDTO();
-//
-//        when(userDAO.findById(anyLong())).thenReturn(user);
-//        when(activityDAO.findById(anyLong())).thenReturn(ActivityProvider.activityOne());
-//        doNothing().when(activityService).invokeLambda(anyString(), anyString(), any(Activity.class));
-////        doNothing().when(activityService).uploadActivityImage(anyLong(), any(MultipartFile.class));
-//
-//        activityService.saveActivityWithImageByUserId(activityRequestDTO, user.getId(), image);
-//
-//        verify(activityDAO, times(1)).save(any(Activity.class));
-//        verify(activityService, times(1)).uploadActivityImage(anyLong(), any(MultipartFile.class));
-//    }
 
     @Test
-    void testSaveActivityWithImageByUserId_WhenUserIsNull() {
+    void saveActivityWithImageByUserIdThrowsExceptionWhenUserIsNull() {
 
         MultipartFile image = mock(MultipartFile.class);
 
@@ -261,7 +244,7 @@ public class ActivityServiceImplTest {
     }
 
     @Test
-    void testSaveActivityWithImageByUserId_WhenImageIsNull() throws IOException {
+    void saveActivityWithImageByUserIdSaveActivitySuccessfullyWhenImageIsNull() throws IOException {
 
         User user = User.builder().id(1L).name("Luis").activityList(new ArrayList<>()).build();
 
@@ -277,7 +260,7 @@ public class ActivityServiceImplTest {
     }
 
     @Test
-    void testSaveActivityWithImageByUserId_WhenImageIsEmpty() throws IOException {
+    void saveActivityWithImageByUserIdSaveActivitySuccessfullyWhenImageIsEmpty() throws IOException {
 
         User user = User.builder().id(1L).name("Luis").activityList(new ArrayList<>()).build();
 
@@ -297,7 +280,7 @@ public class ActivityServiceImplTest {
     }
 
     @Test
-    void testSaveActivityWithImageByCompanyId() throws IOException {
+    void saveActivityWithImageByCompanyIdSaveActivitySuccessfully() throws IOException {
 
         Company company = Company.builder().id(1L).name("TechCorp").activityList(new ArrayList<>()).build();
 
@@ -317,7 +300,7 @@ public class ActivityServiceImplTest {
     }
 
     @Test
-    void testSaveActivityWithImageByCompanyId_WhenCompanyIsNull() {
+    void saveActivityWithImageByCompanyIdThrowsExceptionWhenCompanyIsNull() {
 
         MultipartFile image = mock(MultipartFile.class);
 
@@ -329,7 +312,7 @@ public class ActivityServiceImplTest {
     }
 
     @Test
-    void testSaveActivityWithImageByCompanyId_WhenImageIsNull() throws IOException {
+    void saveActivityWithImageByCompanyIdSaveActivitySuccessfullyWhenImageIsNull() throws IOException {
 
         Company company = Company.builder().id(1L).name("TechCorp").activityList(new ArrayList<>()).build();
 
@@ -345,7 +328,7 @@ public class ActivityServiceImplTest {
     }
 
     @Test
-    void testSaveActivityWithImageByCompanyId_WhenImageIsEmpty() throws IOException {
+    void SaveActivityWithImageByCompanyIdSaveActivitySuccessfullyWhenImageIsEmpty() throws IOException {
 
         Company company = Company.builder().id(1L).name("TechCorp").activityList(new ArrayList<>()).build();
 
@@ -365,7 +348,7 @@ public class ActivityServiceImplTest {
 
 
     @Test
-    void updateActivity_UpdatesFieldsSuccessfully() {
+    void updateActivityUpdatesFieldsSuccessfully() {
         Long activityId = 1L;
         Activity activity = Activity.builder().
                 id(activityId).
@@ -389,7 +372,7 @@ public class ActivityServiceImplTest {
     }
 
     @Test
-    void updateActivity_ThrowsException_WhenActivityNotFound() {
+    void updateActivityThrowsExceptionWhenActivityNotFound() {
 
         when(activityDAO.findById(anyLong())).thenReturn(null);
 
@@ -399,7 +382,7 @@ public class ActivityServiceImplTest {
     }
 
     @Test
-    void updateActivity_SetsFieldToNull_WhenEmptyStringProvided() {
+    void updateActivitySetsFieldToNullWhenEmptyStringProvided() {
         Long activityId = 1L;
         Activity activity = new Activity();
         activity.setId(activityId);
@@ -415,7 +398,7 @@ public class ActivityServiceImplTest {
     }
 
     @Test
-    void updateActivity_ConvertsStringToLocalDate_ForDateFields() {
+    void updateActivityConvertsStringToLocalDateForDateFields() {
         Long activityId = 1L;
         Activity activity = new Activity();
         activity.setId(activityId);
@@ -434,20 +417,20 @@ public class ActivityServiceImplTest {
     }
 
     @Test
-    void getFileName_ReturnsFileName_WhenActivityHasImage() {
+    void getFileNameReturnsFileNameWhenActivityHasImage() {
         Long activityId = 1L;
         Activity activity = new Activity();
         activity.setId(activityId);
-        activity.setUrl("activityimages/1_image.jpg");
+        activity.setUrl("activityimages/1image.jpg");
         when(activityDAO.findById(activityId)).thenReturn(activity);
 
         String fileName = activityService.getFileName(activityId);
 
-        assertEquals("1_image.jpg", fileName);
+        assertEquals("1image.jpg", fileName);
     }
 
     @Test
-    void getFileName_ThrowsException_WhenActivityHasNoImage() {
+    void getFileNameThrowsExceptionWhenActivityHasNoImage() {
         Long activityId = 1L;
         Activity activity = new Activity();
         activity.setId(activityId);

@@ -78,7 +78,7 @@ class SkillServiceImplTest {
     }
 
     @Test
-    void saveCallsSkillDAOSave() {
+    void saveSavesSkillSuccessfully() {
         Skill skill = new Skill();
         skillService.save(skill);
         verify(skillDAO, times(1)).save(skill);

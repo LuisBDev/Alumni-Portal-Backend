@@ -49,7 +49,7 @@ class CertificationServiceImplTest {
     }
 
     @Test
-    void testFindAll_ReturnsListOfCertification_WhenCertificationsExist() {
+    void findAllReturnsListOfCertificationWhenCertificationsExist() {
 
         when(certificationDAO.findAll()).thenReturn(CertificationProvider.certificationList());
 
@@ -60,7 +60,7 @@ class CertificationServiceImplTest {
     }
 
     @Test
-    void testFindAll_ReturnsEmptyList_WhenNoCertificationsExist() {
+    void findAllReturnsEmptyListWhenNoCertificationsExist() {
         when(certificationDAO.findAll()).thenReturn(List.of());
 
         assertThrows(AppException.class, () -> certificationService.findAll());
@@ -70,7 +70,7 @@ class CertificationServiceImplTest {
 
 
     @Test
-    void testFindById_ReturnsCertificationDTO_WhenCertificationExists() {
+    void findByIdReturnsCertificationDTOWhenCertificationExists() {
         Certification certification = CertificationProvider.certificationOne();
 
         when(certificationDAO.findById(anyLong())).thenReturn(certification);
@@ -83,7 +83,7 @@ class CertificationServiceImplTest {
     }
 
     @Test
-    void testFindById_ReturnsNull_WhenCertificationDoesNotExist() {
+    void findByIdReturnsNullWhenCertificationDoesNotExist() {
         when(certificationDAO.findById(anyLong())).thenReturn(null);
 
         assertThrows(AppException.class, () -> certificationService.findById(1L));
@@ -92,7 +92,7 @@ class CertificationServiceImplTest {
     }
 
     @Test
-    void testSavesCertificationSuccessfully() {
+    void savesCertificationSuccessfully() {
         Certification certification = CertificationProvider.certificationOne();
 
         doNothing().when(certificationDAO).save(certification);
@@ -103,7 +103,7 @@ class CertificationServiceImplTest {
     }
 
     @Test
-    void testDeleteById() {
+    void deleteByIdDeletesCertificationSuccessfullyWhenCertificationExists() {
         Long certificationId = 1L;
 
         doNothing().when(certificationDAO).deleteById(anyLong());
@@ -116,7 +116,7 @@ class CertificationServiceImplTest {
     }
 
     @Test
-    void testDeleteById_WhenCertificationDoesNotExist() {
+    void deleteByIdWhenCertificationDoesNotExist() {
         Long certificationId = 1L;
 
         when(certificationDAO.findById(certificationId)).thenReturn(null);
@@ -128,7 +128,7 @@ class CertificationServiceImplTest {
 
 
     @Test
-    void findCertificationsByUserId_ReturnsListOfCertificationDTOs_WhenCertificationsExist() {
+    void findCertificationsByUserIdReturnsListOfCertificationDTOsWhenCertificationsExist() {
 
         when(certificationDAO.findCertificationsByUserId(anyLong())).thenReturn(CertificationProvider.certificationList());
 
@@ -139,7 +139,7 @@ class CertificationServiceImplTest {
     }
 
     @Test
-    void findCertificationsByUserId_ReturnsEmptyList_WhenNoCertificationsExist() {
+    void findCertificationsByUserIdReturnsEmptyListWhenNoCertificationsExist() {
         when(certificationDAO.findCertificationsByUserId(anyLong())).thenReturn(List.of());
 
         assertThrows(AppException.class, () -> certificationService.findCertificationsByUserId(1L));
@@ -148,7 +148,7 @@ class CertificationServiceImplTest {
     }
 
     @Test
-    void testSaveCertification_WhenUserExists() {
+    void saveCertificationSaveCertificationSuccessfullyWhenUserExists() {
         User user = UserProvider.userOne();
         CertificationRequestDTO certification = new CertificationRequestDTO();
 
@@ -163,7 +163,7 @@ class CertificationServiceImplTest {
     }
 
     @Test
-    void testSaveCertification_WhenUserDoesNotExist() {
+    void saveCertificationThrowsExceptionWhenUserDoesNotExist() {
         CertificationRequestDTO certification = new CertificationRequestDTO();
 
         when(userDAO.findById(anyLong())).thenReturn(null);
@@ -175,7 +175,7 @@ class CertificationServiceImplTest {
     }
 
     @Test
-    void updateCertification_UpdatesFieldsSuccessfully_WhenCertificationExists() {
+    void updateCertificationUpdatesFieldsSuccessfullyWhenCertificationExists() {
         Certification certification = CertificationProvider.certificationOne();
         Map<String, Object> fields = Map.of("name", "Updated Certification", "issueDate", "2020-10-01");
 
@@ -189,7 +189,7 @@ class CertificationServiceImplTest {
     }
 
     @Test
-    void updateCertification_ThrowsException_WhenCertificationDoesNotExist() {
+    void updateCertificationThrowsExceptionWhenCertificationDoesNotExist() {
         Map<String, Object> fields = Map.of("name", "Updated Certification");
 
         when(certificationDAO.findById(anyLong())).thenReturn(null);
@@ -199,7 +199,7 @@ class CertificationServiceImplTest {
     }
 
     @Test
-    void updateCertification_SetsFieldToNull_WhenEmptyStringProvided() {
+    void updateCertificationSetsFieldToNullWhenEmptyStringProvided() {
         Certification certification = CertificationProvider.certificationOne();
         Map<String, Object> fields = Map.of("name", "");
 
@@ -212,7 +212,7 @@ class CertificationServiceImplTest {
     }
 
     @Test
-    void updateCertification_ParsesLocalDateFieldsCorrectly() {
+    void updateCertificationParsesLocalDateFieldsCorrectly() {
         Certification certification = CertificationProvider.certificationOne();
         Map<String, Object> fields = Map.of("issueDate", "2023-10-01", "expirationDate", "2024-10-01");
 

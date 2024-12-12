@@ -79,7 +79,7 @@ class ProjectServiceImplTest {
     }
 
     @Test
-    void saveCallsProjectDAOSave() {
+    void saveSavesProjectSuccessfully() {
         Project project = new Project();
         projectService.save(project);
         verify(projectDAO, times(1)).save(project);
