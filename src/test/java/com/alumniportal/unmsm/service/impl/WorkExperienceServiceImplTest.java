@@ -78,7 +78,7 @@ class WorkExperienceServiceImplTest {
     }
 
     @Test
-    void saveCallsWorkExperienceDAOSave() {
+    void saveSavesWorkExperienceSuccessfully() {
         WorkExperience workExperience = new WorkExperience();
         workExperienceService.save(workExperience);
         verify(workExperienceDAO, times(1)).save(workExperience);

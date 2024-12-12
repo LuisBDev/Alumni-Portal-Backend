@@ -26,7 +26,7 @@ class UserDAOImplTest {
     private UserDAOImpl userDAO;
 
     @Test
-    void findAll_ReturnsListOfUsers_WhenUsersExist() {
+    void findAllReturnsListOfUsersWhenUsersExist() {
         List<User> users = List.of(new User(), new User());
         when(userRepository.findAll()).thenReturn(users);
 
@@ -38,7 +38,7 @@ class UserDAOImplTest {
     }
 
     @Test
-    void findAll_ReturnsEmptyList_WhenNoUsersExist() {
+    void findAllReturnsEmptyListWhenNoUsersExist() {
         when(userRepository.findAll()).thenReturn(List.of());
 
         List<User> result = userDAO.findAll();
@@ -49,7 +49,7 @@ class UserDAOImplTest {
     }
 
     @Test
-    void findById_ReturnsUser_WhenUserExists() {
+    void findByIdReturnsUserWhenUserExists() {
         User user = new User();
         user.setId(1L);
 
@@ -63,7 +63,7 @@ class UserDAOImplTest {
     }
 
     @Test
-    void findById_ReturnsNull_WhenUserDoesNotExist() {
+    void findByIdReturnsNullWhenUserDoesNotExist() {
         when(userRepository.findById(1L)).thenReturn(Optional.empty());
 
         User result = userDAO.findById(1L);
@@ -73,7 +73,7 @@ class UserDAOImplTest {
     }
 
     @Test
-    void save_SavesUserSuccessfully_WhenValidUserProvided() {
+    void saveSavesUserSuccessfullyWhenValidUserProvided() {
         User user = new User();
         user.setId(1L);
         user.setEmail("test@example.com");
@@ -82,10 +82,10 @@ class UserDAOImplTest {
 
         verify(userRepository, times(1)).save(user);
     }
-    
+
 
     @Test
-    void deleteById_DeletesUserSuccessfully_WhenUserExists() {
+    void deleteByIdDeletesUserSuccessfullyWhenUserExists() {
         doNothing().when(userRepository).deleteById(1L);
 
         userDAO.deleteById(1L);
@@ -94,7 +94,7 @@ class UserDAOImplTest {
     }
 
     @Test
-    void deleteById_ThrowsException_WhenUserDoesNotExist() {
+    void deleteByIdThrowsExceptionWhenUserDoesNotExist() {
         doThrow(new RuntimeException("User not found")).when(userRepository).deleteById(1L);
 
         assertThrows(RuntimeException.class, () -> userDAO.deleteById(1L));
@@ -102,7 +102,7 @@ class UserDAOImplTest {
     }
 
     @Test
-    void existsByEmail_ReturnsTrue_WhenEmailExists() {
+    void existsByEmailReturnsTrueWhenEmailExists() {
         when(userRepository.existsByEmail("test@example.com")).thenReturn(true);
 
         boolean result = userDAO.existsByEmail("test@example.com");
@@ -112,7 +112,7 @@ class UserDAOImplTest {
     }
 
     @Test
-    void existsByEmail_ReturnsFalse_WhenEmailDoesNotExist() {
+    void existsByEmailReturnsFalseWhenEmailDoesNotExist() {
         when(userRepository.existsByEmail("test@example.com")).thenReturn(false);
 
         boolean result = userDAO.existsByEmail("test@example.com");
@@ -122,7 +122,7 @@ class UserDAOImplTest {
     }
 
     @Test
-    void findByEmail_ReturnsUser_WhenEmailExists() {
+    void findByEmailReturnsUserWhenEmailExists() {
         User user = new User();
         user.setEmail("test@example.com");
 
@@ -136,7 +136,7 @@ class UserDAOImplTest {
     }
 
     @Test
-    void findByEmail_ReturnsNull_WhenEmailDoesNotExist() {
+    void findByEmailReturnsNullWhenEmailDoesNotExist() {
         when(userRepository.findByEmail("test@example.com")).thenReturn(null);
 
         User result = userDAO.findByEmail("test@example.com");

@@ -89,7 +89,7 @@ class EnrollmentServiceImplTest {
     }
 
     @Test
-    void saveEnrollment() {
+    void saveEnrollmentSavesEnrollmentSuccessfully() {
         Enrollment enrollment = new Enrollment();
         enrollmentService.save(enrollment);
         verify(enrollmentDAO, times(1)).save(enrollment);
@@ -159,38 +159,6 @@ class EnrollmentServiceImplTest {
         verify(enrollmentDAO, times(1)).findEnrollmentByUserIdAndActivityId(1L, 1L);
     }
 
-//    @Test
-//    void saveEnrollmentSavesEnrollmentWhenValid() {
-//        EnrollmentRequestDTO enrollmentRequestDTO = new EnrollmentRequestDTO();
-//
-//        User user = new User();
-//        user.setId(1L);
-//        Activity activity = new Activity();
-//        activity.setId(1L);
-//        activity.setEnrollable(true);
-//        activity.setStartDate(LocalDate.parse("2021-10-10"));
-//        activity.setEndDate(LocalDate.parse("2021-10-20"));
-//        when(userDAO.findById(anyLong())).thenReturn(user);
-//        when(activityDAO.findById(anyLong())).thenReturn(activity);
-//        when(enrollmentDAO.findEnrollmentByUserIdAndActivityId(1L, 1L)).thenReturn(null);
-//
-//        UserRequestDTO userRequestDTO = new UserRequestDTO();
-//        userRequestDTO.setId(1L);
-//        enrollmentRequestDTO.setUser(userRequestDTO);
-//
-//        ActivityRequestDTO activityRequestDTO = new ActivityRequestDTO();
-//        activityRequestDTO.setId(1L);
-//        activityRequestDTO.setStartDate(LocalDate.parse("2021-10-10"));
-//        activityRequestDTO.setEndDate(LocalDate.parse("2021-10-20"));
-//        enrollmentRequestDTO.setActivity(activityRequestDTO);
-//
-//        doNothing().when(enrollmentService).invokeLambdaWhenEnrollmentIsCreated(anyString(), any(Enrollment.class));
-//
-//
-//        enrollmentService.saveEnrollment(enrollmentRequestDTO);
-//
-//        verify(enrollmentDAO, times(1)).save(any(Enrollment.class));
-//    }
 
     @Test
     void saveEnrollmentThrowsExceptionWhenUserNotFound() {

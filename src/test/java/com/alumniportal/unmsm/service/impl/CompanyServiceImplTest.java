@@ -54,7 +54,7 @@ class CompanyServiceImplTest {
     }
 
     @Test
-    void findAll_ReturnsListOfCompanyDTOs_WhenCompaniesExist() {
+    void findAllReturnsListOfCompanyDTOsWhenCompaniesExist() {
         Company company1 = new Company();
         Company company2 = new Company();
         when(companyDAO.findAll()).thenReturn(List.of(company1, company2));
@@ -66,7 +66,7 @@ class CompanyServiceImplTest {
     }
 
     @Test
-    void findAll_ThrowsException_WhenNoCompaniesExist() {
+    void findAllThrowsExceptionWhenNoCompaniesExist() {
         when(companyDAO.findAll()).thenReturn(List.of());
 
         assertThrows(AppException.class, () -> companyService.findAll());
@@ -75,7 +75,7 @@ class CompanyServiceImplTest {
     }
 
     @Test
-    void findById_ReturnsCompanyDTO_WhenCompanyExists() {
+    void findByIdReturnsCompanyDTOWhenCompanyExists() {
         Company company = new Company();
         company.setId(1L);
         when(companyDAO.findById(1L)).thenReturn(company);
@@ -88,7 +88,7 @@ class CompanyServiceImplTest {
     }
 
     @Test
-    void findById_ThrowsException_WhenCompanyDoesNotExist() {
+    void findByIdThrowsExceptionWhenCompanyDoesNotExist() {
         when(companyDAO.findById(1L)).thenReturn(null);
 
         assertThrows(AppException.class, () -> companyService.findById(1L));
@@ -97,7 +97,7 @@ class CompanyServiceImplTest {
     }
 
     @Test
-    void save_SavesCompanySuccessfully() {
+    void saveSavesCompanySuccessfully() {
         Company company = new Company();
         company.setName("Tech Company");
 
@@ -107,7 +107,7 @@ class CompanyServiceImplTest {
     }
 
     @Test
-    void existsByEmail_ReturnsTrue_WhenEmailExists() {
+    void existsByEmailReturnsTrueWhenEmailExists() {
         when(companyDAO.existsByEmail("test@example.com")).thenReturn(true);
 
         boolean result = companyService.existsByEmail("test@example.com");
@@ -117,7 +117,7 @@ class CompanyServiceImplTest {
     }
 
     @Test
-    void existsByEmail_ReturnsFalse_WhenEmailDoesNotExist() {
+    void existsByEmailReturnsFalseWhenEmailDoesNotExist() {
         when(companyDAO.existsByEmail("test@example.com")).thenReturn(false);
 
         boolean result = companyService.existsByEmail("test@example.com");
@@ -127,7 +127,7 @@ class CompanyServiceImplTest {
     }
 
     @Test
-    void findByEmail_ReturnsCompanyDTO_WhenEmailExists() {
+    void findByEmailReturnsCompanyDTOWhenEmailExists() {
         Company company = new Company();
         company.setEmail("test@example.com");
         when(companyDAO.findByEmail("test@example.com")).thenReturn(company);
@@ -140,7 +140,7 @@ class CompanyServiceImplTest {
     }
 
     @Test
-    void findByEmail_ThrowsException_WhenEmailDoesNotExist() {
+    void findByEmailThrowsExceptionWhenEmailDoesNotExist() {
         when(companyDAO.findByEmail("test@example.com")).thenReturn(null);
 
         assertThrows(AppException.class, () -> companyService.findByEmail("test@example.com"));
@@ -148,7 +148,7 @@ class CompanyServiceImplTest {
     }
 
     @Test
-    void saveCompany_SavesCompanySuccessfully_WhenEmailIsNotRegistered() {
+    void saveCompanySavesCompanySuccessfullyWhenEmailIsNotRegistered() {
         Company company = new Company();
         company.setEmail("new@example.com");
 
@@ -163,7 +163,7 @@ class CompanyServiceImplTest {
     }
 
     @Test
-    void saveCompany_ThrowsException_WhenEmailAlreadyExists() {
+    void saveCompanyThrowsExceptionWhenEmailAlreadyExists() {
         Company company = new Company();
         company.setEmail("existing@example.com");
 
@@ -174,7 +174,7 @@ class CompanyServiceImplTest {
     }
 
     @Test
-    void updateCompany_UpdatesFieldsSuccessfully_WhenCompanyExists() {
+    void updateCompanyUpdatesFieldsSuccessfullyWhenCompanyExists() {
         Company company = CompanyProvider.companyOne();
         Map<String, Object> fields = Map.of("name", "Updated Company", "email", "updated@example.com");
 
@@ -189,7 +189,7 @@ class CompanyServiceImplTest {
     }
 
     @Test
-    void updateCompany_ThrowsException_WhenCompanyDoesNotExist() {
+    void updateCompanyThrowsExceptionWhenCompanyDoesNotExist() {
         Map<String, Object> fields = Map.of("name", "Updated Company");
 
         when(companyDAO.findById(anyLong())).thenReturn(null);
@@ -199,7 +199,7 @@ class CompanyServiceImplTest {
     }
 
     @Test
-    void updateCompany_SetsFieldToNull_WhenEmptyStringProvided() {
+    void updateCompanySetsFieldToNullWhenEmptyStringProvided() {
         Company company = new Company();
         company.setId(1L);
         Map<String, Object> fields = Map.of("sector", "");
@@ -214,7 +214,7 @@ class CompanyServiceImplTest {
     }
 
     @Test
-    void updatePassword_UpdatesPasswordSuccessfully_WhenValidDataProvided() {
+    void updatePasswordUpdatesPasswordSuccessfullyWhenValidDataProvided() {
         Company company = Company.builder()
                 .id(1L)
                 .email("test@example.com")
@@ -241,7 +241,7 @@ class CompanyServiceImplTest {
     }
 
     @Test
-    void updatePassword_ThrowsException_WhenCompanyDoesNotExist() {
+    void updatePasswordThrowsExceptionWhenCompanyDoesNotExist() {
         PasswordChangeRequestDTO passwordChangeRequestDTO = PasswordChangeRequestDTO.builder()
                 .email("test@example.com")
                 .password("oldPassword")
@@ -255,7 +255,7 @@ class CompanyServiceImplTest {
     }
 
     @Test
-    void updatePassword_ThrowsException_WhenEmailDoesNotMatch() {
+    void updatePasswordThrowsExceptionWhenEmailDoesNotMatch() {
         Company company = Company.builder()
                 .id(1L)
                 .email("test@example.com")
@@ -274,7 +274,7 @@ class CompanyServiceImplTest {
     }
 
     @Test
-    void updatePassword_ThrowsException_WhenOldPasswordDoesNotMatch() {
+    void updatePasswordThrowsExceptionWhenOldPasswordDoesNotMatch() {
 
         Company company = Company.builder()
                 .id(1L)
@@ -299,7 +299,7 @@ class CompanyServiceImplTest {
 
 
     @Test
-    void deleteById_DeletesCompanySuccessfully_WhenCompanyExists() {
+    void deleteByIdDeletesCompanySuccessfullyWhenCompanyExists() {
         Company company = new Company();
         company.setId(1L);
         company.setPhotoUrl("http://example.com/photo.jpg");
@@ -314,7 +314,7 @@ class CompanyServiceImplTest {
     }
 
     @Test
-    void deleteById_DeletesCompany_WhenNoImageExists() {
+    void deleteByIdDeletesCompanyWhenNoImageExists() {
         Company company = new Company();
         company.setId(1L);
         company.setPhotoUrl(null);
@@ -330,7 +330,7 @@ class CompanyServiceImplTest {
 
 
     @Test
-    void deleteById_ThrowsException_WhenCompanyDoesNotExist() {
+    void deleteByIdThrowsExceptionWhenCompanyDoesNotExist() {
         when(companyDAO.findById(1L)).thenReturn(null);
 
         assertThrows(RuntimeException.class, () -> companyService.deleteById(1L));
@@ -338,7 +338,7 @@ class CompanyServiceImplTest {
     }
 
     @Test
-    void deleteById_DeletesActivityImages_WhenCompanyHasActivitiesWithImages() throws Exception {
+    void deleteByIdDeletesActivityImagesWhenCompanyHasActivitiesWithImages() throws Exception {
         Company company = new Company();
         company.setId(1L);
         company.setActivityList(List.of(
@@ -356,7 +356,7 @@ class CompanyServiceImplTest {
     }
 
     @Test
-    void deleteById_DoesNotDeleteActivityImages_WhenCompanyHasNoActivitiesWithImages() throws Exception {
+    void deleteByIdDoesNotDeleteActivityImagesWhenCompanyHasNoActivitiesWithImages() throws Exception {
         Company company = new Company();
         company.setId(1L);
         company.setActivityList(List.of(
@@ -373,7 +373,7 @@ class CompanyServiceImplTest {
     }
 
     @Test
-    void deleteById_ThrowsExceptionWhileDeletingImages_WhenCompanyHasActivitiesWithImages() throws Exception {
+    void deleteByIdThrowsExceptionWhileDeletingImagesWhenCompanyHasActivitiesWithImages() throws Exception {
         Company company = new Company();
         company.setId(1L);
         company.setActivityList(List.of(

@@ -62,7 +62,7 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void loginAcademic_ReturnsAuthUserResponse_WhenCredentialsAreValid() {
+    void loginAcademicReturnsAuthUserResponseWhenCredentialsAreValid() {
         LoginRequestDTO loginRequestDTO = new LoginRequestDTO("user@example.com", "password");
         User user = new User();
         user.setEmail("user@example.com");
@@ -77,7 +77,7 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void loginAcademic_ThrowsException_WhenUserNotFound() {
+    void loginAcademicThrowsExceptionWhenUserNotFound() {
         LoginRequestDTO loginRequestDTO = new LoginRequestDTO("user@example.com", "password");
         when(userDAO.findByEmail("user@example.com")).thenReturn(null);
 
@@ -88,7 +88,7 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void loginAcademic_ThrowsException_WhenAuthenticationFails() {
+    void loginAcademicThrowsExceptionWhenAuthenticationFails() {
         LoginRequestDTO loginRequestDTO = new LoginRequestDTO("user@example.com", "wrongpassword");
         doThrow(new RuntimeException("Authentication failed")).when(authenticationManager).authenticate(any(UsernamePasswordAuthenticationToken.class));
 
@@ -99,7 +99,7 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void loginCompany_ReturnsAuthCompanyResponse_WhenCredentialsAreValid() {
+    void loginCompanyReturnsAuthCompanyResponseWhenCredentialsAreValid() {
         LoginRequestDTO loginRequestDTO = new LoginRequestDTO("company@example.com", "password");
         Company company = new Company();
         company.setEmail("company@example.com");
@@ -115,7 +115,7 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void loginCompany_ThrowsException_WhenCompanyNotFound() {
+    void loginCompanyThrowsExceptionWhenCompanyNotFound() {
         LoginRequestDTO loginRequestDTO = new LoginRequestDTO("company@example.com", "password");
         when(companyDAO.findByEmail("company@example.com")).thenReturn(null);
 
@@ -126,7 +126,7 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void registerAcademic_ReturnsAuthUserResponse_WhenUserIsRegisteredSuccessfully() {
+    void registerAcademicReturnsAuthUserResponseWhenUserIsRegisteredSuccessfully() {
         UserRequestDTO user = new UserRequestDTO();
         user.setEmail("newuser@example.com");
         user.setPassword("password");
@@ -140,7 +140,7 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void registerAcademic_ThrowsException_WhenUserAlreadyExists() {
+    void registerAcademicThrowsExceptionWhenUserAlreadyExists() {
         UserRequestDTO user = new UserRequestDTO();
         user.setEmail("existinguser@example.com");
 
@@ -155,7 +155,7 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void registerCompany_ReturnsAuthCompanyResponse_WhenCompanyIsRegisteredSuccessfully() {
+    void registerCompanyReturnsAuthCompanyResponseWhenCompanyIsRegisteredSuccessfully() {
         CompanyRequestDTO company = new CompanyRequestDTO();
         company.setEmail("newcompany@example.com");
         company.setPassword("password");
@@ -170,7 +170,7 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void registerCompany_ThrowsException_WhenCompanyAlreadyExists() {
+    void registerCompanyThrowsExceptionWhenCompanyAlreadyExists() {
         CompanyRequestDTO company = new CompanyRequestDTO();
         company.setEmail("existingcompany@example.com");
 

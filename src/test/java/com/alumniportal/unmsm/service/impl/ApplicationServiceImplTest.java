@@ -50,7 +50,7 @@ public class ApplicationServiceImplTest {
     }
 
     @Test
-    void testFindAll() {
+    void findAllReturnsApplicationList() {
 
         when(applicationDAO.findAll()).thenReturn(ApplicationProvider.applicationList());
 
@@ -62,7 +62,7 @@ public class ApplicationServiceImplTest {
     }
 
     @Test
-    void testFindAll_WhenApplicationListIsEmpty() {
+    void findAllThrowsExceptionWhenApplicationListIsEmpty() {
         when(applicationDAO.findAll()).thenReturn(List.of());
 
         assertThrows(AppException.class, () -> applicationService.findAll());
@@ -71,7 +71,7 @@ public class ApplicationServiceImplTest {
     }
 
     @Test
-    void testFindById() {
+    void findByIdReturnsApplication() {
         when(applicationDAO.findById(anyLong())).thenReturn(ApplicationProvider.applicationOne());
 
         ApplicationResponseDTO applicationResponseDTO = applicationService.findById(anyLong());
@@ -81,7 +81,7 @@ public class ApplicationServiceImplTest {
     }
 
     @Test
-    void testFindById_WhenApplicationIsNull() {
+    void findByIdThrowsExceptionWhenApplicationIsNull() {
         when(applicationDAO.findById(anyLong())).thenReturn(null);
 
         assertThrows(AppException.class, () -> applicationService.findById(anyLong()));
@@ -90,7 +90,7 @@ public class ApplicationServiceImplTest {
     }
 
     @Test
-    void testSave() {
+    void saveSavesApplicationSuccessfully() {
 
         Application application = ApplicationProvider.applicationOne();
 
@@ -102,7 +102,7 @@ public class ApplicationServiceImplTest {
 
 
     @Test
-    void testDeleteById() {
+    void deleteByIdDeletesApplicationSuccessfully() {
 
         doNothing().when(applicationDAO).deleteById(anyLong());
         when(applicationDAO.findById(anyLong())).thenReturn(ApplicationProvider.applicationOne());
@@ -113,7 +113,7 @@ public class ApplicationServiceImplTest {
     }
 
     @Test
-    void testDeleteById_WhenApplicationIsNull() {
+    void deleteByIdThrowsExceptionWhenApplicationIsNull() {
         when(applicationDAO.findById(anyLong())).thenReturn(null);
 
         assertThrows(AppException.class, () -> applicationService.deleteById(anyLong()));
@@ -122,7 +122,7 @@ public class ApplicationServiceImplTest {
     }
 
     @Test
-    void testFindApplicationsByUserId() {
+    void findApplicationsByUserIdReturnsApplicationList() {
         when(applicationDAO.findApplicationsByUserId(anyLong())).thenReturn(ApplicationProvider.applicationList());
 
         List<ApplicationResponseDTO> applicationResponseDTOList = applicationService.findApplicationsByUserId(anyLong());
@@ -133,7 +133,7 @@ public class ApplicationServiceImplTest {
     }
 
     @Test
-    void testFindApplicationsByUserId_WhenApplicationListIsEmpty() {
+    void findApplicationsByUserIdThrowsExceptionWhenApplicationListIsEmpty() {
         when(applicationDAO.findApplicationsByUserId(anyLong())).thenReturn(List.of());
 
         assertThrows(AppException.class, () -> applicationService.findApplicationsByUserId(anyLong()));
@@ -142,7 +142,7 @@ public class ApplicationServiceImplTest {
     }
 
     @Test
-    void testFindApplicationsByJobOfferId() {
+    void findApplicationsByJobOfferIdReturnsApplicationList() {
         when(applicationDAO.findApplicationsByJobOfferId(anyLong())).thenReturn(ApplicationProvider.applicationList());
 
         List<ApplicationResponseDTO> applicationResponseDTOList = applicationService.findApplicationsByJobOfferId(anyLong());
@@ -151,7 +151,7 @@ public class ApplicationServiceImplTest {
     }
 
     @Test
-    void testFindApplicationsByJobOfferId_WhenApplicationListIsEmpty() {
+    void findApplicationsByJobOfferIdThrowsExceptionWhenApplicationListIsEmpty() {
         when(applicationDAO.findApplicationsByJobOfferId(anyLong())).thenReturn(List.of());
 
         assertThrows(AppException.class, () -> applicationService.findApplicationsByJobOfferId(anyLong()));
@@ -160,7 +160,7 @@ public class ApplicationServiceImplTest {
     }
 
     @Test
-    void testFindApplicationByUserIdAndJobOfferId() {
+    void findApplicationByUserIdAndJobOfferIdReturnsApplication() {
         when(applicationDAO.findApplicationByUserIdAndJobOfferId(anyLong(), anyLong())).thenReturn(ApplicationProvider.applicationOne());
 
         ApplicationResponseDTO applicationResponseDTO = applicationService.findApplicationByUserIdAndJobOfferId(anyLong(), anyLong());
@@ -170,47 +170,12 @@ public class ApplicationServiceImplTest {
     }
 
     @Test
-    void testFindApplicationByUserIdAndJobOfferId_WhenApplicationIsNull() {
+    void findApplicationByUserIdAndJobOfferIdThrowsExceptionWhenApplicationIsNull() {
         when(applicationDAO.findApplicationByUserIdAndJobOfferId(anyLong(), anyLong())).thenReturn(null);
 
         assertThrows(AppException.class, () -> applicationService.findApplicationByUserIdAndJobOfferId(anyLong(), anyLong()));
         verify(applicationDAO, times(1)).findApplicationByUserIdAndJobOfferId(anyLong(), anyLong());
     }
 
-//    @Test
-//    public void testSaveApplication_Success() {
-//        // Arrange
-//        Application application = new Application();
-//        User user = new User();
-//        user.setId(1L);
-//        user.setApplicationList(new ArrayList<>());  // Inicializamos la lista de aplicaciones
-//
-//        JobOffer jobOffer = new JobOffer();
-//        jobOffer.setId(1L);
-//        jobOffer.setApplicationList(new ArrayList<>()); // Inicializamos la lista de aplicaciones del JobOffer
-//        jobOffer.setCompany(Company.builder()
-//                .id(1L)
-//                .name("Company 1")
-//                .build());
-//
-//        application.setUser(user);
-//        application.setJobOffer(jobOffer);
-//
-//        // Mocking de las dependencias
-//        when(userDAO.findById(1L)).thenReturn(user);
-//        when(jobOfferDAO.findById(1L)).thenReturn(jobOffer);
-//        when(applicationDAO.findApplicationByUserIdAndJobOfferId(user.getId(), jobOffer.getId())).thenReturn(null); // No application exists
-//        doNothing().when(applicationDAO).save(any(Application.class)); // Mock para save de application
-//        doNothing().when(userDAO).save(any(User.class)); // Mock para save de user
-//        doNothing().when(jobOfferDAO).save(any(JobOffer.class)); // Mock para save de jobOffer
-//
-//        // Act
-//        applicationService.saveApplication(application);
-//
-//        // Assert
-//        verify(userDAO).save(user); // Verifica que userDAO.save fue llamado
-//        verify(jobOfferDAO).save(jobOffer); // Verifica que jobOfferDAO.save fue llamado
-//        verify(applicationDAO).save(application); // Verifica que applicationDAO.save fue llamado
-//    }
 
 }

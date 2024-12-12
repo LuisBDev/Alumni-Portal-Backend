@@ -26,7 +26,7 @@ class JobOfferDAOImplTest {
     private JobOfferDAOImpl jobOfferDAO;
 
     @Test
-    void findAll_ReturnsListOfJobOffers_WhenJobOffersExist() {
+    void findAllReturnsListOfJobOffersWhenJobOffersExist() {
         List<JobOffer> jobOffers = List.of(new JobOffer(), new JobOffer());
         when(jobOfferRepository.findAll()).thenReturn(jobOffers);
 
@@ -38,7 +38,7 @@ class JobOfferDAOImplTest {
     }
 
     @Test
-    void findAll_ReturnsEmptyList_WhenNoJobOffersExist() {
+    void findAllReturnsEmptyListWhenNoJobOffersExist() {
         when(jobOfferRepository.findAll()).thenReturn(List.of());
 
         List<JobOffer> result = jobOfferDAO.findAll();
@@ -49,7 +49,7 @@ class JobOfferDAOImplTest {
     }
 
     @Test
-    void findById_ReturnsJobOffer_WhenJobOfferExists() {
+    void findByIdReturnsJobOfferWhenJobOfferExists() {
         JobOffer jobOffer = new JobOffer();
         jobOffer.setId(1L);
 
@@ -63,7 +63,7 @@ class JobOfferDAOImplTest {
     }
 
     @Test
-    void findById_ReturnsNull_WhenJobOfferDoesNotExist() {
+    void findByIdReturnsNullWhenJobOfferDoesNotExist() {
         when(jobOfferRepository.findById(1L)).thenReturn(Optional.empty());
 
         JobOffer result = jobOfferDAO.findById(1L);
@@ -73,7 +73,7 @@ class JobOfferDAOImplTest {
     }
 
     @Test
-    void save_SavesJobOfferSuccessfully_WhenValidJobOfferProvided() {
+    void saveSavesJobOfferSuccessfullyWhenValidJobOfferProvided() {
         JobOffer jobOffer = new JobOffer();
         jobOffer.setId(1L);
         jobOffer.setTitle("Test Job Offer");
@@ -82,10 +82,10 @@ class JobOfferDAOImplTest {
 
         verify(jobOfferRepository, times(1)).save(jobOffer);
     }
-    
+
 
     @Test
-    void deleteById_DeletesJobOfferSuccessfully_WhenJobOfferExists() {
+    void deleteByIdDeletesJobOfferSuccessfullyWhenJobOfferExists() {
         doNothing().when(jobOfferRepository).deleteById(1L);
 
         jobOfferDAO.deleteById(1L);
@@ -94,7 +94,7 @@ class JobOfferDAOImplTest {
     }
 
     @Test
-    void deleteById_ThrowsException_WhenJobOfferDoesNotExist() {
+    void deleteByIdThrowsExceptionWhenJobOfferDoesNotExist() {
         doThrow(new RuntimeException("Job Offer not found")).when(jobOfferRepository).deleteById(1L);
 
         assertThrows(RuntimeException.class, () -> jobOfferDAO.deleteById(1L));
@@ -102,7 +102,7 @@ class JobOfferDAOImplTest {
     }
 
     @Test
-    void findJobOffersByCompanyId_ReturnsListOfJobOffers_WhenJobOffersExistForCompany() {
+    void findJobOffersByCompanyIdReturnsListOfJobOffersWhenJobOffersExistForCompany() {
         List<JobOffer> jobOffers = List.of(new JobOffer(), new JobOffer());
         when(jobOfferRepository.findJobOffersByCompanyId(1L)).thenReturn(jobOffers);
 
@@ -114,7 +114,7 @@ class JobOfferDAOImplTest {
     }
 
     @Test
-    void findJobOffersByCompanyId_ReturnsEmptyList_WhenNoJobOffersExistForCompany() {
+    void findJobOffersByCompanyIdReturnsEmptyListWhenNoJobOffersExistForCompany() {
         when(jobOfferRepository.findJobOffersByCompanyId(1L)).thenReturn(List.of());
 
         List<JobOffer> result = jobOfferDAO.findJobOffersByCompanyId(1L);

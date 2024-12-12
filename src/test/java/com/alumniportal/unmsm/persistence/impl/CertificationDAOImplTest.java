@@ -24,7 +24,7 @@ class CertificationDAOImplTest {
     private CertificationDAOImpl certificationDAO;
 
     @Test
-    void findAll_ReturnsListOfCertifications_WhenCertificationsExist() {
+    void findAllReturnsListOfCertificationsWhenCertificationsExist() {
         List<Certification> certifications = List.of(new Certification(), new Certification());
         when(certificationRepository.findAll()).thenReturn(certifications);
 
@@ -36,7 +36,7 @@ class CertificationDAOImplTest {
     }
 
     @Test
-    void findAll_ReturnsEmptyList_WhenNoCertificationsExist() {
+    void findAllReturnsEmptyListWhenNoCertificationsExist() {
         when(certificationRepository.findAll()).thenReturn(List.of());
 
         List<Certification> result = certificationDAO.findAll();
@@ -47,7 +47,7 @@ class CertificationDAOImplTest {
     }
 
     @Test
-    void findById_ReturnsCertification_WhenCertificationExists() {
+    void findByIdReturnsCertificationWhenCertificationExists() {
         Certification certification = new Certification();
         certification.setId(1L);
 
@@ -61,7 +61,7 @@ class CertificationDAOImplTest {
     }
 
     @Test
-    void findById_ReturnsNull_WhenCertificationDoesNotExist() {
+    void findByIdReturnsNullWhenCertificationDoesNotExist() {
         when(certificationRepository.findById(1L)).thenReturn(Optional.empty());
 
         Certification result = certificationDAO.findById(1L);
@@ -71,7 +71,7 @@ class CertificationDAOImplTest {
     }
 
     @Test
-    void save_SavesCertificationSuccessfully_WhenValidCertificationProvided() {
+    void saveSavesCertificationSuccessfullyWhenValidCertificationProvided() {
         Certification certification = new Certification();
         certification.setId(1L);
         certification.setName("Test Certification");
@@ -80,10 +80,10 @@ class CertificationDAOImplTest {
 
         verify(certificationRepository, times(1)).save(certification);
     }
-    
+
 
     @Test
-    void deleteById_DeletesCertificationSuccessfully_WhenCertificationExists() {
+    void deleteByIdDeletesCertificationSuccessfullyWhenCertificationExists() {
         doNothing().when(certificationRepository).deleteById(1L);
 
         certificationDAO.deleteById(1L);
@@ -92,7 +92,7 @@ class CertificationDAOImplTest {
     }
 
     @Test
-    void deleteById_ThrowsException_WhenCertificationDoesNotExist() {
+    void deleteByIdThrowsExceptionWhenCertificationDoesNotExist() {
         doThrow(new RuntimeException("Certification not found")).when(certificationRepository).deleteById(1L);
 
         assertThrows(RuntimeException.class, () -> certificationDAO.deleteById(1L));
@@ -100,7 +100,7 @@ class CertificationDAOImplTest {
     }
 
     @Test
-    void findCertificationsByUserId_ReturnsListOfCertifications_WhenCertificationsExistForUser() {
+    void findCertificationsByUserIdReturnsListOfCertificationsWhenCertificationsExistForUser() {
         List<Certification> certifications = List.of(new Certification(), new Certification());
         when(certificationRepository.findCertificationsByUserId(1L)).thenReturn(certifications);
 
@@ -112,7 +112,7 @@ class CertificationDAOImplTest {
     }
 
     @Test
-    void findCertificationsByUserId_ReturnsEmptyList_WhenNoCertificationsExistForUser() {
+    void findCertificationsByUserIdReturnsEmptyListWhenNoCertificationsExistForUser() {
         when(certificationRepository.findCertificationsByUserId(1L)).thenReturn(List.of());
 
         List<Certification> result = certificationDAO.findCertificationsByUserId(1L);

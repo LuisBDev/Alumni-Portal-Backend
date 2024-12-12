@@ -25,7 +25,7 @@ class EnrollmentDAOImplTest {
     private EnrollmentDAOImpl enrollmentDAO;
 
     @Test
-    void findAll_ReturnsListOfEnrollments_WhenEnrollmentsExist() {
+    void findAllReturnsListOfEnrollmentsWhenEnrollmentsExist() {
         List<Enrollment> enrollments = List.of(new Enrollment(), new Enrollment());
         when(enrollmentRepository.findAll()).thenReturn(enrollments);
 
@@ -37,7 +37,7 @@ class EnrollmentDAOImplTest {
     }
 
     @Test
-    void findAll_ReturnsEmptyList_WhenNoEnrollmentsExist() {
+    void findAllReturnsEmptyListWhenNoEnrollmentsExist() {
         when(enrollmentRepository.findAll()).thenReturn(List.of());
 
         List<Enrollment> result = enrollmentDAO.findAll();
@@ -48,7 +48,7 @@ class EnrollmentDAOImplTest {
     }
 
     @Test
-    void findById_ReturnsEnrollment_WhenEnrollmentExists() {
+    void findByIdReturnsEnrollmentWhenEnrollmentExists() {
         Enrollment enrollment = new Enrollment();
         enrollment.setId(1L);
 
@@ -62,7 +62,7 @@ class EnrollmentDAOImplTest {
     }
 
     @Test
-    void findById_ReturnsNull_WhenEnrollmentDoesNotExist() {
+    void findByIdReturnsNullWhenEnrollmentDoesNotExist() {
         when(enrollmentRepository.findById(1L)).thenReturn(Optional.empty());
 
         Enrollment result = enrollmentDAO.findById(1L);
@@ -72,7 +72,7 @@ class EnrollmentDAOImplTest {
     }
 
     @Test
-    void save_SavesEnrollmentSuccessfully_WhenValidEnrollmentProvided() {
+    void saveSavesEnrollmentSuccessfullyWhenValidEnrollmentProvided() {
         Enrollment enrollment = new Enrollment();
         enrollment.setId(1L);
 
@@ -83,7 +83,7 @@ class EnrollmentDAOImplTest {
 
 
     @Test
-    void deleteById_DeletesEnrollmentSuccessfully_WhenEnrollmentExists() {
+    void deleteByIdDeletesEnrollmentSuccessfullyWhenEnrollmentExists() {
         doNothing().when(enrollmentRepository).deleteById(1L);
 
         enrollmentDAO.deleteById(1L);
@@ -92,7 +92,7 @@ class EnrollmentDAOImplTest {
     }
 
     @Test
-    void deleteById_ThrowsException_WhenEnrollmentDoesNotExist() {
+    void deleteByIdThrowsExceptionWhenEnrollmentDoesNotExist() {
         doThrow(new RuntimeException("Enrollment not found")).when(enrollmentRepository).deleteById(1L);
 
         assertThrows(RuntimeException.class, () -> enrollmentDAO.deleteById(1L));
@@ -100,7 +100,7 @@ class EnrollmentDAOImplTest {
     }
 
     @Test
-    void findEnrollmentsByUserId_ReturnsListOfEnrollments_WhenEnrollmentsExistForUser() {
+    void findEnrollmentsByUserIdReturnsListOfEnrollmentsWhenEnrollmentsExistForUser() {
         List<Enrollment> enrollments = List.of(new Enrollment(), new Enrollment());
         when(enrollmentRepository.findEnrollmentsByUserId(1L)).thenReturn(enrollments);
 
@@ -112,7 +112,7 @@ class EnrollmentDAOImplTest {
     }
 
     @Test
-    void findEnrollmentsByUserId_ReturnsEmptyList_WhenNoEnrollmentsExistForUser() {
+    void findEnrollmentsByUserIdReturnsEmptyListWhenNoEnrollmentsExistForUser() {
         when(enrollmentRepository.findEnrollmentsByUserId(1L)).thenReturn(List.of());
 
         List<Enrollment> result = enrollmentDAO.findEnrollmentsByUserId(1L);
@@ -123,7 +123,7 @@ class EnrollmentDAOImplTest {
     }
 
     @Test
-    void findEnrollmentsByActivityId_ReturnsListOfEnrollments_WhenEnrollmentsExistForActivity() {
+    void findEnrollmentsByActivityIdReturnsListOfEnrollmentsWhenEnrollmentsExistForActivity() {
         List<Enrollment> enrollments = List.of(new Enrollment(), new Enrollment());
         when(enrollmentRepository.findEnrollmentsByActivityId(1L)).thenReturn(enrollments);
 
@@ -135,7 +135,7 @@ class EnrollmentDAOImplTest {
     }
 
     @Test
-    void findEnrollmentsByActivityId_ReturnsEmptyList_WhenNoEnrollmentsExistForActivity() {
+    void findEnrollmentsByActivityIdReturnsEmptyListWhenNoEnrollmentsExistForActivity() {
         when(enrollmentRepository.findEnrollmentsByActivityId(1L)).thenReturn(List.of());
 
         List<Enrollment> result = enrollmentDAO.findEnrollmentsByActivityId(1L);
@@ -146,7 +146,7 @@ class EnrollmentDAOImplTest {
     }
 
     @Test
-    void findEnrollmentByUserIdAndActivityId_ReturnsEnrollment_WhenEnrollmentExistsForUserAndActivity() {
+    void findEnrollmentByUserIdAndActivityIdReturnsEnrollmentWhenEnrollmentExistsForUserAndActivity() {
         Enrollment enrollment = new Enrollment();
         enrollment.setId(1L);
 
@@ -160,7 +160,7 @@ class EnrollmentDAOImplTest {
     }
 
     @Test
-    void findEnrollmentByUserIdAndActivityId_ReturnsNull_WhenNoEnrollmentExistsForUserAndActivity() {
+    void findEnrollmentByUserIdAndActivityIdReturnsNullWhenNoEnrollmentExistsForUserAndActivity() {
         when(enrollmentRepository.findEnrollmentByUserIdAndActivityId(1L, 1L)).thenReturn(null);
 
         Enrollment result = enrollmentDAO.findEnrollmentByUserIdAndActivityId(1L, 1L);
