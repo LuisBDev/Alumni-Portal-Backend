@@ -36,7 +36,8 @@ services:
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
+      start_period: 20s
     restart: always
     # Configuración vital para reducir consumo de RAM en t3.micro
     command: --default-authentication-plugin=mysql_native_password --innodb-buffer-pool-size=256M
