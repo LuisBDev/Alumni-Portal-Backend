@@ -62,9 +62,7 @@ public class SkillServiceImpl implements ISkillService {
     @Override
     public List<SkillResponseDTO> findSkillsByUserId(Long userId) {
         List<Skill> skillsByUserId = skillDAO.findSkillsByUserId(userId);
-        if (skillsByUserId.isEmpty()) {
-            throw new AppException("Skills not found", "NOT_FOUND");
-        }
+
         return skillMapper.entityListToDTOList(skillsByUserId);
     }
 

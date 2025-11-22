@@ -64,9 +64,7 @@ public class WorkExperienceServiceImpl implements IWorkExperienceService {
     @Override
     public List<WorkExperienceResponseDTO> findWorkExperiencesByUserId(Long userId) {
         List<WorkExperience> workExperiencesByUserId = workExperienceDAO.findWorkExperiencesByUserId(userId);
-        if (workExperiencesByUserId.isEmpty()) {
-            throw new AppException("No work experiences found for user", "NOT_FOUND");
-        }
+
         return workExperienceMapper.entityListToDTOList(workExperiencesByUserId);
     }
 

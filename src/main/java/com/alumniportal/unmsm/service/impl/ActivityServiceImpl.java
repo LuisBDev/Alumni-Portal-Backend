@@ -94,18 +94,14 @@ public class ActivityServiceImpl implements IActivityService {
     @Override
     public List<ActivityResponseDTO> findActivitiesByUserId(Long userId) {
         List<Activity> activities = activityDAO.findActivitiesByUserId(userId);
-        if (activities.isEmpty()) {
-            throw new AppException("No se encontraron actividades para el usuario con id: " + userId, "NOT_FOUND");
-        }
+
         return activityMapper.entityListToDTOList(activities);
     }
 
     @Override
     public List<ActivityResponseDTO> findActivitiesByCompanyId(Long companyId) {
         List<Activity> activities = activityDAO.findActivitiesByCompanyId(companyId);
-        if (activities.isEmpty()) {
-            throw new AppException("No se encontraron actividades para la empresa con id: " + companyId, "NOT_FOUND");
-        }
+
         return activityMapper.entityListToDTOList(activities);
     }
 

@@ -63,9 +63,7 @@ public class CertificationServiceImpl implements ICertificationService {
     @Override
     public List<CertificationResponseDTO> findCertificationsByUserId(Long userId) {
         List<Certification> certificationsByUserId = certificationDAO.findCertificationsByUserId(userId);
-        if (certificationsByUserId.isEmpty()) {
-            throw new AppException("User with id " + userId + " has no certifications!", "NOT_FOUND");
-        }
+
         return certificationMapper.entityListToDTOList(certificationsByUserId);
     }
 

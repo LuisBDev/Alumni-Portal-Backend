@@ -73,18 +73,14 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
     @Override
     public List<EnrollmentResponseDTO> findEnrollmentsByUserId(Long userId) {
         List<Enrollment> enrollmentsByUserId = enrollmentDAO.findEnrollmentsByUserId(userId);
-        if (enrollmentsByUserId.isEmpty()) {
-            throw new AppException("There are no enrollments for userId: " + userId, "NOT_FOUND");
-        }
+
         return enrollmentMapper.entityListToDTOList(enrollmentsByUserId);
     }
 
     @Override
     public List<EnrollmentResponseDTO> findEnrollmentsByActivityId(Long activityId) {
         List<Enrollment> enrollmentsByActivityId = enrollmentDAO.findEnrollmentsByActivityId(activityId);
-        if (enrollmentsByActivityId.isEmpty()) {
-            throw new AppException("There are no enrollments for this activityId: " + activityId, "NOT_FOUND");
-        }
+
         return enrollmentMapper.entityListToDTOList(enrollmentsByActivityId);
     }
 
