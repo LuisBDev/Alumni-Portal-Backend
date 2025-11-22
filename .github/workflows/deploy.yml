@@ -2,8 +2,7 @@ name: Deploy Branch (master)
 
 on:
   push:
-    # IMPORTANTE: Distingue mayúsculas y minúsculas. 
-    # Asegúrate de que tu rama en git se llame exactamente "Luis"
+
     branches: [ "master" ]
 
 jobs:
@@ -54,17 +53,18 @@ jobs:
             cd /home/${{ secrets.EC2_USER }}
             
             # Variables de entorno
-            export DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
-            export MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}
-            export MYSQL_USER=${{ secrets.MYSQL_USER }}
-            export MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}
-            export AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
-            export AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            export AWS_S3_BUCKET_NAME=${{ secrets.AWS_S3_BUCKET_NAME }}
-            export AWS_S3_REGION=${{ secrets.AWS_S3_REGION }}
-
-            # Reinicio de servicios
+            echo "Generando archivo .env..."
+            echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" > .env
+            echo "MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" >> .env
+            echo "MYSQL_USER=${{ secrets.MYSQL_USER }}" >> .env
+            echo "MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}" >> .env
+            echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> .env
+            echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env
+            echo "AWS_S3_BUCKET_NAME=${{ secrets.AWS_S3_BUCKET_NAME }}" >> .env
+            echo "AWS_S3_REGION=${{ secrets.AWS_S3_REGION }}" >> .env
+            
             docker compose down --remove-orphans
             docker compose pull app
             docker compose up -d
+            
             docker image prune -f

@@ -1,6 +1,6 @@
 services:
   app:
-    image: ${{ DOCKER_USERNAME }}/unmsm-app:latest # Nombre de imagen consistente
+    image: ${DOCKER_USERNAME}/unmsm-app:latest
     container_name: unmsm-backend
     depends_on:
       mysql:
