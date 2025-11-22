@@ -23,7 +23,6 @@ public class ActivityRestController {
 
     private final IActivityService activityService;
 
-    // Inyección por constructor
     public ActivityRestController(IActivityService activityService) {
         this.activityService = activityService;
     }
