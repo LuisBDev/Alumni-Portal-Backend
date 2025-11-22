@@ -31,9 +31,7 @@ public class JobOfferServiceImpl implements IJobOfferService {
     @Override
     public List<JobOfferResponseDTO> findAll() {
         List<JobOffer> jobOfferList = jobOfferDAO.findAll();
-        if (jobOfferList.isEmpty()) {
-            throw new AppException("No job offers found!", "NOT_FOUND");
-        }
+
         return jobOfferMapper.entityListToDTOList(jobOfferList);
     }
 
@@ -63,9 +61,7 @@ public class JobOfferServiceImpl implements IJobOfferService {
     @Override
     public List<JobOfferResponseDTO> findJobOffersByCompanyId(Long id) {
         List<JobOffer> jobOffersByCompanyId = jobOfferDAO.findJobOffersByCompanyId(id);
-        if (jobOffersByCompanyId.isEmpty()) {
-            throw new AppException("No job offers found for this company!", "NOT_FOUND");
-        }
+
         return jobOfferMapper.entityListToDTOList(jobOffersByCompanyId);
     }
 

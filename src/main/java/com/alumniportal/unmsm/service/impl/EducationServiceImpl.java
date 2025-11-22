@@ -33,9 +33,7 @@ public class EducationServiceImpl implements IEducationService {
     @Override
     public List<EducationResponseDTO> findAll() {
         List<Education> educationList = educationDAO.findAll();
-        if (educationList.isEmpty()) {
-            throw new AppException("No educations found", "NOT_FOUND");
-        }
+
         return educationMapper.entityListToDTOList(educationList);
     }
 
@@ -65,9 +63,7 @@ public class EducationServiceImpl implements IEducationService {
     @Override
     public List<EducationResponseDTO> findEducationsByUserId(Long userId) {
         List<Education> educationsByUserId = educationDAO.findEducationsByUserId(userId);
-        if (educationsByUserId.isEmpty()) {
-            throw new AppException("No educations found for user", "NOT_FOUND");
-        }
+
         return educationMapper.entityListToDTOList(educationsByUserId);
     }
 

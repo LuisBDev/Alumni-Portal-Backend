@@ -32,9 +32,7 @@ public class CertificationServiceImpl implements ICertificationService {
     @Override
     public List<CertificationResponseDTO> findAll() {
         List<Certification> certificationList = certificationDAO.findAll();
-        if (certificationList.isEmpty()) {
-            throw new AppException("No certifications found!", "NOT_FOUND");
-        }
+
         return certificationMapper.entityListToDTOList(certificationList);
     }
 
@@ -65,9 +63,7 @@ public class CertificationServiceImpl implements ICertificationService {
     @Override
     public List<CertificationResponseDTO> findCertificationsByUserId(Long userId) {
         List<Certification> certificationsByUserId = certificationDAO.findCertificationsByUserId(userId);
-        if (certificationsByUserId.isEmpty()) {
-            throw new AppException("User with id " + userId + " has no certifications!", "NOT_FOUND");
-        }
+
         return certificationMapper.entityListToDTOList(certificationsByUserId);
     }
 

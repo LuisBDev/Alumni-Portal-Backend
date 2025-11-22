@@ -14,6 +14,7 @@ import com.alumniportal.unmsm.service.interfaces.IActivityService;
 import com.alumniportal.unmsm.util.EmailTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,12 +51,13 @@ public class ActivityServiceImpl implements IActivityService {
 
     private final LambdaClient lambdaClient;
 
+    @Value("${custom.bucket.s3.name}")
+    private String bucketName;
+
     @Override
     public List<ActivityResponseDTO> findAll() {
         List<Activity> activities = activityDAO.findAll();
-        if (activities.isEmpty()) {
-            throw new AppException("No se encontraron actividades", "NOT_FOUND");
-        }
+
         return activityMapper.entityListToDTOList(activities);
     }
 
@@ -92,18 +94,14 @@ public class ActivityServiceImpl implements IActivityService {
     @Override
     public List<ActivityResponseDTO> findActivitiesByUserId(Long userId) {
         List<Activity> activities = activityDAO.findActivitiesByUserId(userId);
-        if (activities.isEmpty()) {
-            throw new AppException("No se encontraron actividades para el usuario con id: " + userId, "NOT_FOUND");
-        }
+
         return activityMapper.entityListToDTOList(activities);
     }
 
     @Override
     public List<ActivityResponseDTO> findActivitiesByCompanyId(Long companyId) {
         List<Activity> activities = activityDAO.findActivitiesByCompanyId(companyId);
-        if (activities.isEmpty()) {
-            throw new AppException("No se encontraron actividades para la empresa con id: " + companyId, "NOT_FOUND");
-        }
+
         return activityMapper.entityListToDTOList(activities);
     }
 
@@ -224,12 +222,12 @@ public class ActivityServiceImpl implements IActivityService {
         try {
             // Eliminar la imagen previa, si existe
             if (activity.getUrl() != null) {
-                s3Client.deleteObject(builder -> builder.bucket("alumniportals3").key(activity.getUrl()).build());
+                s3Client.deleteObject(builder -> builder.bucket(bucketName).key(activity.getUrl()).build());
             }
 
             // Subir la nueva imagen al bucket
             PutObjectRequest objectRequest = PutObjectRequest.builder()
-                    .bucket("alumniportals3")
+                    .bucket(bucketName)
                     .key(key)
                     .build();
             s3Client.putObject(objectRequest, RequestBody.fromBytes(file.getBytes()));
@@ -282,7 +280,7 @@ public class ActivityServiceImpl implements IActivityService {
         // Construir la solicitud para obtener el objeto de S3
         String key = activity.getUrl();
         GetObjectRequest objectRequest = GetObjectRequest.builder()
-                .bucket("alumniportals3")
+                .bucket(bucketName)
                 .key(key)
                 .build();
 
@@ -307,7 +305,7 @@ public class ActivityServiceImpl implements IActivityService {
         }
 
         try {
-            s3Client.deleteObject(builder -> builder.bucket("alumniportals3")
+            s3Client.deleteObject(builder -> builder.bucket(bucketName)
                     .key(key)
                     .build());
 

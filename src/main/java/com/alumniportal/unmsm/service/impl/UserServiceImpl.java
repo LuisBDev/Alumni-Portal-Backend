@@ -49,9 +49,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     public List<UserResponseDTO> findAll() {
         List<User> users = userDAO.findAll();
-        if (users.isEmpty()) {
-            throw new AppException("No users found!", "NOT_FOUND");
-        }
+
         return userMapper.entityListToDTOList(users);
     }
 

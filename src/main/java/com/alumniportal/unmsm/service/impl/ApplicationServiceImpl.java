@@ -44,9 +44,7 @@ public class ApplicationServiceImpl implements IApplicationService {
     @Override
     public List<ApplicationResponseDTO> findAll() {
         List<Application> applications = applicationDAO.findAll();
-        if (applications.isEmpty()) {
-            throw new AppException("Error: There are no applications", "NOT_FOUND");
-        }
+
         return applicationMapper.entityListToDTOList(applications);
 
     }
@@ -77,18 +75,14 @@ public class ApplicationServiceImpl implements IApplicationService {
     @Override
     public List<ApplicationResponseDTO> findApplicationsByUserId(Long userId) {
         List<Application> applicationsByUserId = applicationDAO.findApplicationsByUserId(userId);
-        if (applicationsByUserId.isEmpty()) {
-            throw new AppException("Error: There are no applications for user with id " + userId, "NOT_FOUND");
-        }
+
         return applicationMapper.entityListToDTOList(applicationsByUserId);
     }
 
     @Override
     public List<ApplicationResponseDTO> findApplicationsByJobOfferId(Long jobOfferId) {
         List<Application> applicationsByJobOfferId = applicationDAO.findApplicationsByJobOfferId(jobOfferId);
-        if (applicationsByJobOfferId.isEmpty()) {
-            throw new AppException("Error: There are no applications for job offer with id " + jobOfferId, "NOT_FOUND");
-        }
+
         return applicationMapper.entityListToDTOList(applicationsByJobOfferId);
     }
 
