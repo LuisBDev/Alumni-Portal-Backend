@@ -33,9 +33,7 @@ public class EducationServiceImpl implements IEducationService {
     @Override
     public List<EducationResponseDTO> findAll() {
         List<Education> educationList = educationDAO.findAll();
-        if (educationList.isEmpty()) {
-            throw new AppException("No educations found", "NOT_FOUND");
-        }
+
         return educationMapper.entityListToDTOList(educationList);
     }
 

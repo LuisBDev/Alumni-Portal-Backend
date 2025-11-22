@@ -33,9 +33,7 @@ public class ProjectServiceImpl implements IProjectService {
     @Override
     public List<ProjectResponseDTO> findAll() {
         List<Project> projectList = projectDAO.findAll();
-        if (projectList.isEmpty()) {
-            throw new AppException("No projects found", "NOT_FOUND");
-        }
+
         return projectMapper.entityListToDTOList(projectList);
     }
 

@@ -37,9 +37,7 @@ public class CompanyServiceImpl implements ICompanyService {
     @Override
     public List<CompanyResponseDTO> findAll() {
         List<Company> companyList = companyDAO.findAll();
-        if (companyList.isEmpty()) {
-            throw new AppException("Error: Companies not found!", "NOT_FOUND");
-        }
+
         return companyMapper.entityListToDTOList(companyList);
     }
 

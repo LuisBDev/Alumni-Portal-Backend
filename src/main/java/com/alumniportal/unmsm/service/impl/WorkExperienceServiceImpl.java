@@ -33,9 +33,7 @@ public class WorkExperienceServiceImpl implements IWorkExperienceService {
     @Override
     public List<WorkExperienceResponseDTO> findAll() {
         List<WorkExperience> workExperienceList = workExperienceDAO.findAll();
-        if (workExperienceList.isEmpty()) {
-            throw new AppException("No work experiences found", "NOT_FOUND");
-        }
+
         return workExperienceMapper.entityListToDTOList(workExperienceList);
     }
 

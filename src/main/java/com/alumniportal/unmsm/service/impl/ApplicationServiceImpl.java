@@ -44,9 +44,7 @@ public class ApplicationServiceImpl implements IApplicationService {
     @Override
     public List<ApplicationResponseDTO> findAll() {
         List<Application> applications = applicationDAO.findAll();
-        if (applications.isEmpty()) {
-            throw new AppException("Error: There are no applications", "NOT_FOUND");
-        }
+ 
         return applicationMapper.entityListToDTOList(applications);
 
     }

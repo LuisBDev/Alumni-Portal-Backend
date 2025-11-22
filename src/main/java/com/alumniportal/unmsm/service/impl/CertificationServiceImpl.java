@@ -32,9 +32,7 @@ public class CertificationServiceImpl implements ICertificationService {
     @Override
     public List<CertificationResponseDTO> findAll() {
         List<Certification> certificationList = certificationDAO.findAll();
-        if (certificationList.isEmpty()) {
-            throw new AppException("No certifications found!", "NOT_FOUND");
-        }
+
         return certificationMapper.entityListToDTOList(certificationList);
     }
 

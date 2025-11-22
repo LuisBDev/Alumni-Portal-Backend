@@ -57,9 +57,7 @@ public class ActivityServiceImpl implements IActivityService {
     @Override
     public List<ActivityResponseDTO> findAll() {
         List<Activity> activities = activityDAO.findAll();
-        if (activities.isEmpty()) {
-            throw new AppException("No se encontraron actividades", "NOT_FOUND");
-        }
+
         return activityMapper.entityListToDTOList(activities);
     }
 

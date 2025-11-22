@@ -43,9 +43,7 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
     @Override
     public List<EnrollmentResponseDTO> findAll() {
         List<Enrollment> enrollmentList = enrollmentDAO.findAll();
-        if (enrollmentList.isEmpty()) {
-            throw new AppException("No enrollments found", "NOT_FOUND");
-        }
+
         return enrollmentMapper.entityListToDTOList(enrollmentList);
     }
 
