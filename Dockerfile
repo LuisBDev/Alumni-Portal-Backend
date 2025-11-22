@@ -1,38 +1,23 @@
-# Imagen base de Java 22
-FROM eclipse-temurin:22-jdk-alpine
+# Etapa 1: Build
+FROM eclipse-temurin:21-jdk-alpine AS builder
+WORKDIR /app
+COPY . .
+# Omitimos tests aquí para agilizar el build de la imagen (los tests corren en GitHub Actions antes)
+RUN ./mvnw clean package -DskipTests
 
-# Configura el directorio de trabajo
+# Etapa 2: Runtime
+FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
-# Copia solo los archivos necesarios para resolver dependencias
-COPY ./pom.xml /app
-COPY ./.mvn /app/.mvn
-COPY ./mvnw /app
+# SEGURIDAD: Creamos un usuario sin privilegios
+RUN addgroup -S spring && adduser -S spring -G spring
+USER spring:spring
 
-# Asignar permisos de ejecución al archivo mvnw
-RUN chmod +x /app/mvnw
+# Copiamos el JAR del builder
+COPY --from=builder /app/target/*.jar app.jar
 
-# Convertir finales de línea CRLF a LF (opcional si desarrollas en Windows)
-RUN sed -i 's/\r$//' /app/mvnw
+# Variables por defecto (se sobrescriben en docker-compose)
+ENV PORT=8080
+EXPOSE 8080
 
-# Descargar dependencias offline
-RUN ./mvnw dependency:go-offline
-
-# Copia el código fuente de la aplicación
-COPY ./src /app/src
-
-# Construir la aplicación
-RUN ./mvnw clean package -DskipTests -Pprod
-
-# Exponer el puerto
-EXPOSE 8084
-
-# Entrypoint para ejecutar la aplicación
-ENTRYPOINT ["java", "-jar", "/app/target/unmsm-0.0.1-SNAPSHOT.jar"]
-
-# Configurar variables de entorno
-ENV AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-ENV AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-ENV AWS_S3_BUCKET_NAME=${AWS_S3_BUCKET_NAME}
-ENV AWS_S3_REGION=${AWS_S3_REGION}
-ENV SERVER_PORT=${SERVER_PORT:-8084}
+ENTRYPOINT ["java", "-jar", "app.jar"]
