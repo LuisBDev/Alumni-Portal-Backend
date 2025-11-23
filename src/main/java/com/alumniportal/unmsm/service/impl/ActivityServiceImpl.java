@@ -54,6 +54,9 @@ public class ActivityServiceImpl implements IActivityService {
     @Value("${custom.bucket.s3.name}")
     private String bucketName;
 
+    @Value("${custom.s3.folder.activity}")
+    private String folder;
+
     @Override
     public List<ActivityResponseDTO> findAll() {
         List<Activity> activities = activityDAO.findAll();
@@ -215,9 +218,15 @@ public class ActivityServiceImpl implements IActivityService {
             throw new AppException("El archivo no tiene un nombre válido", "BAD_REQUEST");
         }
 
-        // Construir el key para el archivo en el bucket S3
-        String folder = "activityimages/";
-        String key = folder + activity.getId() + "_" + fileName;
+
+        StringBuilder keyBuilder = new StringBuilder();
+        keyBuilder.append(folder)
+                .append("/")
+                .append(activity.getId())
+                .append("_")
+                .append(fileName);
+
+        String key = keyBuilder.toString();
 
         try {
             // Eliminar la imagen previa, si existe
