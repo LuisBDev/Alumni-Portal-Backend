@@ -57,6 +57,9 @@ public class ActivityServiceImpl implements IActivityService {
     @Value("${custom.s3.folder.activity}")
     private String folder;
 
+    @Value("${custom.lambda.function.name}")
+    private String lambdaFunctionName;
+
     @Override
     public List<ActivityResponseDTO> findAll() {
         List<Activity> activities = activityDAO.findAll();
@@ -394,7 +397,7 @@ public class ActivityServiceImpl implements IActivityService {
 
             // Se crea la solicitud para invocar Lambda
             InvokeRequest invokeRequest = InvokeRequest.builder()
-                    .functionName("arn:aws:lambda:us-east-2:047719652432:function:alumnilambda")
+                    .functionName(lambdaFunctionName)
                     .payload(SdkBytes.fromUtf8String(payloadJson))
                     .build();
 

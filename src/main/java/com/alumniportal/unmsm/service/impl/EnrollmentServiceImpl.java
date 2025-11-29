@@ -14,6 +14,7 @@ import com.alumniportal.unmsm.service.interfaces.IEnrollmentService;
 import com.alumniportal.unmsm.util.EmailTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.core.SdkBytes;
 import software.amazon.awssdk.services.lambda.LambdaClient;
@@ -39,6 +40,9 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
     private final EnrollmentMapper enrollmentMapper;
 
     private final LambdaClient lambdaClient;
+
+    @Value("${custom.lambda.function.name}")
+    private String lambdaFunctionName;
 
     @Override
     public List<EnrollmentResponseDTO> findAll() {
@@ -154,7 +158,7 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
 
             // Se crea la solicitud para invocar Lambda
             InvokeRequest invokeRequest = InvokeRequest.builder()
-                    .functionName("arn:aws:lambda:us-east-2:047719652432:function:alumnilambda")
+                    .functionName(lambdaFunctionName)
                     .payload(SdkBytes.fromUtf8String(payloadJson))
                     .build();
 

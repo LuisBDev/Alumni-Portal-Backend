@@ -12,6 +12,7 @@ import com.alumniportal.unmsm.service.interfaces.IApplicationService;
 import com.alumniportal.unmsm.util.EmailTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.alumniportal.unmsm.model.JobOffer;
 import com.alumniportal.unmsm.model.User;
@@ -40,6 +41,9 @@ public class ApplicationServiceImpl implements IApplicationService {
     private final ApplicationMapper applicationMapper;
 
     private final LambdaClient lambdaClient;
+
+    @Value("${custom.lambda.function.name}")
+    private String lambdaFunctionName;
 
     @Override
     public List<ApplicationResponseDTO> findAll() {
@@ -149,7 +153,7 @@ public class ApplicationServiceImpl implements IApplicationService {
 
             // Se crea la solicitud para invocar Lambda
             InvokeRequest invokeRequest = InvokeRequest.builder()
-                    .functionName("arn:aws:lambda:us-east-2:047719652432:function:alumnilambda")
+                    .functionName(lambdaFunctionName)
                     .payload(SdkBytes.fromUtf8String(payloadJson))
                     .build();
 
