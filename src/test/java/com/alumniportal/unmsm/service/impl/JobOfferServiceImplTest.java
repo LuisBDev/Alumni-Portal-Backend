@@ -38,11 +38,14 @@ class JobOfferServiceImplTest {
     @InjectMocks
     private JobOfferServiceImpl jobOfferService;
 
+    @InjectMocks
+    private NotificationServiceImpl notificationService;
+
     @BeforeEach
     void setUp() {
 
         jobOfferMapper = new JobOfferMapper(new ModelMapper());
-        jobOfferService = new JobOfferServiceImpl(jobOfferDAO, companyDAO, jobOfferMapper);
+        jobOfferService = new JobOfferServiceImpl(jobOfferDAO, companyDAO, jobOfferMapper, notificationService);
     }
 
 

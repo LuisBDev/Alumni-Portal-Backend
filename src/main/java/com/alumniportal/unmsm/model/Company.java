@@ -77,6 +77,11 @@ public class Company extends AbstractEntity implements UserDetails {
     @JsonIgnore
     private List<CompanyFollower> followerList;
 
+    // Relacion con Notification
+    @OneToMany(mappedBy = "company", orphanRemoval = true, cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Notification> notificationList;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));

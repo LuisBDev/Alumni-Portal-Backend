@@ -16,28 +16,29 @@ public class CompanyFollowerMapper {
     private final ModelMapper modelMapper;
 
     public CompanyFollowerResponseDTO entityToDTO(CompanyFollower companyFollower) {
-        CompanyFollowerResponseDTO dto = new CompanyFollowerResponseDTO();
-        dto.setId(companyFollower.getId());
-        dto.setFollowedAt(companyFollower.getFollowedAt());
-        
+
+        CompanyFollowerResponseDTO.CompanyFollowerResponseDTOBuilder dtoBuilder = CompanyFollowerResponseDTO.builder()
+                .id(companyFollower.getId())
+                .followedAt(companyFollower.getFollowedAt());
+
         if (companyFollower.getUser() != null) {
-            dto.setUserId(companyFollower.getUser().getId());
-            dto.setUserName(companyFollower.getUser().getName());
-            dto.setUserEmail(companyFollower.getUser().getEmail());
-            dto.setUserPaternalSurname(companyFollower.getUser().getPaternalSurname());
-            dto.setUserMaternalSurname(companyFollower.getUser().getMaternalSurname());
+            dtoBuilder.userId(companyFollower.getUser().getId())
+                    .userName(companyFollower.getUser().getName())
+                    .userEmail(companyFollower.getUser().getEmail())
+                    .userPaternalSurname(companyFollower.getUser().getPaternalSurname())
+                    .userMaternalSurname(companyFollower.getUser().getMaternalSurname());
         }
-        
+
         if (companyFollower.getCompany() != null) {
-            dto.setCompanyId(companyFollower.getCompany().getId());
-            dto.setCompanyName(companyFollower.getCompany().getName());
-            dto.setCompanyEmail(companyFollower.getCompany().getEmail());
-            dto.setCompanyRuc(companyFollower.getCompany().getRuc());
-            dto.setCompanySector(companyFollower.getCompany().getSector());
-            dto.setCompanyPhotoUrl(companyFollower.getCompany().getPhotoUrl());
+            dtoBuilder.companyId(companyFollower.getCompany().getId())
+                    .companyName(companyFollower.getCompany().getName())
+                    .companyEmail(companyFollower.getCompany().getEmail())
+                    .companyRuc(companyFollower.getCompany().getRuc())
+                    .companySector(companyFollower.getCompany().getSector())
+                    .companyPhotoUrl(companyFollower.getCompany().getPhotoUrl());
         }
-        
-        return dto;
+
+        return dtoBuilder.build();
     }
 
     public List<CompanyFollowerResponseDTO> entityListToDTOList(List<CompanyFollower> companyFollowers) {
@@ -60,4 +61,3 @@ public class CompanyFollowerMapper {
         return modelMapper.map(companyFollowerRequestDTO, CompanyFollower.class);
     }
 }
-

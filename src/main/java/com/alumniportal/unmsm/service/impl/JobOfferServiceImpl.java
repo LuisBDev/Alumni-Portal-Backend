@@ -9,6 +9,7 @@ import com.alumniportal.unmsm.model.JobOffer;
 import com.alumniportal.unmsm.persistence.interfaces.ICompanyDAO;
 import com.alumniportal.unmsm.persistence.interfaces.IJobOfferDAO;
 import com.alumniportal.unmsm.service.interfaces.IJobOfferService;
+import com.alumniportal.unmsm.service.interfaces.INotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
@@ -27,6 +28,8 @@ public class JobOfferServiceImpl implements IJobOfferService {
     private final ICompanyDAO companyDAO;
 
     private final JobOfferMapper jobOfferMapper;
+
+    private final INotificationService notificationService;
 
     @Override
     public List<JobOfferResponseDTO> findAll() {
@@ -77,6 +80,8 @@ public class JobOfferServiceImpl implements IJobOfferService {
         jobOffer.setCompany(company);
         jobOffer.setCreatedAt(LocalDate.now());
         jobOfferDAO.save(jobOffer);
+
+        notificationService.createNotificationsForJobOffer(jobOffer.getId());
 
         return jobOfferMapper.entityToDTO(jobOffer);
     }
