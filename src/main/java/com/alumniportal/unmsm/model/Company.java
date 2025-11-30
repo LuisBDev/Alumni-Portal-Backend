@@ -62,17 +62,20 @@ public class Company extends AbstractEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    //    Relacion con JobOffer
+    // Relacion con JobOffer
     @OneToMany(mappedBy = "company", orphanRemoval = true, cascade = CascadeType.ALL)
     @JsonIgnore
     private List<JobOffer> jobOfferList;
 
-
-    //    Relacion con Activity
+    // Relacion con Activity
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Activity> activityList;
 
+    // Relacion con CompanyFollower
+    @OneToMany(mappedBy = "company", orphanRemoval = true, cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<CompanyFollower> followerList;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

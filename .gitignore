@@ -8,7 +8,7 @@ target/*
 #Ignorar archivos de docker
 #docker-compose.yml
 #Dockerfile
-documentation-pipeline.md
+*.md
 
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
