@@ -5,8 +5,8 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
-    ports:
-      - "80:8080"
+    #    ports:
+    #      - "80:8080"
     environment:
       # Conexión a la DB (apunta al servicio 'mysql')
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/alumniportal?allowPublicKeyRetrieval=true&useSSL=false
@@ -41,6 +41,20 @@ services:
     restart: always
     # Configuración vital para reducir consumo de RAM en t3.micro
     command: --default-authentication-plugin=mysql_native_password --innodb-buffer-pool-size=256M
+    networks:
+      - app-network
+
+  npm:
+    image: 'jc21/nginx-proxy-manager:latest'
+    container_name: nginx-proxy
+    restart: always
+    ports:
+      - '80:80'    # HTTP (Requerido para el reto HTTP-01 de Let's Encrypt)
+      - '81:81'    # Panel de Administración
+      - '443:443'  # HTTPS
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
     networks:
       - app-network
 
